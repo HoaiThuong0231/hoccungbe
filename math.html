@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Website học chữ cái và toán tiếng Việt dành cho trẻ em 5 tuổi">
+    <title>Học cùng bé 🌈</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="auth.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Floating Stars Background -->
+    <div class="bg-stars" id="bgStars"></div>
+
+    <!-- Mascot Guide -->
+    <div class="mascot-container" id="mascot">
+        <img src="assets/mascot.png" alt="Cú mèo thông thái" class="mascot-img" id="mascotImg">
+        <div class="mascot-speech" id="mascotSpeech">
+            Xin chào! Mình là Cú Mèo! 🦉<br>Hãy cùng học nào!
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand" onclick="navigateTo('home')">
+            <span class="nav-emoji">🌈</span>
+            <span class="nav-title">Học Cùng Bé</span>
+        </div>
+        <div class="nav-links">
+            <div id="authContainer" style="display: flex; align-items: center;">
+                <!-- Hồ sơ của bé sẽ hiện ở đây (Mon) -->
+            </div>
+            <button id="navAchBtn" class="nav-btn head-action" onclick="openAchievementsModal()" style="display:none;">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Thành tích</span>
+            </button>
+            <button class="nav-btn head-action" onclick="openSettingsModal()">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Cài đặt</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="bottom-nav-btn active" data-page="home" onclick="navigateTo('home')">
+            <span class="bottom-nav-icon">🏠</span><span class="bottom-nav-label">Trang chủ</span>
+        </button>
+        <button class="bottom-nav-btn" data-page="vietnamese" onclick="navigateTo('vietnamese')">
+            <span class="bottom-nav-icon">VI</span><span class="bottom-nav-label">Tiếng Việt</span>
+        </button>
+        <button class="bottom-nav-btn" data-page="english" onclick="navigateTo('english')">
+            <span class="bottom-nav-icon">ENG</span><span class="bottom-nav-label">Tiếng Anh</span>
+        </button>
+        <button class="bottom-nav-btn" data-page="math" onclick="navigateTo('math')">
+            <span class="bottom-nav-icon">🔢</span><span class="bottom-nav-label">Toán</span>
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+        <!-- ============ VIETNAMESE HUB PAGE ============ -->
+        <section class="page" id="page-vietnamese">
+            <div class="page-header">
+                <h1 class="page-title">VI Học Tiếng Việt</h1>
+                <p class="page-desc">Chọn môn học bạn muốn ở bên dưới nhé!</p>
+            </div>
+            <div class="hub-grid">
+                <button class="hub-card hub-alphabet" onclick="navigateTo('alphabet')">
+                    <div class="hub-card-icon">🔤</div>
+                    <div class="hub-card-title">Bảng Chữ Cái</div>
+                    <div class="hub-card-desc">29 chữ cái tiếng Việt</div>
+                    <div class="hub-card-arrow">→</div>
+                </button>
+                <button class="hub-card hub-vocab" onclick="navigateTo('vocabulary')">
+                    <div class="hub-card-icon">📚</div>
+                    <div class="hub-card-title">Từ Vựng</div>
+                    <div class="hub-card-desc">Học từ mới theo chủ đề</div>
+                    <div class="hub-card-arrow">→</div>
+                </button>
+                <button class="hub-card hub-games" onclick="navigateTo('games')">
+                    <div class="hub-card-icon">🎮</div>
+                    <div class="hub-card-title">Trò Chơi</div>
+                    <div class="hub-card-desc">Game vần, ghép chữ, nghe đoán</div>
+                    <div class="hub-card-arrow">→</div>
+                </button>
+            </div>
+            <!-- Progress -->
+            <div class="progress-section">
+                <h2 class="section-title">⭐ Tiến Độ Học Tập</h2>
+                <div class="progress-cards">
+                    <div class="progress-card">
+                        <div class="progress-emoji">🔤</div>
+                        <div class="progress-info"><span class="progress-label">Chữ cái đã học</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="alphabetProgress" style="width:0%"></div>
+                            </div>
+                            <span class="progress-count" id="alphabetCount">0/29</span>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-emoji">📚</div>
+                        <div class="progress-info"><span class="progress-label">Từ vựng đã học</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill vocab-fill" id="vocabProgress" style="width:0%"></div>
+                            </div>
+                            <span class="progress-count" id="vocabCount">0/30</span>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-emoji">⭐</div>
+                        <div class="progress-info"><span class="progress-label">Số sao đã đạt</span>
+                            <div class="stars-display" id="starsDisplay">0 ⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ HOME PAGE (LANDING PAGE) ============ -->
+        <section class="page active" id="page-home">
+            <div class="lb-hero">
+                <div class="lb-hero-content">
+                    <h1 class="lb-hero-title">Học cùng bé<br><span class="highlight">vừa học vừa chơi!</span></h1>
+                    <p class="lb-hero-subtitle">Môi trường hoàn hảo để phát triển tư duy 🚀</p>
+                    <button class="lb-hero-btn" onclick="authManager.handleHeroClick()">Bắt đầu học ngay! 🎮</button>
+                </div>
+                <div class="lb-hero-img">
+                    <img src="assets/mascot.png" alt="Mascot dễ thương" class="lb-mascot-jump">
+                </div>
+            </div>
+
+            <!-- Khu vực chọn môn (3 cards) -->
+            <div class="lb-cards-container" id="lb-cards">
+                <button class="lb-card lb-viet" onclick="navigateTo('vietnamese')">
+                    <div class="lb-card-icon" style="font-size: 1.6rem; font-weight: 900; color: #D97706; letter-spacing: -1px;">A Ă Â</div>
+                    <div class="lb-card-info">
+                        <div class="lb-card-title">Tiếng Việt</div>
+                        <div class="lb-card-desc">Bảng chữ cái, từ vựng và đánh vần</div>
+                    </div>
+                    <div class="lb-card-arrow">→</div>
+                </button>
+                <button class="lb-card lb-eng" onclick="navigateTo('english')">
+                    <div class="lb-card-icon" style="font-size: 1.8rem; font-weight: 900; color: #2563EB;">ABC</div>
+                    <div class="lb-card-info">
+                        <div class="lb-card-title">Tiếng Anh</div>
+                        <div class="lb-card-desc">Alphabet, từ vựng theo chủ đề đa dạng</div>
+                    </div>
+                    <div class="lb-card-arrow">→</div>
+                </button>
+                <button class="lb-card lb-math" onclick="navigateTo('math')">
+                    <div class="lb-card-icon" style="font-size: 1.8rem; font-weight: 900; color: #059669;">123</div>
+                    <div class="lb-card-info">
+                        <div class="lb-card-title">Toán Học</div>
+                        <div class="lb-card-desc">Số đếm, phép cộng trừ và so sánh</div>
+                    </div>
+                    <div class="lb-card-arrow">→</div>
+                </button>
+            </div>
+
+            <!-- Thành Tích -->
+            <div id="lbAchievementsSection" class="lb-achievements" style="display:none;">
+                <h2 class="lb-section-title">🏆 Thành Tích Của Bé</h2>
+                <div class="lb-ach-grid">
+                    <div class="lb-ach-item">
+                        <span class="lb-ach-emoji">⭐</span>
+                        <div class="lb-ach-info"><span class="lb-ach-val" id="lbTotalStars">0</span><span class="lb-ach-label">Số sao</span></div>
+                    </div>
+                    <div class="lb-ach-item">
+                        <span class="lb-ach-emoji">📚</span>
+                        <div class="lb-ach-info"><span class="lb-ach-val" id="lbTotalLessons">0</span><span class="lb-ach-label">Bài học</span></div>
+                    </div>
+                    <div class="lb-ach-item">
+                        <span class="lb-ach-emoji">🔥</span>
+                        <div class="lb-ach-info"><span class="lb-ach-val" id="lbStreak">1</span><span class="lb-ach-label">Ngày học</span></div>
+                    </div>
+                    <div class="lb-ach-item">
+                        <span class="lb-ach-emoji">🎯</span>
+                        <div class="lb-ach-info"><span class="lb-ach-val" id="lbAvgScore">100%</span><span class="lb-ach-label">Tỉ lệ đúng</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini Game -->
+            <div class="lb-minigame">
+                <h2 class="lb-section-title">🎮 Góc Vui Chơi</h2>
+                <div class="lb-game-banner">
+                    <div class="lb-game-info">
+                        <h3>Đuổi Hình Bắt Chữ</h3>
+                        <p>Thư giãn với những câu hỏi thú vị nhất!</p>
+                        <button class="lb-play-btn" onclick="navigateTo('games')">Chơi ngay! 🚀</button>
+                    </div>
+                    <div class="lb-game-icon">🎲</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ALPHABET PAGE ============ -->
+        <section class="page" id="page-alphabet">
+            <div class="page-header">
+                <button class="page-back-btn" onclick="navigateTo('vietnamese')">← Tiếng Việt</button>
+                <h1 class="page-title">🔤 Bảng Chữ Cái</h1>
+                <p class="page-desc">Chạm vào chữ cái để nghe phát âm nhé!</p>
+            </div>
+            <div class="alphabet-grid" id="alphabetGrid"></div>
+
+            <!-- Phụ âm ghép -->
+            <div class="alpha-extra-section">
+                <h2 class="section-title">🔗 Phụ Âm Ghép</h2>
+                <p class="page-desc">Chạm để nghe phát âm!</p>
+                <div class="alpha-extra-grid" id="phuAmGhepGrid"></div>
+            </div>
+
+            <!-- Vần -->
+            <div class="alpha-extra-section">
+                <h2 class="section-title">📖 Học Vần</h2>
+                <p class="page-desc">Chạm để nghe vần!</p>
+                <div class="alpha-extra-grid" id="vanGrid"></div>
+            </div>
+        </section>
+
+        <!-- Alphabet Modal -->
+        <div class="modal-overlay" id="alphabetModal">
+            <div class="modal-content alphabet-modal">
+                <button class="modal-close" onclick="closeModal('alphabetModal')">&times;</button>
+                <div class="modal-letter" id="modalLetter">A</div>
+                <div class="modal-letter-lower" id="modalLetterLower">a</div>
+                <div class="modal-example">
+                    <div class="modal-example-img" id="modalExampleEmoji">🍎</div>
+                    <div class="modal-example-word" id="modalExampleWord">Ăn</div>
+                </div>
+                <button class="speak-btn" id="modalSpeakBtn" onclick="speakModalLetter()">🔊 Nghe phát âm</button>
+            </div>
+        </div>
+
+        <!-- ============ VOCABULARY PAGE ============ -->
+        <section class="page" id="page-vocabulary">
+            <div class="page-header">
+                <button class="page-back-btn" onclick="navigateTo('vietnamese')">← Tiếng Việt</button>
+                <h1 class="page-title">📚 Học Từ Vựng</h1>
+                <p class="page-desc">Chạm vào từ để nghe và xem hình nhé!</p>
+            </div>
+            <div class="vocab-categories" id="vocabCategories">
+                <button class="vocab-cat-btn active" data-cat="all" onclick="filterVocab('all')">Tất cả</button>
+                <button class="vocab-cat-btn" data-cat="animals" onclick="filterVocab('animals')">🐾 Động vật</button>
+                <button class="vocab-cat-btn" data-cat="fruits" onclick="filterVocab('fruits')">🍎 Trái cây</button>
+                <button class="vocab-cat-btn" data-cat="objects" onclick="filterVocab('objects')">🎒 Đồ vật</button>
+                <button class="vocab-cat-btn" data-cat="nature" onclick="filterVocab('nature')">🌿 Thiên nhiên</button>
+            </div>
+            <div class="vocab-grid" id="vocabGrid"></div>
+        </section>
+
+        <!-- Vocabulary Modal -->
+        <div class="modal-overlay" id="vocabModal">
+            <div class="modal-content vocab-modal-content">
+                <button class="modal-close" onclick="closeModal('vocabModal')">&times;</button>
+                <div class="vocab-modal-emoji" id="vocabModalEmoji">🐱</div>
+                <div class="vocab-modal-word" id="vocabModalWord">Mèo</div>
+                <div class="vocab-modal-spell" id="vocabModalSpell">M - È - O</div>
+                <div class="vocab-modal-btns">
+                    <button class="speak-btn" onclick="speakVocabWord()">🔊 Nghe phát âm</button>
+                    <button class="speak-btn spell-btn" onclick="spellVocabWord()">✏️ Đánh vần</button>
+                </div>
+                <div class="vocab-spell-display hidden" id="vocabSpellDisplay">
+                    <div class="spell-steps" id="vocabSpellSteps"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ MATH PAGE ============ -->
+        <section class="page" id="page-math">
+            <!-- Custom Math Styles -->
+            <style>
+                :root {
+                    --math-easy: #10B981;
+                    --math-medium: #F59E0B;
+                    --math-hard: #EF4444;
+                }
+
+                /* Math Layout */
+                .math-container {
+                    max-width: 800px;
+                    margin: 0 auto;
+                }
+
+                .math-hub-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                    margin-top: 30px;
+                }
+                
+                @media (max-width: 768px) {
+                    .math-hub-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 15px;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .math-hub-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 10px;
+                    }
+                }
+
+                .math-category-card {
+                    background: white;
+                    border-radius: 24px;
+                    padding: 30px 20px;
+                    text-align: center;
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    border: 3px solid #E5E7EB;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .math-category-card:nth-child(1) { background: #E0F2FE; color: #0369A1; border: 3px solid #BAE6FD; } /* Light Blue */
+                .math-category-card:nth-child(2) { background: #F0FDF4; color: #15803D; border: 3px solid #BBF7D0; } /* Light Green */
+                .math-category-card:nth-child(3) { background: #FFF7ED; color: #C2410C; border: 3px solid #FED7AA; } /* Light Orange */
+                .math-category-card:nth-child(4) { background: #F5F3FF; color: #6D28D9; border: 3px solid #DDD6FE; } /* Light Purple */
+                .math-category-card.adv-test-card { 
+                    background: #FFF1F2; 
+                    color: #BE123C; 
+                    border: 3px solid #FECDD3; 
+                    grid-column: span 4;
+                    flex-direction: row;
+                    gap: 20px;
+                } /* Light Pink */
+
+                @media (max-width: 768px) {
+                    .math-category-card.adv-test-card {
+                        grid-column: span 2;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .math-category-card {
+                        padding: 20px 10px;
+                    }
+                    .math-cat-icon { font-size: 2rem; }
+                    .math-cat-title { font-size: 0.9rem; }
+                    .math-category-card.adv-test-card {
+                        grid-column: span 2;
+                        flex-direction: column;
+                        gap: 5px;
+                    }
+                    .math-category-card.adv-test-card .math-cat-title {
+                        font-size: 1.1rem !important;
+                    }
+                }
+
+                .math-category-card:hover {
+                    transform: translateY(-8px) scale(1.02);
+                    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+                    filter: brightness(1.05);
+                }
+
+                .math-cat-icon { font-size: 2.5rem; margin-bottom: 10px; }
+                .math-cat-title { font-weight: 800; color: var(--text-dark); }
+
+                /* Level & Activity Selectors */
+                .math-nav-stack {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    animation: fadeIn 0.3s ease;
+                }
+
+                .level-group {
+                    display: flex;
+                    justify-content: center;
+                    gap: 12px;
+                    margin-bottom: 20px;
+                }
+
+                .level-chip {
+                    padding: 10px 20px;
+                    border-radius: 30px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: var(--transition);
+                    border: 2px solid transparent;
+                    font-size: 0.9rem;
+                    background: white;
+                }
+
+                .level-chip.easy { color: var(--math-easy); border-color: var(--math-easy); }
+                .level-chip.medium { color: var(--math-medium); border-color: var(--math-medium); }
+                .level-chip.hard { color: var(--math-hard); border-color: var(--math-hard); }
+
+                .level-chip.active.easy { background: var(--math-easy); color: white; }
+                .level-chip.active.medium { background: var(--math-medium); color: white; }
+                .level-chip.active.hard { background: var(--math-hard); color: white; }
+
+                .activity-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 12px;
+                }
+
+                .activity-card {
+                    background: white;
+                    padding: 15px;
+                    border-radius: 16px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: var(--transition);
+                    box-shadow: var(--shadow-soft);
+                    border-bottom: 4px solid #E5E7EB;
+                }
+
+                .activity-card:hover { transform: translateY(-3px); }
+                .activity-card.active { border-bottom-color: var(--blue); background: #EFF6FF; }
+                .act-icon { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+                .act-label { font-size: 0.85rem; font-weight: 700; }
+
+                /* SGK Tables */
+                .sgk-table-container {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 24px;
+                    box-shadow: var(--shadow-card);
+                    margin-top: 20px;
+                    overflow-x: auto;
+                }
+
+                .sgk-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-family: 'Baloo 2', sans-serif;
+                }
+
+                .sgk-table th, .sgk-table td {
+                    padding: 12px;
+                    border: 2px solid #F3F4F6;
+                    text-align: center;
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                }
+
+                .sgk-table tr:nth-child(even) { background: #F9FAFB; }
+                .sgk-table .highlight-num { color: var(--blue); font-weight: 800; }
+
+                /* Math Question Area */
+                .math-q-box {
+                    background: white;
+                    padding: 30px;
+                    border-radius: 28px;
+                    box-shadow: var(--shadow-card);
+                    text-align: center;
+                    margin-top: 20px;
+                    min-height: 300px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 24px;
+                }
+
+                .math-q-text {
+                    font-size: 3.5rem;
+                    font-weight: 800;
+                    color: var(--text-dark);
+                    letter-spacing: 2px;
+                }
+
+                .math-ans-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 15px;
+                }
+
+                .math-ans-btn {
+                    padding: 20px;
+                    font-size: 1.8rem;
+                    font-weight: 800;
+                    border-radius: 20px;
+                    border: none;
+                    background: #F3F4F6;
+                    cursor: pointer;
+                    transition: var(--transition);
+                    font-family: 'Baloo 2', sans-serif;
+                }
+
+                .math-ans-btn:hover { background: #E5E7EB; transform: scale(1.05); }
+                .math-ans-btn.correct { background: var(--math-easy); color: white; }
+                .math-ans-btn.wrong { background: var(--math-hard); color: white; }
+
+                /* Test Results */
+                .math-results {
+                    text-align: center;
+                    padding: 40px 20px;
+                }
+
+                .results-stars { font-size: 3rem; margin-bottom: 20px; }
+                .results-score { font-size: 2rem; font-weight: 800; color: var(--blue); }
+
+                .hidden { display: none !important; }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-10px); }
+                }
+
+                /* Mobile Optimizations */
+                @media (max-width: 480px) {
+                    .math-q-text { font-size: 2.5rem; }
+                    .math-ans-btn { padding: 15px; font-size: 1.5rem; }
+                }
+
+                /* Addition Table Lesson Style */
+                .sgk-lesson-title {
+                    font-size: 2.5rem;
+                    font-weight: 800;
+                    text-align: center;
+                    color: var(--blue);
+                    margin-bottom: 30px;
+                    text-shadow: 2px 2px 0px white;
+                }
+
+                .math-tables-grid {
+                    display: grid;
+                    grid-template-columns: repeat(5, 1fr);
+                    gap: 15px;
+                    padding: 10px;
+                }
+
+                .math-lesson-table {
+                    background: white;
+                    border: 2px solid #E5E7EB;
+                    border-radius: 12px;
+                    padding: 0;
+                    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                    transition: transform 0.2s;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                }
+
+                .math-lesson-table:hover {
+                    transform: translateY(-5px);
+                    border-color: var(--blue);
+                }
+
+                /* Status Styles - Pastel Updates */
+                .math-lesson-table.status-done, .math-test-item.status-done {
+                    background: #F0FDF4 !important;
+                    border-color: #4ADE80 !important;
+                    border-style: solid !important;
+                }
+                .math-lesson-table.status-doing, .math-test-item.status-doing {
+                    background: #FFF1F2 !important;
+                    border-color: #FDA4AF !important;
+                    border-style: solid !important;
+                }
+
+                .math-table-header {
+                    padding: 15px 15px 10px;
+                    text-align: center;
+                    border-bottom: 2px dashed #F3F4F6;
+                }
+
+                .math-table-title { font-size: 1.3rem; font-weight: 800; }
+
+                .math-table-rows {
+                    padding: 15px;
+                    flex-grow: 1;
+                }
+
+                .math-table-row {
+                    display: flex;
+                    justify-content: center;
+                    gap: 5px;
+                    font-size: 0.95rem;
+                    font-weight: 700;
+                    margin-bottom: 4px;
+                }
+
+                .math-row-eq { width: 60px; text-align: right; }
+                .math-row-sep { color: #9CA3AF; }
+                .math-row-res { width: 30px; text-align: left; }
+
+                .math-table-footer {
+                    padding: 10px;
+                    border-top: 1px solid #F3F4F6;
+                }
+
+                .math-table-btn-bottom {
+                    width: 100%;
+                    padding: 8px;
+                    border: none;
+                    border-radius: 8px;
+                    font-family: var(--font);
+                    font-weight: 800;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                    background: #F3F4F6;
+                    color: var(--text-dark);
+                    transition: var(--transition);
+                }
+
+                .math-lesson-table.status-done .math-table-btn-bottom {
+                    background: #22C55E;
+                    color: white;
+                }
+                .math-lesson-table.status-doing .math-table-btn-bottom {
+                    background: #F59E0B;
+                    color: white;
+                }
+                .math-table-btn-bottom:hover {
+                    filter: brightness(1.1);
+                    transform: scale(1.02);
+                }
+
+                /* Test Sections below tables */
+                .math-test-section {
+                    margin-top: 50px;
+                    padding: 30px;
+                    background: #F9FAFB;
+                    border-radius: 20px;
+                    border: 2px dashed #E5E7EB;
+                }
+
+                .math-test-title {
+                    font-size: 2rem;
+                    font-weight: 800;
+                    text-align: center;
+                    color: var(--blue);
+                    margin-bottom: 25px;
+                }
+
+                .math-test-levels {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 20px;
+                }
+
+                .math-test-col {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+
+                .math-test-col-header {
+                    font-size: 1.25rem;
+                    font-weight: 800;
+                    text-align: center;
+                    padding: 10px;
+                    border-radius: 10px;
+                }
+
+                .math-test-col-header.easy { background: #DCFCE7; color: #166534; }
+                .math-test-col-header.medium { background: #FEF3C7; color: #92400E; }
+                .math-test-col-header.hard { background: #FEE2E2; color: #991B1B; }
+
+                .math-test-grid {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    gap: 10px;
+                }
+
+                .math-test-item {
+                    background: white;
+                    border: 1px solid #E5E7EB;
+                    padding: 12px;
+                    border-radius: 12px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: var(--transition);
+                }
+
+                .math-test-item .test-item-title { font-weight: 800; font-size: 1rem; }
+                .math-test-item .test-item-status { font-size: 0.75rem; color: #6B7280; margin-top: 4px; font-weight: 600; }
+
+                .math-test-item:hover {
+                    background: var(--blue);
+                    color: white;
+                    transform: scale(1.05);
+                }
+                .math-test-item:hover .test-item-status { color: white; }
+
+                .math-test-item.status-done { background: #F0FDF4; border-color: #22C55E; }
+                .math-test-item.status-doing { background: #FFFBEB; border-color: #F59E0B; }
+
+                /* Math Test Timer */
+                .math-timer-wrapper {
+                    width: 100%;
+                    height: 12px;
+                    background: #E5E7EB;
+                    border-radius: 6px;
+                    margin-bottom: 20px;
+                    overflow: hidden;
+                    border: 2px solid #D1D5DB;
+                }
+                .math-timer-bar {
+                    height: 100%;
+                    width: 100%;
+                    background: linear-gradient(to right, #10B981, #F59E0B, #EF4444);
+                    transition: width 0.1s linear;
+                }
+
+                /* Feedback Box during game */
+                .math-feedback-box {
+                    position: absolute;
+                    top: -60px;
+                    left: 20px;
+                    right: 20px;
+                    background: white;
+                    padding: 12px 20px;
+                    border-radius: 15px;
+                    box-shadow: var(--shadow-card);
+                    text-align: center;
+                    font-weight: 800;
+                    font-size: 1.2rem;
+                    z-index: 10;
+                    border: 3px solid var(--blue);
+                    animation: bounce 0.5s ease;
+                }
+                .math-feedback-box.correct { border-color: #22C55E; color: #15803D; }
+                .math-feedback-box.wrong { border-color: #EF4444; color: #B91C1C; }
+
+                @media (max-width: 1024px) {
+                    .math-tables-grid { grid-template-columns: repeat(3, 1fr); }
+                }
+                @media (max-width: 768px) {
+                    .math-tables-grid { grid-template-columns: repeat(2, 1fr); }
+                    .sgk-lesson-title { font-size: 1.8rem; }
+                    .math-test-levels { grid-template-columns: 1fr; }
+                }
+                @media (max-width: 480px) {
+                    .math-tables-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+                    .math-table-title { font-size: 1rem; }
+                    .math-table-row { font-size: 0.75rem; }
+                    .math-table-btn-bottom { font-size: 0.7rem; padding: 6px; }
+                }
+                @media (max-width: 360px) {
+                    .math-tables-grid { grid-template-columns: 1fr; }
+                }
+            </style>
+
+            <div class="page-header">
+                <button class="page-back-btn hidden" id="mathBackBtn" onclick="mathApp.goBack()">← Quay lại</button>
+                <h1 class="page-title" id="mathPageTitle">🔢 Học Toán</h1>
+                <p class="page-desc" id="mathPageDesc">Học toán thật vui cùng Cú Mèo!</p>
+            </div>
+
+            <div class="math-container">
+                <!-- 1. Discovery Hub -->
+                <div id="mathHub" class="math-hub-grid">
+                    <div class="math-category-card" onclick="mathApp.selectCategory('addition')">
+                        <div class="math-cat-icon">➕</div>
+                        <div class="math-cat-title">Phép Cộng</div>
+                    </div>
+                    <div class="math-category-card" onclick="mathApp.selectCategory('subtraction')">
+                        <div class="math-cat-icon">➖</div>
+                        <div class="math-cat-title">Phép Trừ</div>
+                    </div>
+                    <div class="math-category-card" onclick="mathApp.selectCategory('multiplication')">
+                        <div class="math-cat-icon">✖️</div>
+                        <div class="math-cat-title">Bảng Nhân</div>
+                    </div>
+                    <div class="math-category-card" onclick="mathApp.selectCategory('division')">
+                        <div class="math-cat-icon">➗</div>
+                        <div class="math-cat-title">Phép Chia</div>
+                    </div>
+                    <div class="math-category-card adv-test-card" onclick="mathApp.selectCategory('adv_test')">
+                        <div class="math-cat-icon">🏆</div>
+                        <div class="math-cat-title" style="font-size: 1.5rem;">Test Tổng Hợp</div>
+                    </div>
+                </div>
+
+                <!-- 3. Content Area -->
+                <div id="mathContent" class="hidden">
+                    <!-- Lesson / Table View -->
+                    <div id="mathLessonView" class="hidden"></div>
+                    
+                    <!-- Question View -->
+                    <div id="mathQuestionView" class="hidden">
+                        <div class="math-q-box">
+                            <div id="mathFeedback" class="hidden math-feedback-box"></div>
+                            
+                            <!-- Timer for Tests -->
+                            <div id="mathTestTimerArea" class="hidden">
+                                <div class="math-timer-wrapper">
+                                    <div id="mathTestTimerBar" class="math-timer-bar"></div>
+                                </div>
+                                <div style="text-align: right; font-weight: 800; color: #EF4444; margin-bottom: 10px;">
+                                    ⏱️ <span id="mathTimeLeft">15</span>s
+                                </div>
+                            </div>
+
+                            <div class="math-q-text" id="currentQuestion">2 + 3 = ?</div>
+                            <div class="math-ans-grid" id="mathAnswers"></div>
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <progress id="mathProgress" value="0" max="100" style="width: 100%; height: 10px; border-radius: 10px;"></progress>
+                            <p id="mathProgressText" style="margin-top: 5px; font-weight: 700;">Câu 1/10</p>
+                        </div>
+                    </div>
+
+                    <!-- Test Result View -->
+                    <div id="mathResultView" class="hidden">
+                        <div class="math-results">
+                            <div class="results-stars" id="resultStars">⭐⭐⭐</div>
+                            <div class="results-score" id="resultScore">Bạn đạt 10/10 điểm!</div>
+                            <p id="resultMsg" style="font-size: 1.2rem; margin-top: 10px;">Bé giỏi quá, tiếp tục phát huy nhé!</p>
+                            <button class="lb-hero-btn" style="margin-top: 30px;" onclick="mathApp.goBack()">Tiếp tục học 🚀</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <!-- ============ GAMES PAGE (Vietnamese) ============ -->
+        <section class="page" id="page-games">
+            <div class="page-header">
+                <button class="page-back-btn" onclick="navigateTo('vietnamese')">← Tiếng Việt</button>
+                <h1 class="page-title">🎮 Trò Chơi Chữ Cái</h1>
+                <p class="page-desc">Vừa chơi vừa học, thật vui nào!</p>
+            </div>
+            <div class="games-menu" id="gamesMenu">
+                <button class="game-card" onclick="startGame('choose')">
+                    <div class="game-card-icon">🖼️</div>
+                    <div class="game-card-title">Chọn Chữ Đúng</div>
+                    <div class="game-card-desc">Nhìn hình → chọn chữ cái đúng</div>
+                    <div class="game-card-badge">⭐ Game 1</div>
+                </button>
+                <button class="game-card" onclick="startGame('match')">
+                    <div class="game-card-icon">🧩</div>
+                    <div class="game-card-title">Ghép Chữ</div>
+                    <div class="game-card-desc">Ghép chữ vào đúng vị trí</div>
+                    <div class="game-card-badge">⭐ Game 2</div>
+                </button>
+                <button class="game-card" onclick="startGame('listen')">
+                    <div class="game-card-icon">🎧</div>
+                    <div class="game-card-title">Nghe Đoán Chữ</div>
+                    <div class="game-card-desc">Nghe phát âm → chọn chữ đúng</div>
+                    <div class="game-card-badge">⭐ Game 3</div>
+                </button>
+            </div>
+
+            <!-- Game Areas -->
+            <div class="game-area hidden" id="game-choose">
+                <div class="game-topbar"><button class="game-back-btn" onclick="backToGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="chooseScore">0</span></div>
+                    <div class="game-round">Câu <span id="chooseRound">1</span>/10</div>
+                </div>
+                <div class="game-question">
+                    <div class="game-question-emoji" id="chooseEmoji">🐱</div>
+                    <div class="game-question-text" id="chooseQuestion">Đây là chữ gì?</div>
+                </div>
+                <div class="game-options" id="chooseOptions"></div>
+                <div class="game-feedback hidden" id="chooseFeedback">
+                    <div class="feedback-text" id="chooseFeedbackText">Đúng rồi! 🎉</div><button class="game-next-btn"
+                        id="chooseNextBtn" onclick="nextChooseQuestion()">Câu tiếp →</button>
+                </div>
+            </div>
+            <div class="game-area hidden" id="game-match">
+                <div class="game-topbar"><button class="game-back-btn" onclick="backToGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="matchScore">0</span></div>
+                    <div class="game-round">Câu <span id="matchRound">1</span>/10</div>
+                </div>
+                <div class="game-question">
+                    <div class="game-question-text" id="matchQuestion">Ghép chữ cái để tạo từ:</div>
+                    <div class="match-target" id="matchTarget"></div>
+                </div>
+                <div class="match-letters" id="matchLetters"></div>
+                <div class="game-feedback hidden" id="matchFeedback">
+                    <div class="feedback-text" id="matchFeedbackText"></div><button class="game-next-btn"
+                        id="matchNextBtn" onclick="nextMatchQuestion()">Câu tiếp →</button>
+                </div>
+            </div>
+            <div class="game-area hidden" id="game-listen">
+                <div class="game-topbar"><button class="game-back-btn" onclick="backToGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="listenScore">0</span></div>
+                    <div class="game-round">Câu <span id="listenRound">1</span>/10</div>
+                </div>
+                <div class="game-question"><button class="listen-play-btn" id="listenPlayBtn"
+                        onclick="playListenAudio()">🔊 Nghe phát âm</button>
+                    <div class="game-question-text">Chữ cái nào vừa được đọc?</div>
+                </div>
+                <div class="game-options" id="listenOptions"></div>
+                <div class="game-feedback hidden" id="listenFeedback">
+                    <div class="feedback-text" id="listenFeedbackText"></div><button class="game-next-btn"
+                        id="listenNextBtn" onclick="nextListenQuestion()">Câu tiếp →</button>
+                </div>
+            </div>
+            <div class="game-area hidden" id="game-complete">
+                <div class="game-complete-content">
+                    <div class="game-complete-emoji">🎉</div>
+                    <h2 class="game-complete-title">Hoàn Thành!</h2>
+                    <div class="game-complete-score">Bạn đạt <span id="finalScore">0</span>/10 ⭐</div>
+                    <div class="game-complete-message" id="completeMessage">Giỏi lắm!</div>
+                    <div class="game-complete-buttons">
+                        <button class="game-btn-replay" onclick="replayGame()">🔄 Chơi lại</button>
+                        <button class="game-btn-menu" onclick="backToGames()">📋 Trò chơi khác</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ENGLISH PAGE ============ -->
+        <section class="page" id="page-english">
+            <div class="page-header">
+                <h1 class="page-title">ENG Học Tiếng Anh</h1>
+                <p class="page-desc">Let's learn English! Chọn bài học nhé!</p>
+            </div>
+
+            <!-- English Sub-Menu -->
+            <div class="en-sub-section" id="en-menu">
+                <div class="games-menu">
+                    <button class="game-card" onclick="showEnSection('alphabet')">
+                        <div class="game-card-icon">🔤</div>
+                        <div class="game-card-title">Alphabet</div>
+                        <div class="game-card-desc">Bảng chữ cái A-Z</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('vocab')">
+                        <div class="game-card-icon">📚</div>
+                        <div class="game-card-title">Vocabulary</div>
+                        <div class="game-card-desc">Từ vựng theo chủ đề</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('flashcard')">
+                        <div class="game-card-icon">🃏</div>
+                        <div class="game-card-title">Flashcard</div>
+                        <div class="game-card-desc">Lật thẻ học từ</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('lessons')">
+                        <div class="game-card-icon">📝</div>
+                        <div class="game-card-title">Lessons</div>
+                        <div class="game-card-desc">Bài học từ vựng + câu</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('games')">
+                        <div class="game-card-icon">🎮</div>
+                        <div class="game-card-title">Games</div>
+                        <div class="game-card-desc">Chơi game tiếng Anh</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('tests')">
+                        <div class="game-card-icon">✅</div>
+                        <div class="game-card-title">Tests</div>
+                        <div class="game-card-desc">Kiểm tra bài học</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alphabet -->
+            <div class="en-sub-section hidden" id="en-alphabet">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>🔤 English Alphabet</h2>
+                </div>
+                <div class="en-alpha-grid" id="enAlphabetGrid"></div>
+            </div>
+
+            <!-- Vocabulary -->
+            <div class="en-sub-section hidden" id="en-vocab">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>📚 English Vocabulary</h2>
+                </div>
+                <div class="en-level-tabs">
+                    <button class="en-level-btn active" data-level="level1" onclick="selectEnLevel('level1')">Level
+                        1</button>
+                    <button class="en-level-btn" data-level="level2" onclick="selectEnLevel('level2')">Level 2</button>
+                    <button class="en-level-btn" data-level="level3" onclick="selectEnLevel('level3')">Level 3</button>
+                </div>
+                <div class="en-topic-tabs" id="enTopicTabs"></div>
+                <div class="en-vocab-grid" id="enVocabGrid"></div>
+            </div>
+
+            <!-- Flashcard -->
+            <div class="en-sub-section hidden" id="en-flashcard">
+                <div class="en-section-header">
+                    <button class="game-back-btn" id="fcBackBtn" onclick="handleFCBack()">← Quay lại</button>
+                    <h2 id="enFCTitle">🃏 English Flashcard</h2>
+                    <span class="en-fc-counter hidden" id="enFCCounter">1/15</span>
+                </div>
+                
+                <!-- Parts Menu -->
+                <div class="games-menu" id="enFcPartsMenu"></div>
+                
+                <!-- Learning Area -->
+                <div id="enFcLearningArea" class="hidden">
+                    <div class="fc-card" onclick="flipEnFC()">
+                        <div class="fc-card-inner" id="enFCInner">
+                            <div class="fc-card-front en-fc-front">
+                                <div class="fc-emoji" id="enFCFrontEmoji">🐱</div>
+                                <div class="fc-word-en" id="enFCFrontWord">cat</div>
+                                <div class="en-fc-phonetic" id="enFCPhonetic">/kæt/</div>
+                                <button class="fc-speaker-btn" onclick="speakEnFCEn(event)">🔊 English</button>
+                                <div style="font-size: 0.9rem; color: #9CA3AF; margin-top: 1rem; font-style: italic;">👆 Click để lật</div>
+                            </div>
+                            <div class="fc-card-back en-fc-back">
+                                <div class="fc-emoji" id="enFCBackEmoji">🐱</div>
+                                <div class="fc-word-vi" id="enFCBackWord">con mèo</div>
+                                <button class="fc-speaker-btn fc-speaker-vi" onclick="speakEnFCVi(event)">🔊 Tiếng Việt</button>
+                                <div style="font-size: 0.9rem; color: #9CA3AF; margin-top: 1rem; font-style: italic;">👆 Click để lật</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fc-nav">
+                        <button class="fc-nav-btn" onclick="prevEnFC()">⬅️ Trước</button>
+                        <button class="fc-nav-btn" onclick="nextEnFC()">Tiếp ➡️</button>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button class="game-next-btn hidden" id="enFCTestBtn" onclick="startEnFCTest()">Làm bài kiểm tra →</button>
+                    </div>
+                </div>
+
+                <!-- Test Area -->
+                <div id="enFcTestArea" class="hidden">
+                    <div class="game-topbar">
+                        <div class="game-score">⭐ <span id="enFcTestScore">0</span></div>
+                        <div class="game-round">Câu <span id="enFcTestRound">1</span>/15</div>
+                    </div>
+                    <div class="game-question">
+                        <div class="listen-btn-container hidden" id="enFcTestListenBtnContainer" style="margin-bottom:1rem">
+                            <button class="listen-play-btn" onclick="playEnFcTestListen()">🔊 Mở loa để nghe!</button>
+                        </div>
+                        <div class="game-question-text" id="enFcTestQuestion" style="font-size:1.8rem;"></div>
+                    </div>
+                    <div class="game-options" id="enFcTestOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem"></div>
+                    <div class="game-feedback hidden" id="enFcTestFeedback" style="margin-top:1.5rem">
+                        <div class="feedback-text" id="enFcTestFeedbackText"></div>
+                        <button class="game-next-btn" onclick="nextEnFcTest()">Câu tiếp →</button>
+                    </div>
+                </div>
+                
+                <!-- Test Complete Area -->
+                <div id="enFcTestComplete" class="hidden">
+                    <div class="game-complete-content">
+                        <div class="game-complete-emoji">🎉</div>
+                        <h2 class="game-complete-title">Hoàn Thành!</h2>
+                        <div class="game-complete-score">Bạn đạt <span id="enFcTestFinalScore">0</span>/<span id="enFcTestMaxScore">15</span> ⭐</div>
+                        <div class="game-complete-message" id="enFcTestMsg">Giỏi lắm!</div>
+                        <div class="game-complete-buttons">
+                            <button class="game-btn-replay" onclick="startEnFCTest()">🔄 Thi lại</button>
+                            <button class="game-btn-menu" onclick="backToEnFcMenu()">📋 Phần khác</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lessons -->
+            <div class="en-sub-section hidden" id="en-lessons">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>📝 Bài Học</h2>
+                </div>
+                <div class="games-menu" id="enLessonsGrid"></div>
+            </div>
+            <div class="en-sub-section hidden" id="en-lesson-active">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnLessons()">← Quay lại</button>
+                    <h2 id="enLessonTitle">Bài 1</h2>
+                </div>
+                <div class="en-lesson-steps">
+                    <button class="en-lesson-step-btn active" onclick="enLessonStep=0;renderEnLessonStep()">📖 Từ
+                        vựng</button>
+                    <button class="en-lesson-step-btn" onclick="enLessonStep=1;renderEnLessonStep()">🎯 Luyện
+                        tập</button>
+                    <button class="en-lesson-step-btn" onclick="enLessonStep=2;renderEnLessonStep()">💬 Câu</button>
+                    <button class="en-lesson-step-btn" onclick="enLessonStep=3;renderEnLessonStep()">📏 Ngữ
+                        pháp</button>
+                </div>
+                <div id="enLessonContent"></div>
+            </div>
+
+            <!-- Games -->
+            <div class="en-sub-section hidden" id="en-games">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>🎮 English Games</h2>
+                </div>
+                <div class="games-menu" id="enGamesMenu"></div>
+            </div>
+            <div class="en-sub-section hidden" id="en-game-active">
+                <div class="game-topbar">
+                    <button class="game-back-btn" onclick="backToEnGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="enGameScore">0</span></div>
+                    <div class="game-round">Câu <span id="enGameRound">1</span>/10</div>
+                </div>
+                <div id="enGameArea"></div>
+            </div>
+
+            <!-- Tests -->
+            <div class="en-sub-section hidden" id="en-tests">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>✅ Kiểm Tra</h2>
+                </div>
+                <div class="games-menu" id="enTestsGrid"></div>
+            </div>
+            <div class="en-sub-section hidden" id="en-test-active">
+                <div class="game-topbar">
+                    <button class="game-back-btn" onclick="backToEnTests()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="enTestScore">0</span></div>
+                    <div class="game-round">Câu <span id="enTestRound">1</span>/10</div>
+                </div>
+                <div id="enTestArea"></div>
+            </div>
+        </section>
+
+        <!-- EN Alphabet Modal -->
+        <div class="modal-overlay" id="enAlphabetModal">
+            <div class="modal-content en-alpha-modal">
+                <button class="modal-close" onclick="closeModal('enAlphabetModal')">&times;</button>
+                <div class="modal-letter en-modal-letter" id="enModalLetter">A</div>
+                <div class="modal-letter-lower" id="enModalLetterLower">a</div>
+                <div class="en-modal-sound" id="enModalSound">/ei/</div>
+                <div class="modal-example">
+                    <div class="modal-example-word" id="enModalExample">🍎 Apple</div>
+                    <div class="en-modal-vi" id="enModalExampleVi">quả táo</div>
+                </div>
+                <button class="speak-btn" onclick="speakEnLetter()">🔊 Nghe phát âm</button>
+            </div>
+        </div>
+
+        <!-- EN Vocab Modal -->
+        <div class="modal-overlay" id="enVocabModal">
+            <div class="modal-content vocab-modal-content">
+                <button class="modal-close" onclick="closeModal('enVocabModal')">&times;</button>
+                <div class="vocab-modal-emoji" id="enVocabModalEmoji">🐱</div>
+                <div class="vocab-modal-word" id="enVocabModalEn" style="color:#2563EB">cat</div>
+                <div class="en-vocab-modal-phonetic" id="enVocabModalPhonetic">/kæt/</div>
+                <div class="vocab-modal-spell" id="enVocabModalVi">con mèo</div>
+                <div class="vocab-modal-btns">
+                    <button class="speak-btn" onclick="speakEnVocabEN()">🔊 English</button>
+                    <button class="speak-btn spell-btn" onclick="speakEnVocabVI()">🔊 Tiếng Việt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal-overlay" id="settingsModal">
+            <div class="modal-content settings-modal-content">
+                <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+                <h2 style="font-family: 'Baloo 2', sans-serif; color: #3B82F6; font-size: 1.8rem; margin-bottom: 24px;">⚙️ Cài Đặt</h2>
+                <div style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="font-weight: 700; color: #4B5563;">🎵 Âm lượng phát âm</label>
+                        <input type="range" min="0" max="1" step="0.1" value="1" id="volumeSpeech" oninput="setAudioVolume('speech', this.value)" style="width: 100%; accent-color: #3B82F6;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="font-weight: 700; color: #4B5563;">🔊 Âm lượng hiệu ứng</label>
+                        <input type="range" min="0" max="1" step="0.1" value="0.5" id="volumeSfx" oninput="setAudioVolume('sfx', this.value)" style="width: 100%; accent-color: #3B82F6;">
+                    </div>
+                    <button onclick="resetAllGlobalProgress()" style="margin-top: 16px; background: #EF4444; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: 700; font-family: 'Baloo 2', sans-serif; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+                        🗑️ Xóa toàn bộ tiến độ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Modal -->
+        <div class="modal-overlay" id="achievementsModal">
+            <div class="modal-content achievements-modal-content" style="max-width: 500px; padding: 24px;">
+                <button class="modal-close" onclick="closeModal('achievementsModal')">&times;</button>
+                <h2 style="font-family: 'Baloo 2', sans-serif; color: #F59E0B; font-size: 1.8rem; margin-bottom: 24px;">🏆 Bảng Thành Tích</h2>
+                <div id="modalAchGrid" style="display: flex; flex-direction: column; gap: 16px;">
+                    <!-- Tiếng Việt -->
+                    <div style="background: #FEFCE8; border: 2px solid #FACC15; border-radius: 16px; padding: 16px; text-align: left;">
+                        <h3 style="color: #D97706; font-size: 1.2rem; margin-bottom: 12px; font-weight: 800; font-family: 'Nunito', sans-serif;">AĂÂ Tiếng Việt</h3>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.5rem;">🔤</span>
+                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achViLetters">0/29</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Chữ cái</div></div>
+                            </div>
+                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.5rem;">📚</span>
+                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achViVocab">0/30</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Từ vựng</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tiếng Anh -->
+                    <div style="background: #EFF6FF; border: 2px solid #60A5FA; border-radius: 16px; padding: 16px; text-align: left;">
+                        <h3 style="color: #2563EB; font-size: 1.2rem; margin-bottom: 12px; font-weight: 800; font-family: 'Nunito', sans-serif;">ABC Tiếng Anh</h3>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.5rem;">⭐</span>
+                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achEnScore">0</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Điểm số</div></div>
+                            </div>
+                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.5rem;">🎯</span>
+                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achEnRatio">0%</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Tỉ lệ</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Toán -->
+                    <div style="background: #ECFDF5; border: 2px solid #34D399; border-radius: 16px; padding: 16px; text-align: left;">
+                        <h3 style="color: #059669; font-size: 1.2rem; margin-bottom: 12px; font-weight: 800; font-family: 'Nunito', sans-serif;">🔢 Toán Học</h3>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.5rem;">⭐</span>
+                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achMathScore">0</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Điểm số</div></div>
+                            </div>
+                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.5rem;">📚</span>
+                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achMathLessons">0/11</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Bài học</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confetti -->
+        <div class="confetti-container" id="confettiContainer"></div>
+
+        <script charset="UTF-8" src="audio.js"></script>
+        <script charset="UTF-8" src="script.js"></script>
+        <script charset="UTF-8" src="flashcard.js"></script>
+        <script charset="UTF-8" src="english.js"></script>
+        
+        <!-- Math Logic Script -->
+        <script>
+            const mathApp = {
+                state: {
+                    view: 'hub',
+                    category: '',
+                    level: 'easy',
+                    currentQ: 0,
+                    totalQ: 10,
+                    score: 0,
+                    questions: [],
+                    isAnswering: false,
+                    focusedNum: null,
+                    testId: null // To track specific test progress
+                },
+
+                init() {
+                    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+                    this.renderHub();
+                },
+
+                getProgress() {
+                    try { return JSON.parse(localStorage.getItem('math_progress') || '{}'); }
+                    catch { return {}; }
+                },
+
+                saveTestProgress(id, score, total) {
+                    const progress = this.getProgress();
+                    // Always update to reflect the "Doing" status with latest counts
+                    progress[id] = { score, total, lastPlayed: Date.now() };
+                    localStorage.setItem('math_progress', JSON.stringify(progress));
+                },
+
+                renderHub() {
+                    this.state.view = 'hub';
+                    this.state.focusedNum = null;
+                    const hub = document.getElementById('mathHub');
+                    const content = document.getElementById('mathContent');
+                    const backBtn = document.getElementById('mathBackBtn');
+                    
+                    if(hub) hub.classList.remove('hidden');
+                    if(content) content.classList.add('hidden');
+                    if(backBtn) backBtn.classList.add('hidden');
+                    
+                    document.getElementById('mathPageTitle').innerText = '🔢 Học Toán';
+                    document.getElementById('mathPageDesc').innerText = 'Học toán thật vui cùng Cú Mèo!';
+                },
+
+                selectCategory(cat) {
+                    this.state.category = cat;
+                    this.state.view = 'activity';
+                    document.getElementById('mathHub').classList.add('hidden');
+                    document.getElementById('mathContent').classList.remove('hidden');
+                    document.getElementById('mathBackBtn').classList.remove('hidden');
+                    
+                    const titles = {
+                        addition: '➕ Phép Cộng',
+                        subtraction: '➖ Phép Trừ',
+                        multiplication: '✖️ Bảng Nhân',
+                        division: '➗ Phép Chia',
+                        adv_test: '🏆 Test Tổng Hợp'
+                    };
+                    document.getElementById('mathPageTitle').innerText = titles[cat];
+                    
+                    if (cat === 'adv_test') {
+                        this.renderAdvancedTest();
+                    } else {
+                        this.renderLesson();
+                    }
+                },
+
+                renderLesson() {
+                    const view = document.getElementById('mathLessonView');
+                    view.classList.remove('hidden');
+                    document.getElementById('mathQuestionView').classList.add('hidden');
+                    document.getElementById('mathResultView').classList.add('hidden');
+                    
+                    const progress = this.getProgress();
+                    const cat = this.state.category;
+                    const colors = ['#E11D48', '#2563EB', '#7C3AED', '#D97706', '#059669', '#F97316', '#0EA5E9', '#8B5CF6', '#EC4899', '#10B981'];
+
+                    let html = `<div class="sgk-lesson-title">BẢNG ${cat === 'addition' ? 'CỘNG' : cat === 'subtraction' ? 'TRỪ' : cat === 'multiplication' ? 'NHÂN' : 'CHIA'} TỪ 1 ĐẾN 10</div>`;
+                    html += `<div class="math-tables-grid">`;
+
+                    for (let n = 1; n <= 10; n++) {
+                        const testId = `${cat}_table_${n}`;
+                        const prog = progress[testId];
+                        let statusClass = '';
+                        let statusText = 'Làm bài test';
+                        if (prog) {
+                            if (prog.score === prog.total && prog.score === 10) {
+                                statusClass = 'status-done';
+                                statusText = `✅ Done ${prog.score}/${prog.total}`;
+                            } else {
+                                statusClass = 'status-doing';
+                                statusText = `⏳ Doing ${prog.score}/${prog.total}`;
+                            }
+                        }
+
+                        html += `
+                        <div class="math-lesson-table ${statusClass}">
+                            <div class="math-table-header">
+                                <div class="math-table-title" style="color: ${colors[n-1]}">${cat === 'addition' ? 'Cộng' : cat === 'subtraction' ? 'Trừ' : cat === 'multiplication' ? 'Nhân' : 'Chia'} ${n}</div>
+                            </div>
+                            <div class="math-table-rows">`;
+                        
+                        for (let i = 0; i <= 10; i++) {
+                            let row = '';
+                            if (cat === 'addition') { if(i<10) row = `${n} + ${i} = ${n+i}`; }
+                            else if (cat === 'subtraction') { if(i+n <= 20 && i < 10) row = `${i+n} - ${n} = ${i}`; }
+                            else if (cat === 'multiplication') { if(i>0) row = `${n} x ${i} = ${n*i}`; }
+                            else if (cat === 'division') { if(i>0) row = `${n*i} : ${n} = ${i}`; }
+                            
+                            if (row) {
+                                const parts = row.split('=');
+                                html += `<div class="math-table-row">
+                                    <span class="math-row-eq" style="color: ${colors[n-1]}">${parts[0].trim()}</span>
+                                    <span class="math-row-sep">=</span>
+                                    <span class="math-row-res">${parts[1].trim()}</span>
+                                </div>`;
+                            }
+                        }
+                        html += `
+                            </div>
+                            <div class="math-table-footer">
+                                <button class="math-table-btn-bottom" onclick="mathApp.startActivity('test', 'easy', ${n}, '${testId}')">${statusText}</button>
+                            </div>
+                        </div>`;
+                    }
+                    html += `</div>`;
+
+                    html += this.renderTestSection();
+                    view.innerHTML = html;
+                },
+
+                renderAdvancedTest() {
+                    const view = document.getElementById('mathLessonView');
+                    view.classList.remove('hidden');
+                    document.getElementById('mathQuestionView').classList.add('hidden');
+                    document.getElementById('mathResultView').classList.add('hidden');
+                    view.innerHTML = this.renderTestSection();
+                },
+
+                renderTestSection() {
+                    const progress = this.getProgress();
+                    const getStatus = (id) => {
+                        const p = progress[id];
+                        if (!p) return { class: '', text: 'Chưa làm' };
+                        if (p.score === p.total && p.score > 0) return { class: 'status-done', text: `✅ Done ${p.score}/${p.total}` };
+                        return { class: 'status-doing', text: `⏳ Doing ${p.score}/${p.total}` };
+                    };
+
+                    const cat = this.state.category;
+                    
+                    const renderGrid = (lvl, label) => {
+                        let gridHtml = '';
+                        for(let i=1; i<=5; i++) {
+                            const testId = `${cat}_${lvl}_test_${i}`;
+                            const status = getStatus(testId);
+                            gridHtml += `<div class="math-test-item ${status.class}" onclick="mathApp.startActivity('test', '${lvl}', null, '${testId}')">
+                                <div class="test-item-title">Bài test ${i}</div>
+                                <div class="test-item-status">${status.text}</div>
+                            </div>`;
+                        }
+                        return gridHtml;
+                    };
+
+                    return `
+                    <div class="math-test-section">
+                        <div class="math-test-title">🎯 BÀI KIỂM TRA CHO BÉ</div>
+                        <div class="math-test-levels">
+                            <div class="math-test-col">
+                                <div class="math-test-col-header easy">🟢 CẤP ĐỘ DỄ</div>
+                                <div class="math-test-grid">
+                                    ${renderGrid('easy', 'Dễ')}
+                                </div>
+                            </div>
+                            <div class="math-test-col">
+                                <div class="math-test-col-header medium">🟡 TRUNG BÌNH</div>
+                                <div class="math-test-grid">
+                                    ${renderGrid('medium', 'Vừa')}
+                                </div>
+                            </div>
+                            <div class="math-test-col">
+                                <div class="math-test-col-header hard">🔴 CẤP ĐỘ KHÓ</div>
+                                <div class="math-test-grid">
+                                    ${renderGrid('hard', 'Khó')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                },
+
+                startActivity(act, lvl = 'easy', focusedNum = null, testId = null) {
+                    this.state.level = lvl;
+                    this.state.focusedNum = focusedNum;
+                    this.state.testId = testId;
+                    this.state.score = 0;
+                    this.state.currentQ = 0;
+                    this.state.totalQ = (act === 'test' && !focusedNum) ? 15 : 10;
+                    
+                    document.getElementById('mathLessonView').classList.add('hidden');
+                    document.getElementById('mathQuestionView').classList.remove('hidden');
+                    document.getElementById('mathResultView').classList.add('hidden');
+                    
+                    this.generateQuestions();
+                    this.showQuestion();
+                },
+
+                generateQuestions() {
+                    const questions = [];
+                    const usedPairs = new Set();
+                    const cat = this.state.category;
+                    const focused = this.state.focusedNum;
+                    const lvl = this.state.level;
+                    
+                    // Priority case: Table-focused tests (e.g. Table 5)
+                    // These have limited combinations (0-10), so we can pre-generate and shuffle
+                    if (focused) {
+                        const allPossible = [];
+                        for (let i = 0; i <= 10; i++) {
+                            let a, b, op, ans;
+                            if (cat === 'addition') { a = focused; b = i; op = '+'; ans = a + b; }
+                            else if (cat === 'subtraction') { b = focused; ans = i; a = b + ans; op = '-'; } // X - 5 = i => X = 5+i
+                            else if (cat === 'multiplication') { a = focused; b = i; op = 'x'; ans = a * b; }
+                            else if (cat === 'division') { b = focused; ans = i; a = b * ans; op = ':'; } // X : 5 = i => X = 5*i
+                            
+                            if (cat === 'division' && i === 0) continue; // Skip divide by zero result for kids
+                            if (cat === 'addition' && i === 10) continue; // Just pick 10 out of 11
+
+                            allPossible.push({ 
+                                text: `${a} ${op} ${b} = ?`, 
+                                ans, 
+                                id: `${a}${op}${b}`,
+                                opts: this.generateOptions(ans)
+                            });
+                        }
+                        // Shuffle and take 10
+                        this.state.questions = allPossible.sort(() => Math.random() - 0.5).slice(0, 10);
+                        return;
+                    }
+
+                    // General tests (Level Easy/Medium/Hard)
+                    let attempts = 0;
+                    while (questions.length < 10 && attempts < 100) {
+                        const q = this.createOneQuestion();
+                        if (!usedPairs.has(q.id)) {
+                            usedPairs.add(q.id);
+                            questions.push(q);
+                        }
+                        attempts++;
+                    }
+                    this.state.questions = questions;
+                },
+
+                createOneQuestion() {
+                    let a, b, op, ans, cat = this.state.category;
+                    const lvl = this.state.level;
+
+                    if (cat === 'adv_test') {
+                        const cats = ['addition', 'subtraction', 'multiplication', 'division'];
+                        cat = cats[Math.floor(Math.random() * 4)];
+                    }
+
+                    if (cat === 'addition') {
+                        op = '+';
+                        if (lvl === 'easy') { a = Math.floor(Math.random() * 10); b = Math.floor(Math.random() * (11 - a)); }
+                        else if (lvl === 'medium') { a = Math.floor(Math.random() * 20); b = Math.floor(Math.random() * 10); }
+                        else { a = Math.floor(Math.random() * 50); b = Math.floor(Math.random() * 50); }
+                        ans = a + b;
+                    } else if (cat === 'subtraction') {
+                        op = '-';
+                        if (lvl === 'easy') { a = Math.floor(Math.random() * 9) + 1; b = Math.floor(Math.random() * (a + 1)); }
+                        else if (lvl === 'medium') { a = Math.floor(Math.random() * 20); b = Math.floor(Math.random() * (a % 10 + 1)); }
+                        else { a = Math.floor(Math.random() * 50); b = Math.floor(Math.random() * a); }
+                        ans = a - b;
+                    } else if (cat === 'multiplication') {
+                        op = 'x';
+                        const range = lvl === 'easy' ? 5 : (lvl === 'medium' ? 9 : 12);
+                        a = Math.floor(Math.random() * (range - 1)) + 2; b = Math.floor(Math.random() * 10) + 1;
+                        ans = a * b;
+                    } else if (cat === 'division') {
+                        op = ':';
+                        const range = lvl === 'easy' ? 5 : (lvl === 'medium' ? 10 : 12);
+                        ans = Math.floor(Math.random() * 10) + 1; b = Math.floor(Math.random() * (range - 1)) + 2;
+                        a = ans * b;
+                    }
+
+                    return { 
+                        text: `${a} ${op} ${b} = ?`, 
+                        ans, 
+                        id: `${a}${op}${b}`,
+                        opts: this.generateOptions(ans)
+                    };
+                },
+
+                generateOptions(ans) {
+                    let opts = [ans];
+                    const maxVal = Math.max(ans + 10, 20);
+                    while(opts.length < 4) {
+                        let v = Math.floor(Math.random() * maxVal);
+                        if (v >= 0 && !opts.includes(v)) opts.push(v);
+                    }
+                    return opts.sort(() => Math.random() - 0.5);
+                },
+
+                showQuestion() {
+                    this.state.isAnswering = false;
+                    const q = this.state.questions[this.state.currentQ];
+                    if (!q) { this.showResults(); return; }
+                    
+                    document.getElementById('currentQuestion').innerText = q.text;
+                    const ansGrid = document.getElementById('mathAnswers');
+                    ansGrid.innerHTML = q.opts.map(o => `<button class="math-ans-btn" onclick="mathApp.checkAnswer(${o}, this)">${o}</button>`).join('');
+                    
+                    const prog = (this.state.currentQ / this.state.totalQ) * 100;
+                    document.getElementById('mathProgress').value = prog;
+                    document.getElementById('mathProgressText').innerText = `Câu ${this.state.currentQ + 1}/10`;
+
+                    // Timer Logic
+                    clearInterval(this.state.timer);
+                    document.getElementById('mathTestTimerArea').classList.add('hidden');
+                    
+                    // Only start timer for 'test' activities (or use a flag)
+                    // If testId is present, it's likely a test
+                    if (this.state.testId) {
+                        document.getElementById('mathTestTimerArea').classList.remove('hidden');
+                        this.state.timeLeft = 15;
+                        this.updateTimerUI();
+                        this.state.timer = setInterval(() => {
+                            this.state.timeLeft -= 0.1;
+                            if (this.state.timeLeft <= 0) {
+                                this.state.timeLeft = 0;
+                                clearInterval(this.state.timer);
+                                this.checkAnswer(null, null); // AUTO-NEXT on timeout
+                            }
+                            this.updateTimerUI();
+                        }, 100);
+                    }
+                },
+
+                updateTimerUI() {
+                    const bar = document.getElementById('mathTestTimerBar');
+                    const text = document.getElementById('mathTimeLeft');
+                    if (bar) bar.style.width = (this.state.timeLeft / 15) * 100 + '%';
+                    if (text) text.innerText = Math.ceil(this.state.timeLeft);
+                },
+
+                checkAnswer(val, btn) {
+                    if (this.state.isAnswering) return;
+                    this.state.isAnswering = true;
+                    clearInterval(this.state.timer);
+                    
+                    const q = this.state.questions[this.state.currentQ];
+                    const correct = (val !== null) && (val === q.ans);
+                    
+                    const feedback = document.getElementById('mathFeedback');
+                    feedback.classList.remove('hidden');
+                    feedback.className = correct ? 'math-feedback-box correct' : 'math-feedback-box wrong';
+                    
+                    const praise = ['Giỏi quá! 🌟', 'Xuất sắc! 👏', 'Chính xác luôn! 🎯', 'Bé thông minh thật! 😊', 'Đúng rồi, tiếp tục nào! 🚀'];
+                    const cheer = ['Cố gắng lên nào, bé làm được mà! 💪', 'Gần đúng rồi, thử lại nhé! 😊', 'Đừng bỏ cuộc, Cú Mèo tin bé! 🦉', 'Suy nghĩ thêm một chút thôi! 🧠'];
+                    const timeoutMsg = 'Hết giờ rồi bé ơi! ⏱️';
+                    
+                    if (val === null) {
+                        feedback.innerHTML = timeoutMsg;
+                    } else {
+                        feedback.innerHTML = correct ? praise[Math.floor(Math.random()*praise.length)] : cheer[Math.floor(Math.random()*cheer.length)];
+                    }
+
+                     if (correct) {
+                        btn.classList.add('correct');
+                        this.state.score++;
+                        if (window.authManager && window.authManager.recordScore) window.authManager.recordScore(1, 1);
+                        if (window.playCorrectSound) window.playCorrectSound();
+                        if (window.addStars) window.addStars(1); // +1 sao mỗi câu đúng
+                    } else {
+                        btn.classList.add('wrong');
+                        if (window.authManager && window.authManager.recordScore) window.authManager.recordScore(0, 1);
+                        document.querySelectorAll('.math-ans-btn').forEach(b => {
+                            if (parseInt(b.innerText) === q.ans) b.classList.add('correct');
+                        });
+                        if (window.playWrongSound) window.playWrongSound();
+                    }
+
+                    // Save intermediate progress (Doing)
+                    if (this.state.testId) {
+                        this.saveTestProgress(this.state.testId, this.state.score, this.state.totalQ);
+                    }
+
+                    setTimeout(() => {
+                        feedback.classList.add('hidden');
+                        this.state.currentQ++;
+                        if (this.state.currentQ >= 10) this.showResults();
+                        else this.showQuestion();
+                    }, 1500);
+                },
+
+                showResults() {
+                    document.getElementById('mathQuestionView').classList.add('hidden');
+                    document.getElementById('mathResultView').classList.remove('hidden');
+                    const score = this.state.score;
+                    document.getElementById('resultScore').innerText = `Kết quả: ${score}/10 ⭐`;
+                    let stars = score === 10 ? '⭐⭐⭐' : (score >= 7 ? '⭐⭐' : (score >= 4 ? '⭐' : '☁️'));
+                    document.getElementById('resultStars').innerText = stars;
+                    document.getElementById('resultMsg').innerText = score === 10 ? 'Tuyệt vời! Bé là thiên tài toán học! 🌟' : 'Bé làm rất tốt! Cố gắng luyện tập thêm nhé! 💪';
+                    
+                    if (this.state.testId) {
+                        this.saveTestProgress(this.state.testId, score, this.state.totalQ);
+                    }
+
+                    if (window.showConfetti && score >= 7) window.showConfetti();
+                    // Đã cộng sao trong từng câu rồi, ở đây không cộng thêm nữa để tránh trùng lặp
+                    // Hoặc có thể cộng "thưởng thêm" nếu muốn, nhưng yêu cầu hiện tại là mỗi câu đúng +1 sao
+                },
+
+                goBack() {
+                    clearInterval(this.state.timer);
+                    if (this.state.view === 'activity') {
+                        this.renderHub();
+                    } else {
+                        this.renderLesson();
+                    }
+                }
+            };
+
+            window.backToMathMenu = () => mathApp.init();
+            if (document.getElementById('page-math') && document.getElementById('page-math').classList.contains('active')) {
+                mathApp.init();
+            }
+            window.initMathApp = () => mathApp.init();
+        </script>
+    <div id="achievementsModal"></div>
+</body>
+
+</html>

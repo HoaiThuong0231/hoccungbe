@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Website học chữ cái và toán tiếng Việt dành cho trẻ em 5 tuổi">
+    <title>Học cùng bé 🌈</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="auth.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Floating Stars Background -->
+    <div class="bg-stars" id="bgStars"></div>
+
+    <!-- Mascot Guide -->
+    <div class="mascot-container" id="mascot">
+        <img src="assets/mascot.png" alt="Cú mèo thông thái" class="mascot-img" id="mascotImg">
+        <div class="mascot-speech" id="mascotSpeech">
+            Xin chào! Mình là Cú Mèo! 🦉<br>Hãy cùng học nào!
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand" onclick="navigateTo('home')">
+            <span class="nav-emoji">🌈</span>
+            <span class="nav-title">Học Cùng Bé</span>
+        </div>
+        <div class="nav-links">
+            <div id="authContainer" style="display: flex; align-items: center;">
+                <!-- Hồ sơ của bé sẽ hiện ở đây (Mon) -->
+            </div>
+            <button id="navAchBtn" class="nav-btn head-action" onclick="openAchievementsModal()" style="display:none;">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Thành tích</span>
+            </button>
+            <button class="nav-btn head-action" onclick="openSettingsModal()">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Cài đặt</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="bottom-nav-btn active" data-page="home" onclick="navigateTo('home')">
+            <span class="bottom-nav-icon">🏠</span><span class="bottom-nav-label">Trang chủ</span>
+        </button>
+        <button class="bottom-nav-btn" data-page="vietnamese" onclick="navigateTo('vietnamese')">
+            <span class="bottom-nav-icon">VI</span><span class="bottom-nav-label">Tiếng Việt</span>
+        </button>
+        <button class="bottom-nav-btn" data-page="english" onclick="navigateTo('english')">
+            <span class="bottom-nav-icon">ENG</span><span class="bottom-nav-label">Tiếng Anh</span>
+        </button>
+        <button class="bottom-nav-btn" data-page="math" onclick="navigateTo('math')">
+            <span class="bottom-nav-icon">🔢</span><span class="bottom-nav-label">Toán</span>
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+        <!-- ============ VIETNAMESE HUB PAGE ============ -->
+        <section class="page" id="page-vietnamese">
+            <div class="page-header">
+                <h1 class="page-title">VI Học Tiếng Việt</h1>
+                <p class="page-desc">Chọn môn học bạn muốn ở bên dưới nhé!</p>
+            </div>
+            <div class="hub-grid">
+                <button class="hub-card hub-alphabet" onclick="navigateTo('alphabet')">
+                    <div class="hub-card-icon">🔤</div>
+                    <div class="hub-card-title">Bảng Chữ Cái</div>
+                    <div class="hub-card-desc">29 chữ cái tiếng Việt</div>
+                    <div class="hub-card-arrow">→</div>
+                </button>
+                <button class="hub-card hub-vocab" onclick="navigateTo('vocabulary')">
+                    <div class="hub-card-icon">📚</div>
+                    <div class="hub-card-title">Từ Vựng</div>
+                    <div class="hub-card-desc">Học từ mới theo chủ đề</div>
+                    <div class="hub-card-arrow">→</div>
+                </button>
+                <button class="hub-card hub-games" onclick="navigateTo('games')">
+                    <div class="hub-card-icon">🎮</div>
+                    <div class="hub-card-title">Trò Chơi</div>
+                    <div class="hub-card-desc">Game vần, ghép chữ, nghe đoán</div>
+                    <div class="hub-card-arrow">→</div>
+                </button>
+            </div>
+            <!-- Progress -->
+            <div class="progress-section">
+                <h2 class="section-title">⭐ Tiến Độ Học Tập</h2>
+                <div class="progress-cards">
+                    <div class="progress-card">
+                        <div class="progress-emoji">🔤</div>
+                        <div class="progress-info"><span class="progress-label">Chữ cái đã học</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="alphabetProgress" style="width:0%"></div>
+                            </div>
+                            <span class="progress-count" id="alphabetCount">0/29</span>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-emoji">📚</div>
+                        <div class="progress-info"><span class="progress-label">Từ vựng đã học</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill vocab-fill" id="vocabProgress" style="width:0%"></div>
+                            </div>
+                            <span class="progress-count" id="vocabCount">0/30</span>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-emoji">⭐</div>
+                        <div class="progress-info"><span class="progress-label">Số sao đã đạt</span>
+                            <div class="stars-display" id="starsDisplay">0 ⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ HOME PAGE (LANDING PAGE) ============ -->
+        <section class="page active" id="page-home">
+            <div class="lb-hero">
+                <div class="lb-hero-content">
+                    <h1 class="lb-hero-title">Học cùng bé<br><span class="highlight">vừa học vừa chơi!</span></h1>
+                    <p class="lb-hero-subtitle">Môi trường hoàn hảo để phát triển tư duy 🚀</p>
+                    <button class="lb-hero-btn" onclick="authManager.handleHeroClick()">Bắt đầu học ngay! 🎮</button>
+                </div>
+                <div class="lb-hero-img">
+                    <img src="assets/mascot.png" alt="Mascot dễ thương" class="lb-mascot-jump">
+                </div>
+            </div>
+
+            <!-- Khu vực chọn môn (3 cards) -->
+            <div class="lb-cards-container" id="lb-cards">
+                <button class="lb-card lb-viet" onclick="window.location.href='vietnamese.html'">
+                    <div class="lb-card-icon" style="padding: 0; background: transparent; box-shadow: none;">
+                        <img src="assets/vietnamese.png" alt="Tiếng Việt" style="width: 75px; height: 75px; object-fit: cover; border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.15);">
+                    </div>
+                    <div class="lb-card-info">
+                        <div class="lb-card-title">Tiếng Việt</div>
+                        <div class="lb-card-desc">Bảng chữ cái, từ vựng và đánh vần</div>
+                    </div>
+                    <div class="lb-card-arrow">→</div>
+                </button>
+                <button class="lb-card lb-eng" onclick="window.location.href='english.html'">
+                    <div class="lb-card-icon" style="padding: 0; background: transparent; box-shadow: none;">
+                        <img src="assets/english.png" alt="Tiếng Anh" style="width: 75px; height: 75px; object-fit: cover; border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.15);">
+                    </div>
+                    <div class="lb-card-info">
+                        <div class="lb-card-title">Tiếng Anh</div>
+                        <div class="lb-card-desc">Alphabet, từ vựng theo chủ đề đa dạng</div>
+                    </div>
+                    <div class="lb-card-arrow">→</div>
+                </button>
+                <button class="lb-card lb-math" onclick="window.location.href='math.html'">
+                    <div class="lb-card-icon" style="padding: 0; background: transparent; box-shadow: none;">
+                        <img src="assets/math.png" alt="Toán Học" style="width: 75px; height: 75px; object-fit: cover; border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.15);">
+                    </div>
+                    <div class="lb-card-info">
+                        <div class="lb-card-title">Toán Học</div>
+                        <div class="lb-card-desc">Số đếm, phép cộng trừ và so sánh</div>
+                    </div>
+                    <div class="lb-card-arrow">→</div>
+                </button>
+            </div>
+
+            <!-- Thành Tích -->
+            <div id="lbAchievementsSection" class="lb-achievements" style="display:none;">
+                <h2 class="lb-section-title">🏆 Thành Tích Của Bé</h2>
+                <div class="lb-ach-grid">
+                    <div class="lb-ach-item">
+                        <span class="lb-ach-emoji">⭐</span>
+                        <div class="lb-ach-info"><span class="lb-ach-val" id="lbTotalStars">0</span><span class="lb-ach-label">Số sao</span></div>
+                    </div>
+                    <div class="lb-ach-item">
+                        <span class="lb-ach-emoji">📚</span>
+                        <div class="lb-ach-info"><span class="lb-ach-val" id="lbTotalLessons">0</span><span class="lb-ach-label">Bài học</span></div>
+                    </div>
+                    <div class="lb-ach-item">
+                        <span class="lb-ach-emoji">🔥</span>
+                        <div class="lb-ach-info"><span class="lb-ach-val" id="lbStreak">1</span><span class="lb-ach-label">Ngày học</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini Game -->
+            <div class="lb-minigame">
+                <h2 class="lb-section-title">🎮 Góc Vui Chơi</h2>
+                <div class="lb-game-banner">
+                    <div class="lb-game-info">
+                        <h3>Đuổi Hình Bắt Chữ</h3>
+                        <p>Thư giãn với những câu hỏi thú vị nhất!</p>
+                        <button class="lb-play-btn" onclick="navigateTo('games')">Chơi ngay! 🚀</button>
+                    </div>
+                    <div class="lb-game-icon">🎲</div>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div id="lbLeaderboardSection" class="lb-leaderboard" style="margin-top: 40px; padding: 0 10px;">
+                <div class="lb-section-header" style="text-align: center; margin-bottom: 24px;">
+                    <h2 class="lb-section-title" style="color: #9D174D; margin-bottom: 8px;">🔥 Bảng Thi Đua</h2>
+                    <p style="color: #6B7280; font-weight: 600;">Cùng xem ai là người chăm chỉ nhất nào!</p>
+                </div>
+                
+                <div id="leaderboardContainer">
+                    <!-- Sẽ được điền bởi auth.js -->
+                    <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;">
+                        <p style="color:#6B7280; font-weight:600;">Đang tải bảng xếp hạng... 🚀</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ALPHABET PAGE ============ -->
+        <section class="page" id="page-alphabet">
+            <div class="page-header">
+                <button class="page-back-btn" onclick="navigateTo('vietnamese')">← Tiếng Việt</button>
+                <h1 class="page-title">🔤 Bảng Chữ Cái</h1>
+                <p class="page-desc">Chạm vào chữ cái để nghe phát âm nhé!</p>
+            </div>
+            <div class="alphabet-grid" id="alphabetGrid"></div>
+
+            <!-- Phụ âm ghép -->
+            <div class="alpha-extra-section">
+                <h2 class="section-title">🔗 Phụ Âm Ghép</h2>
+                <p class="page-desc">Chạm để nghe phát âm!</p>
+                <div class="alpha-extra-grid" id="phuAmGhepGrid"></div>
+            </div>
+
+            <!-- Vần -->
+            <div class="alpha-extra-section">
+                <h2 class="section-title">📖 Học Vần</h2>
+                <p class="page-desc">Chạm để nghe vần!</p>
+                <div class="alpha-extra-grid" id="vanGrid"></div>
+            </div>
+        </section>
+
+        <!-- Alphabet Modal -->
+        <div class="modal-overlay" id="alphabetModal">
+            <div class="modal-content alphabet-modal">
+                <button class="modal-close" onclick="closeModal('alphabetModal')">&times;</button>
+                <div class="modal-letter" id="modalLetter">A</div>
+                <div class="modal-letter-lower" id="modalLetterLower">a</div>
+                <div class="modal-example">
+                    <div class="modal-example-img" id="modalExampleEmoji">🍎</div>
+                    <div class="modal-example-word" id="modalExampleWord">Ăn</div>
+                </div>
+                <button class="speak-btn" id="modalSpeakBtn" onclick="speakModalLetter()">🔊 Nghe phát âm</button>
+            </div>
+        </div>
+
+        <!-- ============ VOCABULARY PAGE ============ -->
+        <section class="page" id="page-vocabulary">
+            <div class="page-header">
+                <button class="page-back-btn" onclick="navigateTo('vietnamese')">← Tiếng Việt</button>
+                <h1 class="page-title">📚 Học Từ Vựng</h1>
+                <p class="page-desc">Chạm vào từ để nghe và xem hình nhé!</p>
+            </div>
+            <div class="vocab-categories" id="vocabCategories">
+                <button class="vocab-cat-btn active" data-cat="all" onclick="filterVocab('all')">Tất cả</button>
+                <button class="vocab-cat-btn" data-cat="animals" onclick="filterVocab('animals')">🐾 Động vật</button>
+                <button class="vocab-cat-btn" data-cat="fruits" onclick="filterVocab('fruits')">🍎 Trái cây</button>
+                <button class="vocab-cat-btn" data-cat="objects" onclick="filterVocab('objects')">🎒 Đồ vật</button>
+                <button class="vocab-cat-btn" data-cat="nature" onclick="filterVocab('nature')">🌿 Thiên nhiên</button>
+            </div>
+            <div class="vocab-grid" id="vocabGrid"></div>
+        </section>
+
+        <!-- Vocabulary Modal -->
+        <div class="modal-overlay" id="vocabModal">
+            <div class="modal-content vocab-modal-content">
+                <button class="modal-close" onclick="closeModal('vocabModal')">&times;</button>
+                <div class="vocab-modal-emoji" id="vocabModalEmoji">🐱</div>
+                <div class="vocab-modal-word" id="vocabModalWord">Mèo</div>
+                <div class="vocab-modal-spell" id="vocabModalSpell">M - È - O</div>
+                <div class="vocab-modal-btns">
+                    <button class="speak-btn" onclick="speakVocabWord()">🔊 Nghe phát âm</button>
+                    <button class="speak-btn spell-btn" onclick="spellVocabWord()">✏️ Đánh vần</button>
+                </div>
+                <div class="vocab-spell-display hidden" id="vocabSpellDisplay">
+                    <div class="spell-steps" id="vocabSpellSteps"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ MATH PAGE ============ -->
+        <section class="page" id="page-math">
+            <div class="page-header">
+                <h1 class="page-title">🔢 Học Toán</h1>
+                <p class="page-desc">Chọn bài học toán bên dưới nhé!</p>
+            </div>
+
+            <!-- Level Selector -->
+            <div class="level-selector" id="levelSelector">
+                <span class="level-label">📊 Cấp độ:</span>
+                <button class="level-btn active" data-level="1" onclick="setMathLevel(1)">⭐ Level 1 (0-5)</button>
+                <button class="level-btn" data-level="2" onclick="setMathLevel(2)">🌟 Level 2 (0-10)</button>
+            </div>
+
+            <!-- Math Sub-Menu -->
+            <div class="math-menu" id="mathMenu">
+                <button class="home-btn btn-math-numbers" onclick="showMathSection('numbers')">
+                    <div class="home-btn-icon">🔢</div>
+                    <div class="home-btn-text"><span class="home-btn-title">Học Số Đếm</span><span
+                            class="home-btn-desc">Số từ 0 đến 10</span></div>
+                    <div class="home-btn-arrow">→</div>
+                </button>
+                <button class="home-btn btn-math-add" onclick="showMathSection('addition')">
+                    <div class="home-btn-icon">➕</div>
+                    <div class="home-btn-text"><span class="home-btn-title">Phép Cộng</span><span
+                            class="home-btn-desc">Cộng đơn giản</span></div>
+                    <div class="home-btn-arrow">→</div>
+                </button>
+                <button class="home-btn btn-math-sub" onclick="showMathSection('subtraction')">
+                    <div class="home-btn-icon">➖</div>
+                    <div class="home-btn-text"><span class="home-btn-title">Phép Trừ</span><span
+                            class="home-btn-desc">Trừ đơn giản</span></div>
+                    <div class="home-btn-arrow">→</div>
+                </button>
+                <button class="home-btn btn-game" onclick="showMathSection('mathgames')">
+                    <div class="home-btn-icon">🎮</div>
+                    <div class="home-btn-text"><span class="home-btn-title">Trò Chơi Toán</span><span
+                            class="home-btn-desc">3 game vui nhộn</span></div>
+                    <div class="home-btn-arrow">→</div>
+                </button>
+            </div>
+
+            <!-- Numbers Section -->
+            <div class="math-section hidden" id="mathNumbers">
+                <div class="math-section-header">
+                    <button class="game-back-btn" onclick="backToMathMenu()">← Quay lại</button>
+                    <h2>🔢 Học Số Đếm</h2>
+                </div>
+                <div class="number-grid" id="numberGrid"></div>
+            </div>
+
+            <!-- Number Detail Modal -->
+            <div class="modal-overlay" id="numberModal">
+                <div class="modal-content number-modal-content">
+                    <button class="modal-close" onclick="closeModal('numberModal')">&times;</button>
+                    <div class="number-modal-digit" id="numberModalDigit">5</div>
+                    <div class="number-modal-word" id="numberModalWord">Năm</div>
+                    <div class="number-modal-visual" id="numberModalVisual">🍎🍎🍎🍎🍎</div>
+                    <button class="speak-btn" onclick="speakCurrentNumber()">🔊 Nghe phát âm</button>
+                </div>
+            </div>
+
+            <!-- Addition Section -->
+            <div class="math-section hidden" id="mathAddition">
+                <div class="math-section-header">
+                    <button class="game-back-btn" onclick="backToMathMenu()">← Quay lại</button>
+                    <h2>➕ Phép Cộng</h2>
+                </div>
+                <div class="math-practice" id="additionPractice">
+                    <div class="math-visual-equation" id="addVisual"></div>
+                    <div class="math-equation" id="addEquation"></div>
+                    <div class="math-options" id="addOptions"></div>
+                    <div class="math-feedback hidden" id="addFeedback">
+                        <div class="feedback-text" id="addFeedbackText"></div>
+                        <button class="game-next-btn" onclick="nextAddition()">Câu tiếp →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subtraction Section -->
+            <div class="math-section hidden" id="mathSubtraction">
+                <div class="math-section-header">
+                    <button class="game-back-btn" onclick="backToMathMenu()">← Quay lại</button>
+                    <h2>➖ Phép Trừ</h2>
+                </div>
+                <div class="math-practice" id="subtractionPractice">
+                    <div class="math-visual-equation" id="subVisual"></div>
+                    <div class="math-equation" id="subEquation"></div>
+                    <div class="math-options" id="subOptions"></div>
+                    <div class="math-feedback hidden" id="subFeedback">
+                        <div class="feedback-text" id="subFeedbackText"></div>
+                        <button class="game-next-btn" onclick="nextSubtraction()">Câu tiếp →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Math Games Sub-Menu -->
+            <div class="math-section hidden" id="mathGamesSection">
+                <div class="math-section-header">
+                    <button class="game-back-btn" onclick="backToMathMenu()">← Quay lại</button>
+                    <h2>🎮 Trò Chơi Toán</h2>
+                </div>
+                <div class="games-menu" id="mathGamesMenu">
+                    <button class="game-card" onclick="startMathGame('mathchoose')">
+                        <div class="game-card-icon">🧮</div>
+                        <div class="game-card-title">Chọn Đáp Án</div>
+                        <div class="game-card-desc">Tính và chọn đáp án đúng</div>
+                        <div class="game-card-badge">⭐ Game 1</div>
+                    </button>
+                    <button class="game-card" onclick="startMathGame('counting')">
+                        <div class="game-card-icon">🐱</div>
+                        <div class="game-card-title">Đếm Số</div>
+                        <div class="game-card-desc">Đếm hình và chọn số đúng</div>
+                        <div class="game-card-badge">⭐ Game 2</div>
+                    </button>
+                    <button class="game-card" onclick="startMathGame('mathdrag')">
+                        <div class="game-card-icon">🎯</div>
+                        <div class="game-card-title">Kéo Thả Số</div>
+                        <div class="game-card-desc">Kéo số vào kết quả phép tính</div>
+                        <div class="game-card-badge">⭐ Game 3</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Math Game Area -->
+            <div class="math-section hidden" id="mathGameArea">
+                <div class="game-topbar">
+                    <button class="game-back-btn" onclick="backToMathGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="mathGameScore">0</span></div>
+                    <div class="game-round">Câu <span id="mathGameRound">1</span>/10</div>
+                </div>
+                <div class="game-question" id="mathGameQuestion"></div>
+                <div class="game-options" id="mathGameOptions"></div>
+                <div class="game-feedback hidden" id="mathGameFeedback">
+                    <div class="feedback-text" id="mathGameFeedbackText"></div>
+                    <button class="game-next-btn" onclick="nextMathGameQuestion()">Câu tiếp →</button>
+                </div>
+            </div>
+
+            <!-- Math Game Complete -->
+            <div class="math-section hidden" id="mathGameComplete">
+                <div class="game-complete-content">
+                    <div class="game-complete-emoji">🎉</div>
+                    <h2 class="game-complete-title">Hoàn Thành!</h2>
+                    <div class="game-complete-score">Bạn đạt <span id="mathFinalScore">0</span>/10 ⭐</div>
+                    <div class="game-complete-message" id="mathCompleteMsg">Giỏi lắm!</div>
+                    <div class="sticker-section">
+                        <h3 class="sticker-title">🏆 Bộ sưu tập Sticker</h3>
+                        <div class="sticker-collection" id="stickerCollection"></div>
+                    </div>
+                    <div class="game-complete-buttons">
+                        <button class="game-btn-replay" onclick="replayMathGame()">🔄 Chơi lại</button>
+                        <button class="game-btn-menu" onclick="backToMathGames()">📋 Trò chơi khác</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============ GAMES PAGE (Vietnamese) ============ -->
+        <section class="page" id="page-games">
+            <div class="page-header">
+                <button class="page-back-btn" onclick="navigateTo('vietnamese')">← Tiếng Việt</button>
+                <h1 class="page-title">🎮 Trò Chơi Chữ Cái</h1>
+                <p class="page-desc">Vừa chơi vừa học, thật vui nào!</p>
+            </div>
+            <div class="games-menu" id="gamesMenu">
+                <button class="game-card" onclick="startGame('choose')">
+                    <div class="game-card-icon">🖼️</div>
+                    <div class="game-card-title">Chọn Chữ Đúng</div>
+                    <div class="game-card-desc">Nhìn hình → chọn chữ cái đúng</div>
+                    <div class="game-card-badge">⭐ Game 1</div>
+                </button>
+                <button class="game-card" onclick="startGame('match')">
+                    <div class="game-card-icon">🧩</div>
+                    <div class="game-card-title">Ghép Chữ</div>
+                    <div class="game-card-desc">Ghép chữ vào đúng vị trí</div>
+                    <div class="game-card-badge">⭐ Game 2</div>
+                </button>
+                <button class="game-card" onclick="startGame('listen')">
+                    <div class="game-card-icon">🎧</div>
+                    <div class="game-card-title">Nghe Đoán Chữ</div>
+                    <div class="game-card-desc">Nghe phát âm → chọn chữ đúng</div>
+                    <div class="game-card-badge">⭐ Game 3</div>
+                </button>
+            </div>
+
+            <!-- Game Areas -->
+            <div class="game-area hidden" id="game-choose">
+                <div class="game-topbar"><button class="game-back-btn" onclick="backToGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="chooseScore">0</span></div>
+                    <div class="game-round">Câu <span id="chooseRound">1</span>/10</div>
+                </div>
+                <div class="game-question">
+                    <div class="game-question-emoji" id="chooseEmoji">🐱</div>
+                    <div class="game-question-text" id="chooseQuestion">Đây là chữ gì?</div>
+                </div>
+                <div class="game-options" id="chooseOptions"></div>
+                <div class="game-feedback hidden" id="chooseFeedback">
+                    <div class="feedback-text" id="chooseFeedbackText">Đúng rồi! 🎉</div><button class="game-next-btn"
+                        id="chooseNextBtn" onclick="nextChooseQuestion()">Câu tiếp →</button>
+                </div>
+            </div>
+            <div class="game-area hidden" id="game-match">
+                <div class="game-topbar"><button class="game-back-btn" onclick="backToGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="matchScore">0</span></div>
+                    <div class="game-round">Câu <span id="matchRound">1</span>/10</div>
+                </div>
+                <div class="game-question">
+                    <div class="game-question-text" id="matchQuestion">Ghép chữ cái để tạo từ:</div>
+                    <div class="match-target" id="matchTarget"></div>
+                </div>
+                <div class="match-letters" id="matchLetters"></div>
+                <div class="game-feedback hidden" id="matchFeedback">
+                    <div class="feedback-text" id="matchFeedbackText"></div><button class="game-next-btn"
+                        id="matchNextBtn" onclick="nextMatchQuestion()">Câu tiếp →</button>
+                </div>
+            </div>
+            <div class="game-area hidden" id="game-listen">
+                <div class="game-topbar"><button class="game-back-btn" onclick="backToGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="listenScore">0</span></div>
+                    <div class="game-round">Câu <span id="listenRound">1</span>/10</div>
+                </div>
+                <div class="game-question"><button class="listen-play-btn" id="listenPlayBtn"
+                        onclick="playListenAudio()">🔊 Nghe phát âm</button>
+                    <div class="game-question-text">Chữ cái nào vừa được đọc?</div>
+                </div>
+                <div class="game-options" id="listenOptions"></div>
+                <div class="game-feedback hidden" id="listenFeedback">
+                    <div class="feedback-text" id="listenFeedbackText"></div><button class="game-next-btn"
+                        id="listenNextBtn" onclick="nextListenQuestion()">Câu tiếp →</button>
+                </div>
+            </div>
+            <div class="game-area hidden" id="game-complete">
+                <div class="game-complete-content">
+                    <div class="game-complete-emoji">🎉</div>
+                    <h2 class="game-complete-title">Hoàn Thành!</h2>
+                    <div class="game-complete-score">Bạn đạt <span id="finalScore">0</span>/10 ⭐</div>
+                    <div class="game-complete-message" id="completeMessage">Giỏi lắm!</div>
+                    <div class="game-complete-buttons">
+                        <button class="game-btn-replay" onclick="replayGame()">🔄 Chơi lại</button>
+                        <button class="game-btn-menu" onclick="backToGames()">📋 Trò chơi khác</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ENGLISH PAGE ============ -->
+        <section class="page" id="page-english">
+            <div class="page-header">
+                <h1 class="page-title">ENG Học Tiếng Anh</h1>
+                <p class="page-desc">Let's learn English! Chọn bài học nhé!</p>
+            </div>
+
+            <!-- English Sub-Menu -->
+            <div class="en-sub-section" id="en-menu">
+                <div class="games-menu">
+                    <button class="game-card" onclick="showEnSection('alphabet')">
+                        <div class="game-card-icon">🔤</div>
+                        <div class="game-card-title">Alphabet</div>
+                        <div class="game-card-desc">Bảng chữ cái A-Z</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('vocab')">
+                        <div class="game-card-icon">📚</div>
+                        <div class="game-card-title">Vocabulary</div>
+                        <div class="game-card-desc">Từ vựng theo chủ đề</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('flashcard')">
+                        <div class="game-card-icon">🃏</div>
+                        <div class="game-card-title">Flashcard</div>
+                        <div class="game-card-desc">Lật thẻ học từ</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('lessons')">
+                        <div class="game-card-icon">📝</div>
+                        <div class="game-card-title">Lessons</div>
+                        <div class="game-card-desc">Bài học từ vựng + câu</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('games')">
+                        <div class="game-card-icon">🎮</div>
+                        <div class="game-card-title">Games</div>
+                        <div class="game-card-desc">Chơi game tiếng Anh</div>
+                    </button>
+                    <button class="game-card" onclick="showEnSection('tests')">
+                        <div class="game-card-icon">✅</div>
+                        <div class="game-card-title">Tests</div>
+                        <div class="game-card-desc">Kiểm tra bài học</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alphabet -->
+            <div class="en-sub-section hidden" id="en-alphabet">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>🔤 English Alphabet</h2>
+                </div>
+                <div class="en-alpha-grid" id="enAlphabetGrid"></div>
+            </div>
+
+            <!-- Vocabulary -->
+            <div class="en-sub-section hidden" id="en-vocab">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>📚 English Vocabulary</h2>
+                </div>
+                <div class="en-level-tabs">
+                    <button class="en-level-btn active" data-level="level1" onclick="selectEnLevel('level1')">Level
+                        1</button>
+                    <button class="en-level-btn" data-level="level2" onclick="selectEnLevel('level2')">Level 2</button>
+                    <button class="en-level-btn" data-level="level3" onclick="selectEnLevel('level3')">Level 3</button>
+                </div>
+                <div class="en-topic-tabs" id="enTopicTabs"></div>
+                <div class="en-vocab-grid" id="enVocabGrid"></div>
+            </div>
+
+            <!-- Flashcard -->
+            <div class="en-sub-section hidden" id="en-flashcard">
+                <div class="en-section-header">
+                    <button class="game-back-btn" id="fcBackBtn" onclick="handleFCBack()">← Quay lại</button>
+                    <h2 id="enFCTitle">🃏 English Flashcard</h2>
+                    <span class="en-fc-counter hidden" id="enFCCounter">1/15</span>
+                </div>
+                
+                <!-- Parts Menu -->
+                <div class="games-menu" id="enFcPartsMenu"></div>
+                
+                <!-- Learning Area -->
+                <div id="enFcLearningArea" class="hidden">
+                    <div class="fc-card" onclick="flipEnFC()">
+                        <div class="fc-card-inner" id="enFCInner">
+                            <div class="fc-card-front en-fc-front">
+                                <div class="fc-emoji" id="enFCFrontEmoji">🐱</div>
+                                <div class="fc-word-en" id="enFCFrontWord">cat</div>
+                                <div class="en-fc-phonetic" id="enFCPhonetic">/kæt/</div>
+                                <button class="fc-speaker-btn" onclick="speakEnFCEn(event)">🔊 English</button>
+                                <div style="font-size: 0.9rem; color: #9CA3AF; margin-top: 1rem; font-style: italic;">👆 Click để lật</div>
+                            </div>
+                            <div class="fc-card-back en-fc-back">
+                                <div class="fc-emoji" id="enFCBackEmoji">🐱</div>
+                                <div class="fc-word-vi" id="enFCBackWord">con mèo</div>
+                                <button class="fc-speaker-btn fc-speaker-vi" onclick="speakEnFCVi(event)">🔊 Tiếng Việt</button>
+                                <div style="font-size: 0.9rem; color: #9CA3AF; margin-top: 1rem; font-style: italic;">👆 Click để lật</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fc-nav">
+                        <button class="fc-nav-btn" onclick="prevEnFC()">⬅️ Trước</button>
+                        <button class="fc-nav-btn" onclick="nextEnFC()">Tiếp ➡️</button>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button class="game-next-btn hidden" id="enFCTestBtn" onclick="startEnFCTest()">Làm bài kiểm tra →</button>
+                    </div>
+                </div>
+
+                <!-- Test Area -->
+                <div id="enFcTestArea" class="hidden">
+                    <div class="game-topbar">
+                        <div class="game-score">⭐ <span id="enFcTestScore">0</span></div>
+                        <div class="game-round">Câu <span id="enFcTestRound">1</span>/15</div>
+                    </div>
+                    <div class="game-question">
+                        <div class="listen-btn-container hidden" id="enFcTestListenBtnContainer" style="margin-bottom:1rem">
+                            <button class="listen-play-btn" onclick="playEnFcTestListen()">🔊 Mở loa để nghe!</button>
+                        </div>
+                        <div class="game-question-text" id="enFcTestQuestion" style="font-size:1.8rem;"></div>
+                    </div>
+                    <div class="game-options" id="enFcTestOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem"></div>
+                    <div class="game-feedback hidden" id="enFcTestFeedback" style="margin-top:1.5rem">
+                        <div class="feedback-text" id="enFcTestFeedbackText"></div>
+                        <button class="game-next-btn" onclick="nextEnFcTest()">Câu tiếp →</button>
+                    </div>
+                </div>
+                
+                <!-- Test Complete Area -->
+                <div id="enFcTestComplete" class="hidden">
+                    <div class="game-complete-content">
+                        <div class="game-complete-emoji">🎉</div>
+                        <h2 class="game-complete-title">Hoàn Thành!</h2>
+                        <div class="game-complete-score">Bạn đạt <span id="enFcTestFinalScore">0</span>/<span id="enFcTestMaxScore">15</span> ⭐</div>
+                        <div class="game-complete-message" id="enFcTestMsg">Giỏi lắm!</div>
+                        <div class="game-complete-buttons">
+                            <button class="game-btn-replay" onclick="startEnFCTest()">🔄 Thi lại</button>
+                            <button class="game-btn-menu" onclick="backToEnFcMenu()">📋 Phần khác</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lessons -->
+            <div class="en-sub-section hidden" id="en-lessons">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>📝 Bài Học</h2>
+                </div>
+                <div class="games-menu" id="enLessonsGrid"></div>
+            </div>
+            <div class="en-sub-section hidden" id="en-lesson-active">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnLessons()">← Quay lại</button>
+                    <h2 id="enLessonTitle">Bài 1</h2>
+                </div>
+                <div class="en-lesson-steps">
+                    <button class="en-lesson-step-btn active" onclick="enLessonStep=0;renderEnLessonStep()">📖 Từ
+                        vựng</button>
+                    <button class="en-lesson-step-btn" onclick="enLessonStep=1;renderEnLessonStep()">🎯 Luyện
+                        tập</button>
+                    <button class="en-lesson-step-btn" onclick="enLessonStep=2;renderEnLessonStep()">💬 Câu</button>
+                    <button class="en-lesson-step-btn" onclick="enLessonStep=3;renderEnLessonStep()">📏 Ngữ
+                        pháp</button>
+                </div>
+                <div id="enLessonContent"></div>
+            </div>
+
+            <!-- Games -->
+            <div class="en-sub-section hidden" id="en-games">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>🎮 English Games</h2>
+                </div>
+                <div class="games-menu" id="enGamesMenu"></div>
+            </div>
+            <div class="en-sub-section hidden" id="en-game-active">
+                <div class="game-topbar">
+                    <button class="game-back-btn" onclick="backToEnGames()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="enGameScore">0</span></div>
+                    <div class="game-round">Câu <span id="enGameRound">1</span>/10</div>
+                </div>
+                <div id="enGameArea"></div>
+            </div>
+
+            <!-- Tests -->
+            <div class="en-sub-section hidden" id="en-tests">
+                <div class="en-section-header">
+                    <button class="game-back-btn" onclick="backToEnMenu()">← Quay lại</button>
+                    <h2>✅ Kiểm Tra</h2>
+                </div>
+                <div class="games-menu" id="enTestsGrid"></div>
+            </div>
+            <div class="en-sub-section hidden" id="en-test-active">
+                <div class="game-topbar">
+                    <button class="game-back-btn" onclick="backToEnTests()">← Quay lại</button>
+                    <div class="game-score">⭐ <span id="enTestScore">0</span></div>
+                    <div class="game-round">Câu <span id="enTestRound">1</span>/10</div>
+                </div>
+                <div id="enTestArea"></div>
+            </div>
+        </section>
+
+        <!-- EN Alphabet Modal -->
+        <div class="modal-overlay" id="enAlphabetModal">
+            <div class="modal-content en-alpha-modal">
+                <button class="modal-close" onclick="closeModal('enAlphabetModal')">&times;</button>
+                <div class="modal-letter en-modal-letter" id="enModalLetter">A</div>
+                <div class="modal-letter-lower" id="enModalLetterLower">a</div>
+                <div class="en-modal-sound" id="enModalSound">/ei/</div>
+                <div class="modal-example">
+                    <div class="modal-example-word" id="enModalExample">🍎 Apple</div>
+                    <div class="en-modal-vi" id="enModalExampleVi">quả táo</div>
+                </div>
+                <button class="speak-btn" onclick="speakEnLetter()">🔊 Nghe phát âm</button>
+            </div>
+        </div>
+
+        <!-- EN Alphabet Modal -->
+        <div class="modal-overlay" id="enAlphabetModal">
+            <div class="modal-content alphabet-modal en-alpha-modal">
+                <button class="modal-close" onclick="closeModal('enAlphabetModal')">&times;</button>
+                <div class="modal-letter en-modal-letter" id="enModalLetter">A</div>
+                <div class="modal-letter-lower" id="enModalLetterLower">a</div>
+                <div class="en-modal-sound" id="enModalSound">/ei/</div>
+                <div class="modal-example">
+                    <div class="modal-example-img" id="enModalExampleEmoji">🍎</div>
+                    <div class="modal-example-word" id="enModalExample">Apple</div>
+                    <div class="en-modal-vi" id="enModalExampleVi">quả táo</div>
+                </div>
+                <button class="speak-btn" style="background: #3B82F6;" onclick="speakEnLetter()">🔊 Nghe phát âm</button>
+            </div>
+        </div>
+
+        <!-- EN Vocab Modal -->
+        <div class="modal-overlay" id="enVocabModal">
+            <div class="modal-content vocab-modal-content">
+                <button class="modal-close" onclick="closeModal('enVocabModal')">&times;</button>
+                <div class="vocab-modal-emoji" id="enVocabModalEmoji">🐱</div>
+                <div class="vocab-modal-word" id="enVocabModalEn" style="color:#2563EB">cat</div>
+                <div class="en-vocab-modal-phonetic" id="enVocabModalPhonetic">/kæt/</div>
+                <div class="vocab-modal-spell" id="enVocabModalVi">con mèo</div>
+                <div class="vocab-modal-btns">
+                    <button class="speak-btn" onclick="speakEnVocabEN()">🔊 English</button>
+                    <button class="speak-btn spell-btn" onclick="speakEnVocabVI()">🔊 Tiếng Việt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal-overlay" id="settingsModal">
+            <div class="modal-content settings-modal-content">
+                <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+                <h2 style="font-family: 'Baloo 2', sans-serif; color: #3B82F6; font-size: 1.8rem; margin-bottom: 24px;">⚙️ Cài Đặt</h2>
+                <div style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="font-weight: 700; color: #4B5563;">🎵 Âm lượng phát âm</label>
+                        <input type="range" min="0" max="1" step="0.1" value="1" id="volumeSpeech" oninput="setAudioVolume('speech', this.value)" style="width: 100%; accent-color: #3B82F6;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="font-weight: 700; color: #4B5563;">🔊 Âm lượng hiệu ứng</label>
+                        <input type="range" min="0" max="1" step="0.1" value="0.5" id="volumeSfx" oninput="setAudioVolume('sfx', this.value)" style="width: 100%; accent-color: #3B82F6;">
+                    </div>
+                    <button onclick="resetAllGlobalProgress()" style="margin-top: 16px; background: #EF4444; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: 700; font-family: 'Baloo 2', sans-serif; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+                        🗑️ Xóa toàn bộ tiến độ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Modal (Dynamic) -->
+        <div id="achievementsModal"></div>
+
+        <!-- Confetti -->
+        <div class="confetti-container" id="confettiContainer"></div>
+
+        <script charset="UTF-8" src="audio.js"></script>
+        <script charset="UTF-8" src="script.js"></script>
+        <script charset="UTF-8" src="math.js"></script>
+        <script charset="UTF-8" src="flashcard.js"></script>
+        <script charset="UTF-8" src="english.js"></script>
+</body>
+
+</html>
