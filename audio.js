@@ -9,10 +9,10 @@
 // CẤU HÌNH
 // ===================================================
 const AUDIO_CONFIG = {
-    viRate: 0.8,
-    viPitch: 1.15,
-    enRate: 0.75,
-    enPitch: 1.1,
+    viRate: 0.95, // Tăng tốc độ một chút cho tự nhiên hơn
+    viPitch: 1.05,
+    enRate: 0.85,
+    enPitch: 1.0,
     spellDelay: 900,
 };
 
@@ -102,7 +102,10 @@ function initAudioSystem() {
         // Vietnamese search
         const vi = voices.filter(v => v.lang.includes('vi'));
         if (vi.length > 0) {
-            const preferred = vi.find(v => /female|nữ|woman|google/i.test(v.name)) || vi[0];
+            // Ưu tiên giọng Google đầu tiên, sau đó đến giọng Nữ
+            const preferred = vi.find(v => /google/i.test(v.name)) || 
+                              vi.find(v => /female|nữ|woman/i.test(v.name)) || 
+                              vi[0];
             viVoice = preferred;
             hasViVoice = true;
         }
@@ -110,9 +113,12 @@ function initAudioSystem() {
         // English search
         const en = voices.filter(v => v.lang.startsWith('en'));
         if (en.length > 0) {
-            // Ưu tiên voice en-US chuẩn
             const us = en.filter(v => v.lang === 'en-US');
-            const preferred = (us.length > 0 ? us : en).find(v => /female|woman|google/i.test(v.name)) || en[0];
+            const targetList = us.length > 0 ? us : en;
+            // Ưu tiên giọng Google US English, sau đó đến các giọng Nữ
+            const preferred = targetList.find(v => /google/i.test(v.name)) || 
+                              targetList.find(v => /female|woman/i.test(v.name)) || 
+                              targetList[0];
             enVoice = preferred;
             hasEnVoice = true;
         }
@@ -206,19 +212,21 @@ function playGoogleTTS(text, lang, onEndCallback) {
     stopCurrentAudio();
     const tl = (lang === 'en') ? 'en' : 'vi';
     
-    // Thêm các URL provider dự phòng khác nhau (gtx là chuẩn nhất, tw-ob là dự phòng)
+    // Sử dụng bộ tham số đầy đủ hơn để tránh bị Google chặn (status failed)
+    const encodedText = encodeURIComponent(text);
     const providers = [
-        'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + tl + '&q=' + encodeURIComponent(text),
-        'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + tl + '&q=' + encodeURIComponent(text)
+        `https://translate.googleapis.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${tl}&total=1&idx=0&textlen=${text.length}&client=gtx`,
+        `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${tl}&total=1&idx=0&textlen=${text.length}&client=tw-ob`,
+        `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${tl}&client=p`
     ];
     
     let currentIdx = 0;
     const a = new Audio();
     a.volume = 1;
-    
+
     const tryNextProvider = () => {
         if (currentIdx >= providers.length) {
-            console.warn('Tất cả Google TTS đều lỗi, đang chuyển sang Web Speech API (giọng đọc hệ thống)...');
+            console.warn('Fallback to Web Speech API');
             speakWithWebSpeech(text, lang, onEndCallback);
             return;
         }
@@ -226,25 +234,17 @@ function playGoogleTTS(text, lang, onEndCallback) {
         const url = providers[currentIdx];
         currentIdx++;
         
-        // Cố gắng phát âm thanh
         a.src = url;
-        const playPromise = a.play();
-        
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                currentAudio = a;
-            }).catch(err => {
-                console.warn('Lỗi phát TTS (Google): ', err);
-                tryNextProvider();
-            });
-        }
+        a.play().then(() => {
+            currentAudio = a;
+        }).catch(err => {
+            console.warn('Provider failed, trying next...');
+            tryNextProvider();
+        });
     };
 
     a.onended = () => { if (onEndCallback) onEndCallback(); };
-    a.onerror = () => {
-        console.warn('Network error hoặc Google chặn yêu cầu TTS.');
-        tryNextProvider();
-    };
+    a.onerror = () => { tryNextProvider(); };
 
     tryNextProvider();
 }
