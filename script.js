@@ -608,7 +608,7 @@ function openLetterModal(i) {
 function closeAlphabetModal() {
     const modal = document.getElementById('alphabetModal');
     if (modal) {
-        modal.style.display = 'none';
+        modal.style.display = '';
         modal.classList.remove('show');
     }
 }
@@ -629,7 +629,7 @@ function closeModal(id) {
     const modal = document.getElementById(id);
     if (modal) {
         modal.classList.remove('show');
-        modal.style.display = 'none';
+        modal.style.display = '';
     }
 }
 
@@ -639,7 +639,7 @@ document.addEventListener('click', e => {
         if (window.currentCountingInterval) clearInterval(window.currentCountingInterval);
         stopAllAudio();
         e.target.classList.remove('show');
-        e.target.style.display = 'none';
+        e.target.style.display = '';
     }
 });
 

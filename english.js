@@ -685,7 +685,7 @@ function openEnLetterModal(i) {
 function closeEnAlphabetModal() {
     const modal = document.getElementById('enAlphabetModal');
     if (modal) {
-        modal.style.display = 'none';
+        modal.style.display = '';
         modal.classList.remove('show');
     }
 }

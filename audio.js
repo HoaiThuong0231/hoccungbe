@@ -9,10 +9,10 @@
 // CẤU HÌNH
 // ===================================================
 const AUDIO_CONFIG = {
-    viRate: 0.95, // Tăng tốc độ một chút cho tự nhiên hơn
-    viPitch: 1.05,
-    enRate: 0.85,
-    enPitch: 1.0,
+    viRate: 0.8,
+    viPitch: 1.15,
+    enRate: 0.75,
+    enPitch: 1.1,
     spellDelay: 900,
 };
 
@@ -102,10 +102,7 @@ function initAudioSystem() {
         // Vietnamese search
         const vi = voices.filter(v => v.lang.includes('vi'));
         if (vi.length > 0) {
-            // Ưu tiên giọng Google đầu tiên, sau đó đến giọng Nữ
-            const preferred = vi.find(v => /google/i.test(v.name)) || 
-                              vi.find(v => /female|nữ|woman/i.test(v.name)) || 
-                              vi[0];
+            const preferred = vi.find(v => /female|nữ|woman|google/i.test(v.name)) || vi[0];
             viVoice = preferred;
             hasViVoice = true;
         }
@@ -113,12 +110,9 @@ function initAudioSystem() {
         // English search
         const en = voices.filter(v => v.lang.startsWith('en'));
         if (en.length > 0) {
+            // Ưu tiên voice en-US chuẩn
             const us = en.filter(v => v.lang === 'en-US');
-            const targetList = us.length > 0 ? us : en;
-            // Ưu tiên giọng Google US English, sau đó đến các giọng Nữ
-            const preferred = targetList.find(v => /google/i.test(v.name)) || 
-                              targetList.find(v => /female|woman/i.test(v.name)) || 
-                              targetList[0];
+            const preferred = (us.length > 0 ? us : en).find(v => /female|woman|google/i.test(v.name)) || en[0];
             enVoice = preferred;
             hasEnVoice = true;
         }
@@ -211,73 +205,29 @@ function speakLetterSound(letterLower, onEndCallback) {
 function playGoogleTTS(text, lang, onEndCallback) {
     stopCurrentAudio();
     const tl = (lang === 'en') ? 'en' : 'vi';
+    // Sử dụng client=gtx để giọng Google thường là giọng nữ chuẩn
+    const url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + tl + '&q=' + encodeURIComponent(text);
     
-    // Sử dụng bộ tham số đầy đủ hơn để tránh bị Google chặn (status failed)
-    const encodedText = encodeURIComponent(text);
-    const providers = [
-        `https://translate.googleapis.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${tl}&total=1&idx=0&textlen=${text.length}&client=gtx`,
-        `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${tl}&total=1&idx=0&textlen=${text.length}&client=tw-ob`,
-        `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${tl}&client=p`
-    ];
-    
-    let currentIdx = 0;
     const a = new Audio();
     a.volume = 1;
-
-    const tryNextProvider = () => {
-        if (currentIdx >= providers.length) {
-            console.warn('Fallback to Web Speech API');
-            speakWithWebSpeech(text, lang, onEndCallback);
-            return;
-        }
-        
-        const url = providers[currentIdx];
-        currentIdx++;
-        
-        a.src = url;
-        a.play().then(() => {
-            currentAudio = a;
-        }).catch(err => {
-            console.warn('Provider failed, trying next...');
-            tryNextProvider();
-        });
-    };
-
     a.onended = () => { if (onEndCallback) onEndCallback(); };
-    a.onerror = () => { tryNextProvider(); };
-
-    tryNextProvider();
-}
-
-function speakWithWebSpeech(text, lang, onEndCallback) {
-    if (!('speechSynthesis' in window)) {
-        console.error('Trình duyệt không hỗ trợ Web Speech API.');
-        if (onEndCallback) onEndCallback();
-        return;
-    }
-
-    // Dừng các giọng đang đọc dở để tránh kẹt hàng đợi
-    speechSynthesis.cancel();
-
-    const ut = new SpeechSynthesisUtterance(text);
-    const isEn = lang === 'en';
-    ut.lang = isEn ? 'en-US' : 'vi-VN';
     
-    // Gán giọng đọc ưu tiên đã tìm thấy ở initAudioSystem()
-    if (isEn && enVoice) ut.voice = enVoice;
-    else if (!isEn && viVoice) ut.voice = viVoice;
-    
-    ut.rate = isEn ? AUDIO_CONFIG.enRate : AUDIO_CONFIG.viRate;
-    ut.pitch = isEn ? AUDIO_CONFIG.enPitch : AUDIO_CONFIG.viPitch;
-    ut.volume = 1;
-
-    ut.onend = () => { if (onEndCallback) onEndCallback(); };
-    ut.onerror = (e) => {
-        console.error('WebSpeech error:', e);
-        if (onEndCallback) onEndCallback();
+    const handleFallback = () => {
+        // Fallback sang client dự phòng khác
+        const fallbackUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + tl + '&q=' + encodeURIComponent(text);
+        a.onerror = () => { if (onEndCallback) onEndCallback(); };
+        a.src = fallbackUrl;
+        a.play().catch(() => { if (onEndCallback) onEndCallback(); });
     };
-
-    speechSynthesis.speak(ut);
+    
+    a.onerror = handleFallback;
+    a.src = url;
+    
+    a.play().then(() => {
+        currentAudio = a;
+    }).catch(() => {
+        handleFallback();
+    });
 }
 
 // ===================================================
