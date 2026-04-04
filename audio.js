@@ -205,29 +205,79 @@ function speakLetterSound(letterLower, onEndCallback) {
 function playGoogleTTS(text, lang, onEndCallback) {
     stopCurrentAudio();
     const tl = (lang === 'en') ? 'en' : 'vi';
-    // Sử dụng client=gtx để giọng Google thường là giọng nữ chuẩn
-    const url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + tl + '&q=' + encodeURIComponent(text);
     
+    // Thêm các URL provider dự phòng khác nhau (gtx là chuẩn nhất, tw-ob là dự phòng)
+    const providers = [
+        'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + tl + '&q=' + encodeURIComponent(text),
+        'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + tl + '&q=' + encodeURIComponent(text)
+    ];
+    
+    let currentIdx = 0;
     const a = new Audio();
     a.volume = 1;
-    a.onended = () => { if (onEndCallback) onEndCallback(); };
     
-    const handleFallback = () => {
-        // Fallback sang client dự phòng khác
-        const fallbackUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + tl + '&q=' + encodeURIComponent(text);
-        a.onerror = () => { if (onEndCallback) onEndCallback(); };
-        a.src = fallbackUrl;
-        a.play().catch(() => { if (onEndCallback) onEndCallback(); });
+    const tryNextProvider = () => {
+        if (currentIdx >= providers.length) {
+            console.warn('Tất cả Google TTS đều lỗi, đang chuyển sang Web Speech API (giọng đọc hệ thống)...');
+            speakWithWebSpeech(text, lang, onEndCallback);
+            return;
+        }
+        
+        const url = providers[currentIdx];
+        currentIdx++;
+        
+        // Cố gắng phát âm thanh
+        a.src = url;
+        const playPromise = a.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                currentAudio = a;
+            }).catch(err => {
+                console.warn('Lỗi phát TTS (Google): ', err);
+                tryNextProvider();
+            });
+        }
     };
+
+    a.onended = () => { if (onEndCallback) onEndCallback(); };
+    a.onerror = () => {
+        console.warn('Network error hoặc Google chặn yêu cầu TTS.');
+        tryNextProvider();
+    };
+
+    tryNextProvider();
+}
+
+function speakWithWebSpeech(text, lang, onEndCallback) {
+    if (!('speechSynthesis' in window)) {
+        console.error('Trình duyệt không hỗ trợ Web Speech API.');
+        if (onEndCallback) onEndCallback();
+        return;
+    }
+
+    // Dừng các giọng đang đọc dở để tránh kẹt hàng đợi
+    speechSynthesis.cancel();
+
+    const ut = new SpeechSynthesisUtterance(text);
+    const isEn = lang === 'en';
+    ut.lang = isEn ? 'en-US' : 'vi-VN';
     
-    a.onerror = handleFallback;
-    a.src = url;
+    // Gán giọng đọc ưu tiên đã tìm thấy ở initAudioSystem()
+    if (isEn && enVoice) ut.voice = enVoice;
+    else if (!isEn && viVoice) ut.voice = viVoice;
     
-    a.play().then(() => {
-        currentAudio = a;
-    }).catch(() => {
-        handleFallback();
-    });
+    ut.rate = isEn ? AUDIO_CONFIG.enRate : AUDIO_CONFIG.viRate;
+    ut.pitch = isEn ? AUDIO_CONFIG.enPitch : AUDIO_CONFIG.viPitch;
+    ut.volume = 1;
+
+    ut.onend = () => { if (onEndCallback) onEndCallback(); };
+    ut.onerror = (e) => {
+        console.error('WebSpeech error:', e);
+        if (onEndCallback) onEndCallback();
+    };
+
+    speechSynthesis.speak(ut);
 }
 
 // ===================================================
