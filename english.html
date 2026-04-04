@@ -8,8 +8,7 @@
     <title>Học cùng bé 🌈</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="auth.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -43,11 +42,16 @@
             <span class="nav-title">Học Cùng Bé</span>
         </div>
         <div class="nav-links">
+            <div id="authContainer" style="display: flex; align-items: center;">
+                <!-- Hồ sơ của bé sẽ hiện ở đây (Mon) -->
+            </div>
             <button id="navAchBtn" class="nav-btn head-action" onclick="openAchievementsModal()" style="display:none;">
-                <span class="nav-icon">🏆</span><span class="nav-text">Thành tích</span>
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Thành tích</span>
             </button>
             <button class="nav-btn head-action" onclick="openSettingsModal()">
-                <span class="nav-icon">⚙️</span><span class="nav-text">Cài đặt</span>
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Cài đặt</span>
             </button>
         </div>
     </nav>
@@ -755,16 +759,17 @@
 
         <!-- EN Alphabet Modal -->
         <div class="modal-overlay" id="enAlphabetModal">
-            <div class="modal-content en-alpha-modal">
+            <div class="modal-content alphabet-modal en-alpha-modal">
                 <button class="modal-close" onclick="closeModal('enAlphabetModal')">&times;</button>
                 <div class="modal-letter en-modal-letter" id="enModalLetter">A</div>
                 <div class="modal-letter-lower" id="enModalLetterLower">a</div>
                 <div class="en-modal-sound" id="enModalSound">/ei/</div>
                 <div class="modal-example">
-                    <div class="modal-example-word" id="enModalExample">🍎 Apple</div>
+                    <div class="modal-example-img" id="enModalExampleEmoji">🍎</div>
+                    <div class="modal-example-word" id="enModalExample">Apple</div>
                     <div class="en-modal-vi" id="enModalExampleVi">quả táo</div>
                 </div>
-                <button class="speak-btn" onclick="speakEnLetter()">🔊 Nghe phát âm</button>
+                <button class="speak-btn" style="background: #3B82F6;" onclick="speakEnLetter()">🔊 Nghe phát âm</button>
             </div>
         </div>
 

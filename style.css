@@ -32,7 +32,7 @@
     --radius-lg: 28px;
     --radius-xl: 36px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --font: 'Baloo 2', 'Segoe UI', sans-serif;
+    --font: 'Baloo 2', 'Segoe UI', cursive, sans-serif;
 }
 
 html {
@@ -48,6 +48,12 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    font-weight: 600;
+}
+
+/* Force global font sync for elements that don't always inherit */
+button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font) !important;
 }
 
 /* === Background Stars === */
@@ -168,22 +174,36 @@ body {
 
 /* === Top Nav (Desktop) === */
 .navbar {
-    display: none;
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 64px;
+    height: 60px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    z-index: 100;
-    padding: 0 24px;
+    z-index: 2000;
+    padding: 0 16px;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
     border-bottom: 3px solid transparent;
     border-image: linear-gradient(90deg, var(--pink), var(--purple), var(--blue), var(--cyan), var(--green), var(--yellow)) 1;
+}
+
+@media (max-width: 600px) {
+    .nav-text, .auth-profile-name { display: none; }
+    .nav-btn { padding: 0; height: 48px; width: 48px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #F3F4F6; }
+    .nav-icon { font-size: 1.4rem; }
+    .auth-profile-badge { padding: 0; width: 48px; height: 48px; justify-content: center; border-radius: 50%; border: 3px solid #FBCFE8; }
+    .auth-profile-avatar { font-size: 2.1rem; }
+}
+
+@media (max-width: 480px) {
+    .navbar { height: 64px; padding: 0 12px; }
+    .nav-links { gap: 10px; }
+    .auth-container { margin-right: 0 !important; padding-right: 0 !important; }
 }
 
 .badge-orange { background: #FFEDD5; color: #9A3412; }
@@ -239,28 +259,30 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 6px 16px;
-    background: #FEF3C7;
-    border: 3px solid #FDE68A;
+    padding: 0 20px 0 6px;
+    background: #FEF9C3;
+    border: 3px solid #FBCFE8;
     border-radius: 40px;
     cursor: pointer;
     transition: var(--transition);
-    height: 48px;
+    height: 52px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .auth-profile-badge:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 8px 20px rgba(251, 207, 232, 0.4);
 }
 
 .auth-profile-avatar {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
 }
 
 .auth-profile-name {
     font-weight: 800;
-    color: #9D174D;
-    font-size: 1rem;
+    color: #1E1B4B;
+    font-size: 1.2rem;
+    font-family: var(--font);
 }
 
 /* === Bottom Nav (Mobile) === */
@@ -304,8 +326,8 @@ body {
 }
 
 .bottom-nav-label {
-    font-size: 0.6rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     color: var(--text-mid);
     transition: var(--transition);
 }
@@ -337,11 +359,15 @@ body {
 .main-content {
     position: relative;
     z-index: 1;
-    padding: 16px;
+    padding: 12px;
+    padding-top: 72px;
     padding-bottom: 80px;
     max-width: 1200px;
     margin: 0 auto;
     min-height: 100vh;
+}
+@media (max-width: 480px) {
+    .main-content { padding-top: 64px; }
 }
 
 .page {
@@ -853,14 +879,15 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: 2000;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 5000;
     display: none;
-    align-items: center;
+    align-items: flex-start; /* Better for tall content scrolling */
     justify-content: center;
-    padding: 20px;
+    padding: 60px 20px 40px; /* Space for the top nav even behind overlay */
+    overflow-y: auto;
 }
 
 .modal-overlay.show {
@@ -904,20 +931,21 @@ body {
 
 .modal-close {
     position: absolute;
-    top: 12px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
+    top: 15px;
+    right: 15px;
+    width: 44px;
+    height: 44px;
     border: none;
-    background: #F3F4F6;
+    background: rgba(0, 0, 0, 0.05);
     border-radius: 50%;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: var(--transition);
-    color: var(--text-mid);
+    color: #4B5563;
+    z-index: 10;
 }
 
 .modal-close:hover {
@@ -3007,7 +3035,7 @@ body {
     font-size: 1.8rem;
     font-weight: 800;
     margin: 0;
-    font-family: 'Baloo 2', cursive;
+    font-family: var(--font);
     color: var(--text-dark);
 }
 
@@ -3697,7 +3725,7 @@ body {
     border-radius: 40px;
     font-size: 1.4rem;
     font-weight: 800;
-    font-family: 'Baloo 2', cursive;
+    font-family: var(--font);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     letter-spacing: 0.5px;
     cursor: pointer;
@@ -3808,12 +3836,21 @@ body {
 }
 
 .lb-card-title {
-    font-family: 'Nunito', 'Baloo 2', sans-serif;
-    font-size: 1.8rem;
+    font-family: var(--font);
+    font-size: 1.5rem;
     font-weight: 800;
     color: #4B5563;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     letter-spacing: -0.5px;
+}
+
+@media (max-width: 480px) {
+    .lb-card-title {
+        font-size: 1.3rem;
+    }
+    .lb-card-desc {
+        font-size: 0.85rem;
+    }
 }
 
 .lb-card-desc {
@@ -3841,7 +3878,7 @@ body {
     color: #9D174D;
     margin-bottom: 24px;
     text-align: center;
-    font-family: 'Baloo 2', cursive;
+    font-family: var(--font);
 }
 
 .lb-achievements {
@@ -3977,7 +4014,7 @@ body {
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 8px;
-    font-family: 'Baloo 2', cursive;
+    font-family: var(--font);
 }
 
 .lb-game-info p {
@@ -4013,7 +4050,7 @@ body {
     border-radius: 40px;
     font-size: 1.2rem;
     font-weight: 800;
-    font-family: 'Baloo 2', cursive;
+    font-family: var(--font);
     cursor: pointer;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -4143,7 +4180,7 @@ body {
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 8px;
-    font-family: 'Baloo 2', cursive;
+    font-family: var(--font);
 }
 
 .lb-game-info p {
@@ -4179,7 +4216,7 @@ body {
     border-radius: 40px;
     font-size: 1.2rem;
     font-weight: 800;
-    font-family: 'Baloo 2', cursive;
+    font-family: var(--font);
     cursor: pointer;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -4562,7 +4599,7 @@ body {
     font-size: 2.2rem;
     font-weight: 800;
     color: #9D174D;
-    font-family: 'Baloo 2', cursive;
+    font-family: var(--font);
     margin: 0;
 }
 
@@ -4644,13 +4681,33 @@ body {
 
 @media (max-width: 600px) {
     .ach-modal-content {
-        padding: 24px !important;
+        padding: 20px !important;
+        border-radius: 28px !important;
+        max-width: 92% !important;
     }
-    .ach-modal-header {
-        flex-direction: column;
-        text-align: center;
+    .ach-modal-header { gap: 12px; margin-bottom: 20px; }
+    .ach-modal-icon { font-size: 2.5rem; }
+    .ach-modal-main-title { font-size: 1.5rem; }
+    .ach-modal-subtitle { font-size: 0.9rem; }
+    .ach-cards-grid { gap: 10px; margin-bottom: 20px; }
+    .ach-card { padding: 12px; border-radius: 18px; }
+    .ach-card-emoji { font-size: 1.5rem; margin-bottom: 4px; }
+    .ach-card-label { font-size: 0.75rem; margin-bottom: 0; }
+    .ach-card-val { font-size: 1.4rem; margin-bottom: 2px; }
+    .ach-card-desc { font-size: 0.75rem; }
+    .ach-card-stars { margin-top: 8px; padding: 4px 12px; font-size: 0.85rem; border-radius: 8px; }
+    .ach-modal-footer { padding-top: 16px; font-size: 1rem; }
+}
+
+/* Desktop vs Mobile Nav Toggles */
+@media (min-width: 1024px) {
+    .bottom-nav {
+        display: none !important;
     }
-    .ach-modal-main-title {
-        font-size: 1.8rem;
+}
+
+@media (max-width: 1023px) {
+    .bottom-nav {
+        display: flex !important;
     }
 }

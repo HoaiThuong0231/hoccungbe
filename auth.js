@@ -296,10 +296,12 @@ window.renderAuthUI = function() {
             </div>`;
         if (document.querySelector('.lb-hero-btn')) document.querySelector('.lb-hero-btn').style.display = 'none';
         if (document.getElementById('lbAchievementsSection')) document.getElementById('lbAchievementsSection').style.display = 'block';
+        if (document.getElementById('navAchBtn')) document.getElementById('navAchBtn').style.display = 'inline-flex';
     } else {
         authContainer.innerHTML = `<button class="auth-btn auth-btn-outline" onclick="openAuthModal('login')">Đăng nhập</button><button class="auth-btn auth-btn-primary" onclick="openAuthModal('register')">Đăng ký</button>`;
         if (document.querySelector('.lb-hero-btn')) document.querySelector('.lb-hero-btn').style.display = 'inline-block';
         if (document.getElementById('lbAchievementsSection')) document.getElementById('lbAchievementsSection').style.display = 'none';
+        if (document.getElementById('navAchBtn')) document.getElementById('navAchBtn').style.display = 'none';
     }
     if (window.renderLeaderboard) window.renderLeaderboard();
 };

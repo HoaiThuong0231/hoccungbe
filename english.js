@@ -8,32 +8,32 @@
 // ENGLISH ALPHABET A-Z
 // ===================================================
 const EN_ALPHABET = [
-    { letter: 'A', sound: 'ei', example: 'Apple', emoji: '🍎', word_vi: 'quả táo' },
-    { letter: 'B', sound: 'bi', example: 'Ball', emoji: '⚽', word_vi: 'quả bóng' },
-    { letter: 'C', sound: 'xi', example: 'Cat', emoji: '🐱', word_vi: 'con mèo' },
-    { letter: 'D', sound: 'đi', example: 'Dog', emoji: '🐶', word_vi: 'con chó' },
-    { letter: 'E', sound: 'i', example: 'Egg', emoji: '🥚', word_vi: 'quả trứng' },
-    { letter: 'F', sound: 'ép', example: 'Fish', emoji: '🐟', word_vi: 'con cá' },
-    { letter: 'G', sound: 'di', example: 'Girl', emoji: '👧', word_vi: 'bé gái' },
-    { letter: 'H', sound: 'ết', example: 'Hat', emoji: '🎩', word_vi: 'cái mũ' },
-    { letter: 'I', sound: 'ai', example: 'Ice cream', emoji: '🍦', word_vi: 'kem' },
-    { letter: 'J', sound: 'jây', example: 'Jam', emoji: '🍯', word_vi: 'mứt' },
-    { letter: 'K', sound: 'kây', example: 'Kite', emoji: '🪁', word_vi: 'diều' },
-    { letter: 'L', sound: 'eo', example: 'Lion', emoji: '🦁', word_vi: 'sư tử' },
+    { letter: 'A', sound: 'eɪ', example: 'Apple', emoji: '🍎', word_vi: 'quả táo' },
+    { letter: 'B', sound: 'biː', example: 'Ball', emoji: '⚽', word_vi: 'quả bóng' },
+    { letter: 'C', sound: 'siː', example: 'Cat', emoji: '🐱', word_vi: 'con mèo' },
+    { letter: 'D', sound: 'diː', example: 'Dog', emoji: '🐶', word_vi: 'con chó' },
+    { letter: 'E', sound: 'iː', example: 'Egg', emoji: '🥚', word_vi: 'quả trứng' },
+    { letter: 'F', sound: 'ef', example: 'Fish', emoji: '🐟', word_vi: 'con cá' },
+    { letter: 'G', sound: 'dʒiː', example: 'Girl', emoji: '👧', word_vi: 'bé gái' },
+    { letter: 'H', sound: 'eɪtʃ', example: 'Hat', emoji: '🎩', word_vi: 'cái mũ' },
+    { letter: 'I', sound: 'aɪ', example: 'Ice cream', emoji: '🍦', word_vi: 'kem' },
+    { letter: 'J', sound: 'dʒeɪ', example: 'Jam', emoji: '🍯', word_vi: 'mứt' },
+    { letter: 'K', sound: 'keɪ', example: 'Kite', emoji: '🪁', word_vi: 'diều' },
+    { letter: 'L', sound: 'el', example: 'Lion', emoji: '🦁', word_vi: 'sư tử' },
     { letter: 'M', sound: 'em', example: 'Moon', emoji: '🌙', word_vi: 'mặt trăng' },
     { letter: 'N', sound: 'en', example: 'Nose', emoji: '👃', word_vi: 'cái mũi' },
-    { letter: 'O', sound: 'âu', example: 'Orange', emoji: '🍊', word_vi: 'quả cam' },
-    { letter: 'P', sound: 'pi', example: 'Pen', emoji: '✏️', word_vi: 'cái bút' },
-    { letter: 'Q', sound: 'kiu', example: 'Queen', emoji: '👸', word_vi: 'nữ hoàng' },
-    { letter: 'R', sound: 'a', example: 'Rain', emoji: '🌧️', word_vi: 'mưa' },
-    { letter: 'S', sound: 'ét', example: 'Sun', emoji: '☀️', word_vi: 'mặt trời' },
-    { letter: 'T', sound: 'ti', example: 'Tree', emoji: '🌳', word_vi: 'cái cây' },
-    { letter: 'U', sound: 'iu', example: 'Umbrella', emoji: '☂️', word_vi: 'ô dù' },
-    { letter: 'V', sound: 'vi', example: 'Van', emoji: '🚐', word_vi: 'xe tải' },
-    { letter: 'W', sound: 'đấp liu', example: 'Water', emoji: '💧', word_vi: 'nước' },
-    { letter: 'X', sound: 'éc', example: 'Box', emoji: '📦', word_vi: 'hộp' },
-    { letter: 'Y', sound: 'oai', example: 'Yellow', emoji: '💛', word_vi: 'vàng' },
-    { letter: 'Z', sound: 'di', example: 'Zebra', emoji: '🦓', word_vi: 'ngựa vằn' },
+    { letter: 'O', sound: 'oʊ', example: 'Orange', emoji: '🍊', word_vi: 'quả cam' },
+    { letter: 'P', sound: 'piː', example: 'Pen', emoji: '✏️', word_vi: 'cái bút' },
+    { letter: 'Q', sound: 'kjuː', example: 'Queen', emoji: '👸', word_vi: 'nữ hoàng' },
+    { letter: 'R', sound: 'ɑːr', example: 'Rain', emoji: '🌧️', word_vi: 'mưa' },
+    { letter: 'S', sound: 'es', example: 'Sun', emoji: '☀️', word_vi: 'mặt trời' },
+    { letter: 'T', sound: 'tiː', example: 'Tree', emoji: '🌳', word_vi: 'cái cây' },
+    { letter: 'U', sound: 'juː', example: 'Umbrella', emoji: '☂️', word_vi: 'ô dù' },
+    { letter: 'V', sound: 'viː', example: 'Van', emoji: '🚐', word_vi: 'xe tải' },
+    { letter: 'W', sound: 'ˈdʌbəljuː', example: 'Water', emoji: '💧', word_vi: 'nước' },
+    { letter: 'X', sound: 'eks', example: 'Box', emoji: '📦', word_vi: 'hộp' },
+    { letter: 'Y', sound: 'waɪ', example: 'Yellow', emoji: '💛', word_vi: 'vàng' },
+    { letter: 'Z', sound: 'ziː', example: 'Zebra', emoji: '🦓', word_vi: 'ngựa vằn' },
 ];
 
 // ===================================================
@@ -651,22 +651,53 @@ function renderEnAlphabet() {
 }
 
 function openEnLetterModal(i) {
-    enCurrentAlpha = EN_ALPHABET[i];
-    if (window.markEnAlphaLearned) window.markEnAlphaLearned(enCurrentAlpha.letter);
-    if (window.addStars) window.addStars(1);
-    document.getElementById('enModalLetter').textContent = enCurrentAlpha.letter;
-    document.getElementById('enModalLetterLower').textContent = enCurrentAlpha.letter.toLowerCase();
-    document.getElementById('enModalSound').textContent = '/' + enCurrentAlpha.sound + '/';
-    document.getElementById('enModalExample').textContent = enCurrentAlpha.emoji + ' ' + enCurrentAlpha.example;
-    document.getElementById('enModalExampleVi').textContent = enCurrentAlpha.word_vi;
-    document.getElementById('enAlphabetModal').classList.add('show');
-    playClickSound();
+    try {
+        enCurrentAlpha = EN_ALPHABET[i];
+        if (!enCurrentAlpha) return;
+        
+        if (window.markEnAlphaLearned) window.markEnAlphaLearned(enCurrentAlpha.letter);
+        if (window.addStars) window.addStars(1);
+        
+        const setEl = (id, text) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        };
+        
+        setEl('enModalLetter', enCurrentAlpha.letter);
+        setEl('enModalLetterLower', enCurrentAlpha.letter.toLowerCase());
+        setEl('enModalSound', '/' + enCurrentAlpha.sound + '/');
+        setEl('enModalExampleEmoji', enCurrentAlpha.emoji);
+        setEl('enModalExample', enCurrentAlpha.example);
+        setEl('enModalExampleVi', enCurrentAlpha.word_vi);
+        
+        const modal = document.getElementById('enAlphabetModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+        }
+        
+        if (typeof playClickSound === 'function') playClickSound();
+    } catch (e) {
+        console.error('Error opening EN modal:', e);
+    }
+}
+
+function closeEnAlphabetModal() {
+    const modal = document.getElementById('enAlphabetModal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+    }
 }
 
 function speakEnLetter() {
     if (!enCurrentAlpha) return;
-    speakEnglish(enCurrentAlpha.letter);
-    setTimeout(() => speakEnglish(enCurrentAlpha.example), 800);
+    // Phát âm chữ cái trước, sau đó phát âm từ ví dụ (dùng callback để tránh bị chặn trên mobile)
+    speakEnglish(enCurrentAlpha.letter, () => {
+        setTimeout(() => {
+            if (enCurrentAlpha) speakEnglish(enCurrentAlpha.example);
+        }, 500);
+    });
 }
 
 // ===================================================

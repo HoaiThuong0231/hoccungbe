@@ -577,29 +577,60 @@ function renderVan() {
 }
 
 function openLetterModal(i) {
-    const item = ALPHABET[i]; currentModalLetter = item;
-    document.getElementById('modalLetter').textContent = item.letter;
-    document.getElementById('modalLetterLower').textContent = item.lower;
-    document.getElementById('modalExampleEmoji').textContent = item.emoji;
-    document.getElementById('modalExampleWord').textContent = item.example;
-    document.getElementById('alphabetModal').classList.add('show');
-    playClickSound();
-    markLetterLearned(item.letter);
-    // KHÔNG auto play - chỉ phát khi user bấm nút
+    try {
+        const item = ALPHABET[i];
+        if (!item) return;
+        currentModalLetter = item;
+        
+        const setEl = (id, text) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        };
+        
+        setEl('modalLetter', item.letter);
+        setEl('modalLetterLower', item.lower);
+        setEl('modalExampleEmoji', item.emoji);
+        setEl('modalExampleWord', item.example);
+        
+        const modal = document.getElementById('alphabetModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+        }
+        
+        if (typeof playClickSound === 'function') playClickSound();
+        if (typeof markLetterLearned === 'function') markLetterLearned(item.letter);
+    } catch (e) {
+        console.error('Error opening VI modal:', e);
+    }
+}
+
+function closeAlphabetModal() {
+    const modal = document.getElementById('alphabetModal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+    }
 }
 
 function speakModalLetter() {
     if (!currentModalLetter) return;
-    // Phát âm đánh vần trước, rồi từ ví dụ
-    speakLetterSound(currentModalLetter.lower);
-    // Sau 1 giây, đọc từ ví dụ
-    setTimeout(() => speakVietnamese(currentModalLetter.example), 1000);
+    // Phát âm chữ cái trước, sau đó phát âm từ ví dụ (dùng callback để tránh bị chặn trên mobile)
+    speakLetterSound(currentModalLetter.lower, () => {
+        setTimeout(() => {
+            if (currentModalLetter) speakVietnamese(currentModalLetter.example);
+        }, 400);
+    });
 }
 
 function closeModal(id) { 
     if (window.currentCountingInterval) clearInterval(window.currentCountingInterval);
     stopAllAudio(); // Also stop any TTS currently playing
-    document.getElementById(id).classList.remove('show'); 
+    const modal = document.getElementById(id);
+    if (modal) {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+    }
 }
 
 // Close modal on backdrop click
@@ -608,6 +639,7 @@ document.addEventListener('click', e => {
         if (window.currentCountingInterval) clearInterval(window.currentCountingInterval);
         stopAllAudio();
         e.target.classList.remove('show');
+        e.target.style.display = 'none';
     }
 });
 

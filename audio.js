@@ -94,104 +94,140 @@ function initAudioSystem() {
         audioReady = true;
         return;
     }
-    const find = () => {
+
+    const findVoices = () => {
         const voices = speechSynthesis.getVoices();
-        if (!voices.length) return false;
-        // Vietnamese
-        const vi = voices.filter(v => v.lang === 'vi-VN' || v.lang.startsWith('vi'));
-        if (vi.length) {
-            const fem = vi.find(v => /female|nữ|woman/i.test(v.name));
-            const nonM = vi.find(v => !/male|nam/i.test(v.name));
-            viVoice = fem || nonM || vi[0];
+        if (!voices || voices.length === 0) return false;
+
+        // Vietnamese search
+        const vi = voices.filter(v => v.lang.includes('vi'));
+        if (vi.length > 0) {
+            const preferred = vi.find(v => /female|nữ|woman|google/i.test(v.name)) || vi[0];
+            viVoice = preferred;
             hasViVoice = true;
         }
-        // English
-        const en = voices.filter(v => v.lang === 'en-US' || v.lang.startsWith('en'));
-        if (en.length) {
-            const fem = en.find(v => /female|woman/i.test(v.name));
-            enVoice = fem || en[0];
+
+        // English search
+        const en = voices.filter(v => v.lang.startsWith('en'));
+        if (en.length > 0) {
+            // Ưu tiên voice en-US chuẩn
+            const us = en.filter(v => v.lang === 'en-US');
+            const preferred = (us.length > 0 ? us : en).find(v => /female|woman|google/i.test(v.name)) || en[0];
+            enVoice = preferred;
             hasEnVoice = true;
         }
-        audioReady = true;
-        return true;
+
+        if (hasViVoice || hasEnVoice) {
+            audioReady = true;
+            return true;
+        }
+        return false;
     };
-    if (find()) return;
-    speechSynthesis.onvoiceschanged = find;
-    let r = 0;
-    const iv = setInterval(() => { r++; if (find() || r > 15) { clearInterval(iv); audioReady = true; } }, 300);
+
+    // Initial find
+    findVoices();
+    speechSynthesis.onvoiceschanged = findVoices;
+
+    // Retry loop for slow mobile browsers
+    let retries = 0;
+    const retryInterval = setInterval(() => {
+        retries++;
+        if (findVoices() || retries > 20) {
+            clearInterval(retryInterval);
+            audioReady = true;
+        }
+    }, 250);
+
+    // Audio Unlocking for Mobile Browsers
+    const unlock = () => {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.resume();
+            const ut = new SpeechSynthesisUtterance(' ');
+            ut.volume = 0;
+            speechSynthesis.speak(ut);
+        }
+        
+        // Unlock HTML5 Audio
+        const silentAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+        silentAudio.play().catch(() => {});
+        
+        document.removeEventListener('touchstart', unlock);
+        document.removeEventListener('click', unlock);
+        document.removeEventListener('mousedown', unlock);
+    };
+    document.addEventListener('touchstart', unlock, { passive: true });
+    document.addEventListener('click', unlock, { passive: true });
+    document.addEventListener('mousedown', unlock, { passive: true });
 }
 initAudioSystem();
 
-// ===================================================
-// speakVietnamese(text) – KHÔNG BAO GIỜ đọc tiếng Anh
-// ===================================================
-function speakVietnamese(text) {
+function speakVietnamese(text, onEndCallback) {
     stopAllAudio();
-    if (!audioReady) { playGoogleTTS(text, 'vi'); return; }
-    if (hasViVoice && viVoice) {
-        speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.voice = viVoice;
-        u.lang = 'vi-VN';
-        u.rate = AUDIO_CONFIG.viRate;
-        u.pitch = AUDIO_CONFIG.viPitch;
-        u.volume = 1;
-        isSpeaking = true;
-        u.onend = () => { isSpeaking = false; };
-        u.onerror = () => { isSpeaking = false; playGoogleTTS(text, 'vi'); };
-        speechSynthesis.speak(u);
-    } else {
-        playGoogleTTS(text, 'vi');
-    }
+    // Ưu tiên dùng giọng "Chị Google" theo yêu cầu người dùng
+    playGoogleTTS(text, 'vi', onEndCallback);
 }
 
-// ===================================================
-// speakEnglish(text) – Luôn dùng Google TTS để phát âm chuẩn
-// ===================================================
-function speakEnglish(text) {
+function speakEnglish(text, onEndCallback) {
     stopAllAudio();
-    // Ưu tiên Google Translate TTS cho phát âm tiếng Anh chuẩn
-    playGoogleTTS(text, 'en');
+    // Ưu tiên dùng giọng "Chị Google" theo yêu cầu người dùng
+    playGoogleTTS(text, 'en', onEndCallback);
 }
 
-// ===================================================
-// speakLetterSound – phát âm chữ cái kiểu đánh vần
-// Ưu tiên: local mp3 → TTS vi-VN
-// ===================================================
-function speakLetterSound(letterLower) {
+function speakLetterSound(letterLower, onEndCallback) {
     stopAllAudio();
     const key = LETTER_AUDIO_MAP[letterLower];
     if (key) {
-        const audio = new Audio('assets/audio/' + key + '.mp3');
-        audio.play().then(() => { currentAudio = audio; }).catch(() => {
+        const url = 'assets/audio/' + key + '.mp3';
+        const a = new Audio(url);
+        a.volume = 1;
+        a.onended = () => { if (onEndCallback) onEndCallback(); };
+        a.onerror = () => {
             const sound = LETTER_SOUNDS[letterLower];
-            if (sound) speakVietnamese(sound);
+            if (sound) speakVietnamese(sound, onEndCallback);
+            else if (onEndCallback) onEndCallback();
+        };
+        a.play().then(() => { 
+            currentAudio = a; 
+        }).catch((err) => {
+            console.warn('Audio play failed, falling back to TTS', err);
+            const sound = LETTER_SOUNDS[letterLower];
+            if (sound) speakVietnamese(sound, onEndCallback);
+            else if (onEndCallback) onEndCallback();
         });
-        currentAudio = audio;
+        currentAudio = a;
     } else {
         const sound = LETTER_SOUNDS[letterLower];
-        if (sound) speakVietnamese(sound);
+        if (sound) speakVietnamese(sound, onEndCallback);
+        else if (onEndCallback) onEndCallback();
     }
 }
 
-// ===================================================
-// GOOGLE TTS FALLBACK
-// ===================================================
-const googleTTSCache = {};
-
-function playGoogleTTS(text, lang) {
+function playGoogleTTS(text, lang, onEndCallback) {
     stopCurrentAudio();
-    const ck = lang + ':' + text;
-    if (googleTTSCache[ck]) {
-        const a = googleTTSCache[ck]; a.currentTime = 0;
-        a.play().catch(() => {}); currentAudio = a; return;
-    }
-    const tl = lang === 'en' ? 'en' : 'vi';
-    const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + tl + '&q=' + encodeURIComponent(text);
-    const a = new Audio(url);
-    a.play().catch(() => {});
-    currentAudio = a;
-    googleTTSCache[ck] = a;
+    const tl = (lang === 'en') ? 'en' : 'vi';
+    // Sử dụng client=gtx để giọng Google thường là giọng nữ chuẩn
+    const url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + tl + '&q=' + encodeURIComponent(text);
+    
+    const a = new Audio();
+    a.volume = 1;
+    a.onended = () => { if (onEndCallback) onEndCallback(); };
+    
+    const handleFallback = () => {
+        // Fallback sang client dự phòng khác
+        const fallbackUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + tl + '&q=' + encodeURIComponent(text);
+        a.onerror = () => { if (onEndCallback) onEndCallback(); };
+        a.src = fallbackUrl;
+        a.play().catch(() => { if (onEndCallback) onEndCallback(); });
+    };
+    
+    a.onerror = handleFallback;
+    a.src = url;
+    
+    a.play().then(() => {
+        currentAudio = a;
+    }).catch(() => {
+        handleFallback();
+    });
 }
 
 // ===================================================

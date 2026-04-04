@@ -8,8 +8,7 @@
     <title>Học cùng bé 🌈</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="auth.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -32,10 +31,15 @@
             <span class="nav-title">Học Cùng Bé</span>
         </div>
         <div class="nav-links">
+            <div id="authContainer" style="display: flex; align-items: center;">
+                <!-- Hồ sơ của bé sẽ hiện ở đây (Mon) -->
+            </div>
             <button id="navAchBtn" class="nav-btn head-action" onclick="openAchievementsModal()" style="display:none;">
+                <span class="nav-icon">🏆</span>
                 <span class="nav-text">Thành tích</span>
             </button>
             <button class="nav-btn head-action" onclick="openSettingsModal()">
+                <span class="nav-icon">⚙️</span>
                 <span class="nav-text">Cài đặt</span>
             </button>
         </div>
@@ -290,6 +294,20 @@
                     gap: 20px;
                     margin-top: 30px;
                 }
+                
+                @media (max-width: 768px) {
+                    .math-hub-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 15px;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .math-hub-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 10px;
+                    }
+                }
 
                 .math-category-card {
                     background: white;
@@ -318,6 +336,28 @@
                     flex-direction: row;
                     gap: 20px;
                 } /* Light Pink */
+
+                @media (max-width: 768px) {
+                    .math-category-card.adv-test-card {
+                        grid-column: span 2;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .math-category-card {
+                        padding: 20px 10px;
+                    }
+                    .math-cat-icon { font-size: 2rem; }
+                    .math-cat-title { font-size: 0.9rem; }
+                    .math-category-card.adv-test-card {
+                        grid-column: span 2;
+                        flex-direction: column;
+                        gap: 5px;
+                    }
+                    .math-category-card.adv-test-card .math-cat-title {
+                        font-size: 1.1rem !important;
+                    }
+                }
 
                 .math-category-card:hover {
                     transform: translateY(-8px) scale(1.02);
@@ -702,6 +742,12 @@
                     .math-test-levels { grid-template-columns: 1fr; }
                 }
                 @media (max-width: 480px) {
+                    .math-tables-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+                    .math-table-title { font-size: 1rem; }
+                    .math-table-row { font-size: 0.75rem; }
+                    .math-table-btn-bottom { font-size: 0.7rem; padding: 6px; }
+                }
+                @media (max-width: 360px) {
                     .math-tables-grid { grid-template-columns: 1fr; }
                 }
             </style>
