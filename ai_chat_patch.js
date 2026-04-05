@@ -1,29 +1,23 @@
-// AI CHAT INTEGRATION FOR MASCOT (CÚ MÈO) - VERSION 2.0.1
-console.log("Cú Mèo AI Chat: v2.0.1 (gemini-pro)");
-
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        const img = document.getElementById('mascotImg');
-        const container = document.getElementById('mascot');
-        
-        if (img && container) {
-            // Remove existing listeners from script.js by recreating the node
-            const newImg = img.cloneNode(true);
-            img.parentNode.replaceChild(newImg, img);
-
-            newImg.addEventListener('click', () => {
-                openAiChatModal();
-            });
-
-            // Initial speech bubble animation
-            container.classList.add('show-speech');
-            setTimeout(() => container.classList.remove('show-speech'), 4000);
-        }
-    }, 500); // Slight delay to ensure script.js has already bound its events
-});
+// AI CHAT INTEGRATION (CÚ MÈO THÔNG THÁI)
 
 let owlChatHistory = [];
 let isAiThinking = false;
+
+function setupMascot() {
+    const img = document.getElementById('mascotImg');
+    const container = document.getElementById('mascot');
+    
+    // Auto-show speech at start
+    setTimeout(() => {
+        container.classList.add('show-speech');
+        setTimeout(() => container.classList.remove('show-speech'), 4000);
+    }, 1500);
+
+    // Click: Open AI Chat Modal
+    img.addEventListener('click', () => {
+        openAiChatModal();
+    });
+}
 
 function openAiChatModal() {
     let aiModal = document.getElementById('aiChatModal');
@@ -32,13 +26,13 @@ function openAiChatModal() {
         aiModal.id = 'aiChatModal';
         aiModal.className = 'modal-overlay';
         aiModal.innerHTML = `
-            <div class="modal-content" style="max-width: 500px; padding: 24px; text-align: left; display: flex; flex-direction: column; width: 90%; height: 80dvh; max-height: min(600px, 80dvh); border: 4px solid #FBCFE8; border-radius: 32px; box-sizing: border-box;">
-                <button class="modal-close" onclick="closeAiModal()" style="right: 20px; top: 20px;">&times;</button>
+            <div class="modal-content" style="max-width: 500px; padding: 24px; text-align: left; display: flex; flex-direction: column; width: 90%; height: 80vh; max-height: 600px; border: 4px solid #FBCFE8; border-radius: 32px;">
+                <button class="modal-close" onclick="closeModal('aiChatModal')" style="right: 20px; top: 20px;">&times;</button>
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-                    <span style="font-size: 2.5rem; animation: bounce 3s infinite;">🦉</span>
+                    <span style="font-size: 2.5rem;">🦉</span>
                     <div>
-                        <h2 style="font-family: 'Baloo 2', sans-serif; color: #DB2777; margin: 0; font-size: 1.8rem; font-weight: 800; line-height: 1.2;">Cú Mèo Thông Thái</h2>
-                        <p style="margin: 0; color: #6B7280; font-weight: 600; font-size: 0.85rem;">Powered by ai.btoan.com</p>
+                        <h2 style="font-family: 'Baloo 2', sans-serif; color: #DB2777; margin: 0; font-size: 1.8rem; font-weight: 800;">Cú Mèo Thông Thái</h2>
+                        <p style="margin: 0; color: #6B7280; font-weight: 600; font-size: 0.9rem;">Hỏi tớ bất cứ điều gì bạn muốn nhé!</p>
                     </div>
                 </div>
                 
@@ -46,41 +40,27 @@ function openAiChatModal() {
                     <div style="display: flex; gap: 12px; align-items: flex-end;">
                         <div style="font-size: 1.8rem;">🦉</div>
                         <div style="background: white; padding: 12px 16px; border-radius: 20px; border-bottom-left-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 2px solid #FCE7F3; color: #4B5563; font-weight: 700; font-size: 1rem; max-width: 80%;">
-                            Chào bạn nhỏ! Cú Mèo đây! Bạn muốn hỏi tớ điều gì nào? 🌈
+                            Chào bạn nhỏ! Hôm nay bạn muốn hỏi Cú Mèo điều gì? 🌈
                         </div>
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 8px; align-items: stretch;">
-                    <input type="text" id="aiChatInput" placeholder="Ví dụ: Giảng cho tớ về Trái Đất..." style="flex: 1; min-width: 0; padding: 12px 16px; border: 3px solid #FBCFE8; border-radius: 20px; outline: none; font-family: inherit; font-size: 0.95rem; font-weight: 700;" onkeypress="if(event.key === 'Enter') sendAiMessage()">
-                    <button onclick="sendAiMessage()" style="background: #EC4899; color: white; border: none; padding: 0 16px; border-radius: 20px; font-weight: 800; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 0 #BE123C; font-family: 'Baloo 2', sans-serif; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; min-width: 70px;">
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="aiChatInput" placeholder="VD: Vì sao có Cầu Vồng?" style="flex: 1; padding: 14px 20px; border: 3px solid #FBCFE8; border-radius: 20px; outline: none; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700;" onkeypress="if(event.key === 'Enter') sendAiMessage()">
+                    <button onclick="sendAiMessage()" style="background: #EC4899; color: white; border: none; padding: 0 24px; border-radius: 20px; font-weight: 800; cursor: pointer; transition: all 0.2s; box-shadow: 0 6px 0 #BE123C; font-family: 'Baloo 2', sans-serif; font-size: 1.2rem;">
                         GỬI
                     </button>
                 </div>
             </div>
         `;
         document.body.appendChild(aiModal);
-        
-        aiModal.addEventListener('click', (e) => {
-            if(e.target === aiModal) closeAiModal();
-        });
     }
     
     if(typeof playClickSound === 'function') playClickSound();
     
     aiModal.style.display = 'flex';
-    setTimeout(() => {
-        aiModal.classList.add('show');
-        document.getElementById('aiChatInput').focus();
-    }, 10);
-}
-
-function closeAiModal() {
-    const aiModal = document.getElementById('aiChatModal');
-    if (aiModal) {
-        aiModal.style.display = '';
-        aiModal.classList.remove('show');
-    }
+    // Small delay to allow CSS transition
+    setTimeout(() => aiModal.classList.add('show'), 10);
 }
 
 async function sendAiMessage() {
@@ -109,7 +89,7 @@ async function sendAiMessage() {
     const typingId = 'typing-' + Date.now();
     historyEl.innerHTML += `
         <div id="${typingId}" style="display: flex; gap: 12px; align-items: flex-end;">
-            <div style="font-size: 1.8rem; animation: bounce 1s infinite;">🦉</div>
+            <div style="font-size: 1.8rem;">🦉</div>
             <div style="background: white; padding: 12px 16px; border-radius: 20px; border-bottom-left-radius: 4px; border: 2px solid #FCE7F3; color: #9CA3AF; font-weight: 700; font-size: 1rem; font-style: italic;">
                 Cú Mèo đang nghĩ... 🤔
             </div>
@@ -120,7 +100,7 @@ async function sendAiMessage() {
     if (owlChatHistory.length === 0) {
         owlChatHistory.push({
             role: "user",
-            parts: [{ text: "Hãy đóng vai Cú Mèo Thông Thái của trang web Học Cùng Bé. Bạn có thể trả lời mọi thắc mắc của người dùng về bất kỳ chủ đề nào (Toán, Lý, Hóa, Khoa học...). Hãy dùng LaTeX (kẹp trong dấu $ cho inline hoặc $$ cho block) để trình bày các công thức, ký hiệu khoa học cho đẹp mắt. Hãy trả lời thật đầy đủ, dễ hiểu, luôn xưng là 'Cú Mèo' và gọi người dùng là 'bạn nhỏ' hoặc 'bé'. Dùng emoji dễ thương. \n\nCâu hỏi: " + text }]
+            parts: [{ text: "Bối cảnh: Bạn là Cú Mèo Thông Thái của trang web 'Học Cùng Bé'. Bạn nói chuyện với học sinh 5-7 tuổi. Trả lời cực kỳ ngắn gọn, dễ hiểu, xưng 'Cú Mèo' và gọi 'bạn nhỏ' hoặc 'bé'. Dùng nhiều emoji. Không dùng markdown phức tạp. Trả lời đúng trọng tâm.\\n\\nCâu hỏi của bé: " + text }]
         });
     } else {
         owlChatHistory.push({
@@ -135,34 +115,25 @@ async function sendAiMessage() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 model: "gemini-pro",
-                _v: Date.now(),
                 user_id: 1,
-                user: "1",
-                pass: "1",
-                contents: owlChatHistory,
-                generationConfig: {
-                    maxOutputTokens: 1000,
-                    temperature: 0.8
+                payload: {
+                    contents: owlChatHistory,
+                    generationConfig: {
+                        temperature: 0.7,
+                        maxOutputTokens: 600
+                    }
                 }
             })
         });
 
         const raw = await res.text();
-        console.log("AI RAW RESP:", raw);
         const data = JSON.parse(raw);
         if(!res.ok) throw new Error(data.error?.message || "Lỗi mạng");
         
         let reply = "Xin lỗi, Cú Mèo bị mệt một chút xíu rùi! 😢";
-        // Gemini standard
-        if(data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+        if(data?.candidates && data.candidates.length > 0 && data.candidates[0].content?.parts) {
             reply = data.candidates[0].content.parts.map(p => p.text).join("");
-        } 
-        // Proxy alternates
-        else if (data.reply) reply = data.reply;
-        else if (data.text) reply = data.text;
-        else if (data.content) reply = data.content;
-        else if (data.choices?.[0]?.message?.content) reply = data.choices[0].message.content;
-        else if (typeof data === 'string' && data.length > 5) reply = data;
+        }
 
         const tEl = document.getElementById(typingId);
         if(tEl) tEl.remove();
@@ -180,23 +151,6 @@ async function sendAiMessage() {
                 </div>
             </div>
         `;
-        
-        // Render math
-        if (window.renderMathInElement) {
-            try {
-                renderMathInElement(historyEl, {
-                    delimiters: [
-                        {left: '$$', right: '$$', display: true},
-                        {left: '$', right: '$', display: false},
-                        {left: '\\(', right: '\\)', display: false},
-                        {left: '\\[', right: '\\]', display: true}
-                    ],
-                    throwOnError: false
-                });
-            } catch (err) {
-                console.error("KaTeX Error:", err);
-            }
-        }
     } catch (err) {
         console.error("AI Error: ", err);
         const tEl = document.getElementById(typingId);
@@ -205,11 +159,11 @@ async function sendAiMessage() {
             <div style="display: flex; gap: 12px; align-items: flex-end;">
                 <div style="font-size: 1.8rem;">🦉</div>
                 <div style="background: #FEE2E2; padding: 12px 16px; border-radius: 20px; border-bottom-left-radius: 4px; border: 2px solid #FECACA; color: #DC2626; font-weight: 700; font-size: 1rem; max-width: 80%;">
-                    Xin lỗi nha, Cú Mèo đang nghẽn mạng xíu 💤
+                    Ôi, Cú Mèo buồn ngủ vấp cục đá vỡ wifi rồi! Bé thử lại sau nghen! 💤
                 </div>
             </div>
         `;
-        owlChatHistory.pop();
+        owlChatHistory.pop(); // Remove the failed message
     }
 
     isAiThinking = false;

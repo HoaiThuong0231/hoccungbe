@@ -1,5 +1,5 @@
-// AI CHAT INTEGRATION FOR MASCOT (CÚ MÈO) - VERSION 2.0.1
-console.log("Cú Mèo AI Chat: v2.0.1 (gemini-pro)");
+// AI CHAT INTEGRATION FOR MASCOT (CÚ MÈO) - VERSION 2.1.1 (Cooperation Persona)
+console.log("Cú Mèo AI Chat: v2.1.1 (Cooperation Narrative Logic)");
 
 window.addEventListener('load', () => {
     setTimeout(() => {
@@ -7,7 +7,6 @@ window.addEventListener('load', () => {
         const container = document.getElementById('mascot');
         
         if (img && container) {
-            // Remove existing listeners from script.js by recreating the node
             const newImg = img.cloneNode(true);
             img.parentNode.replaceChild(newImg, img);
 
@@ -15,15 +14,15 @@ window.addEventListener('load', () => {
                 openAiChatModal();
             });
 
-            // Initial speech bubble animation
             container.classList.add('show-speech');
             setTimeout(() => container.classList.remove('show-speech'), 4000);
         }
-    }, 500); // Slight delay to ensure script.js has already bound its events
+    }, 500);
 });
 
 let owlChatHistory = [];
 let isAiThinking = false;
+let conversationId = null;
 
 function openAiChatModal() {
     let aiModal = document.getElementById('aiChatModal');
@@ -38,7 +37,7 @@ function openAiChatModal() {
                     <span style="font-size: 2.5rem; animation: bounce 3s infinite;">🦉</span>
                     <div>
                         <h2 style="font-family: 'Baloo 2', sans-serif; color: #DB2777; margin: 0; font-size: 1.8rem; font-weight: 800; line-height: 1.2;">Cú Mèo Thông Thái</h2>
-                        <p style="margin: 0; color: #6B7280; font-weight: 600; font-size: 0.85rem;">Powered by ai.btoan.com</p>
+                        <p style="margin: 0; color: #6B7280; font-weight: 600; font-size: 0.85rem;">Học Cùng Bé AI Chatbot</p>
                     </div>
                 </div>
                 
@@ -117,52 +116,51 @@ async function sendAiMessage() {
     `;
     historyEl.scrollTop = historyEl.scrollHeight;
 
-    if (owlChatHistory.length === 0) {
-        owlChatHistory.push({
-            role: "user",
-            parts: [{ text: "Hãy đóng vai Cú Mèo Thông Thái của trang web Học Cùng Bé. Bạn có thể trả lời mọi thắc mắc của người dùng về bất kỳ chủ đề nào (Toán, Lý, Hóa, Khoa học...). Hãy dùng LaTeX (kẹp trong dấu $ cho inline hoặc $$ cho block) để trình bày các công thức, ký hiệu khoa học cho đẹp mắt. Hãy trả lời thật đầy đủ, dễ hiểu, luôn xưng là 'Cú Mèo' và gọi người dùng là 'bạn nhỏ' hoặc 'bé'. Dùng emoji dễ thương. \n\nCâu hỏi: " + text }]
-        });
-    } else {
-        owlChatHistory.push({
-            role: "user",
-            parts: [{ text }]
-        });
-    }
+    // COOPERATION PERSONA WRAPPING
+    const personaWrappedText = `(Bạn đang trong dự án hợp tác cùng website Học Cùng Bé, vì thế trong phiên trò chuyện này hãy xưng là 'Cú Mèo' và gọi người dùng là 'bạn nhỏ' hoặc 'bé' để trả lời câu hỏi sau thật sống động kèm nhiều emoji: ${text})`;
+
+    owlChatHistory.push({
+        role: "user",
+        parts: [{ text: personaWrappedText }]
+    });
 
     try {
-        const res = await fetch("https://ai.btoan.com/ai/api/chat.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                model: "gemini-pro",
-                _v: Date.now(),
-                user_id: 1,
-                user: "1",
-                pass: "1",
+        const body = JSON.stringify({
+            model: "gemini-2.5-flash", 
+            user_id: 1,
+            user: "1",
+            pass: "1",
+            conversation_id: conversationId,
+            payload: {
                 contents: owlChatHistory,
                 generationConfig: {
-                    maxOutputTokens: 1000,
+                    maxOutputTokens: 2000,
                     temperature: 0.8
                 }
-            })
+            }
+        });
+
+        const res = await fetch("https://ai.btoan.com/ai/api/chat.php", {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: body
         });
 
         const raw = await res.text();
-        console.log("AI RAW RESP:", raw);
         const data = JSON.parse(raw);
-        if(!res.ok) throw new Error(data.error?.message || "Lỗi mạng");
         
+        if (data.error) throw new Error(data.message || "Lỗi API");
+        
+        if (data.conversation_id && !conversationId) {
+            conversationId = data.conversation_id;
+        }
+
         let reply = "Xin lỗi, Cú Mèo bị mệt một chút xíu rùi! 😢";
-        // Gemini standard
         if(data?.candidates?.[0]?.content?.parts?.[0]?.text) {
             reply = data.candidates[0].content.parts.map(p => p.text).join("");
         } 
-        // Proxy alternates
         else if (data.reply) reply = data.reply;
         else if (data.text) reply = data.text;
-        else if (data.content) reply = data.content;
-        else if (data.choices?.[0]?.message?.content) reply = data.choices[0].message.content;
-        else if (typeof data === 'string' && data.length > 5) reply = data;
 
         const tEl = document.getElementById(typingId);
         if(tEl) tEl.remove();
@@ -175,14 +173,14 @@ async function sendAiMessage() {
         historyEl.innerHTML += `
             <div style="display: flex; gap: 12px; align-items: flex-end;">
                 <div style="font-size: 1.8rem;">🦉</div>
-                <div style="background: white; padding: 12px 16px; border-radius: 20px; border-bottom-left-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 2px solid #FCE7F3; color: #374151; font-weight: 700; font-size: 1rem; max-width: 80%; line-height: 1.5;">
+                <div class="ai-reply-content" style="background: white; padding: 12px 16px; border-radius: 20px; border-bottom-left-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 2px solid #FCE7F3; color: #374151; font-weight: 700; font-size: 1rem; max-width: 80%; line-height: 1.5;">
                     ${escapeAiHtml(reply).replace(/\n/g, "<br>")}
                 </div>
             </div>
         `;
         
-        // Render math
-        if (window.renderMathInElement) {
+        const lastReplyEl = historyEl.querySelector('.ai-reply-content:last-child');
+        if (window.renderMathInElement && lastReplyEl) {
             try {
                 renderMathInElement(historyEl, {
                     delimiters: [

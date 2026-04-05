@@ -426,12 +426,20 @@ function navigateTo(page) {
 // ===================================================
 function getProgress() {
     try { 
-        let p = JSON.parse(localStorage.getItem('vn_learn_progress')) || { 
+        let p = JSON.parse(localStorage.getItem('vn_learn_progress')) || {};
+        
+        // Ensure all fields exist
+        const defaults = {
             learnedLetters: [], learnedWords: [], learnedNumbers: [], learnedRhymes: [],
             learnedDigraphs: [], learnedThemes: [],
             enLetters: [], enVocab: [], enLessons: [], 
             stars: 0, stars_math: 0, stars_en: 0 
-        }; 
+        };
+        
+        Object.keys(defaults).forEach(key => {
+            if (!p[key]) p[key] = defaults[key];
+        });
+
         if (!p.migratedStars) {
             // Migrate English stars if they haven't been
             let enProg = {}; try { enProg = JSON.parse(localStorage.getItem('en_fc_progress') || '{}'); } catch {}
@@ -444,7 +452,14 @@ function getProgress() {
         }
         return p;
     }
-    catch { return { learnedLetters: [], learnedWords: [], learnedNumbers: [], stars: 0, stars_math: 0, stars_en: 0, migratedStars: true }; }
+    catch { 
+        return { 
+            learnedLetters: [], learnedWords: [], learnedNumbers: [], 
+            learnedRhymes: [], learnedDigraphs: [], learnedThemes: [],
+            enLetters: [], enVocab: [], enLessons: [],
+            stars: 0, stars_math: 0, stars_en: 0, migratedStars: true 
+        }; 
+    }
 }
 function saveProgress(p) { try { localStorage.setItem('vn_learn_progress', JSON.stringify(p)); } catch {} }
 function markLetterLearned(l) { const p = getProgress(); if (!p.learnedLetters.includes(l)) { p.learnedLetters.push(l); p.stars += 1; saveProgress(p); updateProgress(); renderAlphabetGrid(); } }

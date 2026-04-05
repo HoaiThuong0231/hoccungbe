@@ -334,15 +334,26 @@ function spellWordAnimated(word, onStep, onComplete) {
     cancelSpelling();
     const steps = getSpellingSteps(word);
     let idx = 0;
-    function next() {
-        if (idx >= steps.length) { if (onComplete) onComplete(); return; }
+
+    function playNextStep() {
+        if (idx >= steps.length) {
+            if (onComplete) onComplete();
+            return;
+        }
+
         const step = steps[idx];
         if (onStep) onStep(step, idx, steps.length);
-        speakVietnamese(step.speak);
-        idx++;
-        spellTimeout = setTimeout(next, AUDIO_CONFIG.spellDelay);
+
+        // Use playGoogleTTS directly instead of speakVietnamese 
+        // to avoid calling stopAllAudio which triggers cancelSpelling()
+        playGoogleTTS(step.speak, 'vi', () => {
+            idx++;
+            // Small delay between steps for natural feel, but triggered by onended
+            spellTimeout = setTimeout(playNextStep, 200); 
+        });
     }
-    next();
+
+    playNextStep();
 }
 
 function cancelSpelling() {

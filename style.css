@@ -46,6 +46,7 @@ body {
     background: var(--bg-main);
     color: var(--text-dark);
     min-height: 100vh;
+    min-height: 100dvh; /* Better for mobile dynamic toolbars */
     overflow-x: hidden;
     position: relative;
     font-weight: 600;
@@ -98,7 +99,7 @@ button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
 /* === Mascot === */
 .mascot-container {
     position: fixed;
-    bottom: 80px;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0));
     right: 12px;
     z-index: 1000;
     display: flex;
@@ -321,7 +322,9 @@ button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 64px;
+    height: auto;
+    min-height: 64px;
+    padding-bottom: env(safe-area-inset-bottom, 0);
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -329,9 +332,11 @@ button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 4px 4px;
+    padding-top: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
     box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.06);
-    border-top: 3px solid transparent;
+    border-top: 3.5px solid transparent; /* Slightly thicker */
     border-image: linear-gradient(90deg, var(--pink), var(--purple), var(--blue), var(--green)) 1;
 }
 
@@ -390,11 +395,12 @@ button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
     position: relative;
     z-index: 1;
     padding: 12px;
-    padding-top: 72px;
-    padding-bottom: 80px;
+    padding-top: 76px;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0)); /* Increased to clear bottom nav */
     max-width: 1200px;
     margin: 0 auto;
     min-height: 100vh;
+    min-height: 100dvh;
 }
 @media (max-width: 480px) {
     .main-content { padding-top: 64px; }
@@ -4741,3 +4747,31 @@ button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
         display: flex !important;
     }
 }
+
+/* === Footer === */
+.site-footer {
+    padding: 40px 20px 20px;
+    text-align: center;
+    color: var(--text-mid);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border-top: 2.5px dashed #E5E7EB;
+    margin-top: 60px;
+    width: 100%;
+}
+
+.site-footer p {
+    margin: 4px 0;
+}
+
+.site-footer .copyright {
+    color: var(--pink);
+    font-weight: 800;
+}
+
+.site-footer .collab {
+    font-size: 0.85rem;
+    color: var(--purple);
+    font-weight: 700;
+}
+
