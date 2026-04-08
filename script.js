@@ -684,6 +684,13 @@ function openVocabModal(i) {
     document.getElementById('vocabModalEmoji').textContent = item.emoji;
     document.getElementById('vocabModalWord').textContent = item.word;
     document.getElementById('vocabModalSpell').textContent = item.spell;
+    
+    // Đảm bảo ẩn và reset phần đánh vần cũ
+    const display = document.getElementById('vocabSpellDisplay');
+    const stepsEl = document.getElementById('vocabSpellSteps');
+    if (display) display.classList.add('hidden');
+    if (stepsEl) stepsEl.innerHTML = '';
+
     document.getElementById('vocabModal').classList.add('show');
     playClickSound();
     markWordLearned(item.word);

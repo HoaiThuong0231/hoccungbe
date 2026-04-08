@@ -3567,31 +3567,53 @@ button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
 
 /* Spell game */
 .en-spell-target {
-    min-height: 56px;
-    padding: 12px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
     margin: 12px auto;
+    min-height: 56px;
+    flex-wrap: wrap;
+    max-width: 100%;
+}
+
+.en-spell-box {
+    width: 48px;
+    height: 56px;
     background: white;
+    border: 3px dashed #E5E7EB;
+    border-radius: var(--radius-sm);
+    font-size: 2rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: lowercase;
+    color: #2563EB;
+}
+
+.en-spell-target.correct {
+    display: block;
+    padding: 12px 20px;
+    border: 3px dashed var(--green);
+    background: #D1FAE5;
+    color: var(--green);
     border-radius: var(--radius-md);
     font-size: 2rem;
     font-weight: 800;
     text-align: center;
-    letter-spacing: 6px;
-    text-transform: lowercase;
-    color: #2563EB;
-    border: 3px dashed #E5E7EB;
-    max-width: 320px;
-}
-
-.en-spell-target.correct {
-    border-color: var(--green);
-    background: #D1FAE5;
-    color: var(--green);
+    letter-spacing: 2px;
 }
 
 .en-spell-target.wrong {
-    border-color: #EF4444;
+    display: block;
+    padding: 12px 20px;
+    border: 3px dashed #EF4444;
     background: #FEE2E2;
     color: #EF4444;
+    border-radius: var(--radius-md);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
 }
 
 .en-spell-letters {
@@ -3647,6 +3669,44 @@ button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
 .en-spell-clear-btn {
     background: #F3F4F6;
     color: var(--text-mid);
+}
+
+.vi-difficulty-selector {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: var(--radius-lg);
+    margin: 20px auto;
+    max-width: 400px;
+    box-shadow: var(--shadow-sm);
+}
+
+.vi-difficulty-selector p {
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+.vi-diff-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.vi-diff-buttons button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font);
+    font-weight: 700;
+    transition: var(--transition);
+    background: #F3F4F6;
+}
+
+.vi-diff-buttons button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
 }
 
 .en-spell-check-btn {

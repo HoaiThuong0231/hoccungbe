@@ -414,10 +414,10 @@
                     <div class="game-card-desc">Nhìn hình → chọn từ đúng</div>
                     <div class="game-card-badge">⭐ Game 1</div>
                 </button>
-                <button class="game-card" onclick="startGame('match')">
-                    <div class="game-card-icon">🧩</div>
+                <button class="game-card" onclick="startGame('spelling')">
+                    <div class="game-card-icon">🔤</div>
                     <div class="game-card-title">Ghép Từ</div>
-                    <div class="game-card-desc">Ghép các chữ thành từ</div>
+                    <div class="game-card-desc">Xếp chữ cái thành từ đúng</div>
                     <div class="game-card-badge">⭐ Game 2</div>
                 </button>
                 <button class="game-card" onclick="startGame('listen')">
@@ -444,6 +444,28 @@
                     <div class="game-question-text" id="chooseQuestion">Đây là chữ gì?</div>
                 </div>
                 
+                <div id="viSpellingGameArea" class="hidden vi-spell-game-area">
+                    <!-- Difficulty Selection View -->
+                    <div id="viSpellingDifficulty" class="vi-difficulty-selector">
+                        <p>Chọn mức độ khó của từ nhé:</p>
+                        <div class="vi-diff-buttons">
+                            <button onclick="viAppSpelling.setDifficulty('easy')">🟢 Dễ</button>
+                            <button onclick="viAppSpelling.setDifficulty('medium')">🟡 Vừa</button>
+                            <button onclick="viAppSpelling.setDifficulty('hard')">🔴 Khó</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Game Play View -->
+                    <div id="viSpellingPlay" class="hidden">
+                        <div id="viSpellingTarget" class="en-spell-target"></div>
+                        <div id="viSpellingLetters" class="en-spell-letters"></div>
+                        <div class="en-spell-actions">
+                            <button class="en-spell-clear-btn" onclick="viAppSpelling.clear()">🔄 Xóa</button>
+                            <button class="en-spell-check-btn" onclick="viAppSpelling.check()">✅ Kiểm tra</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="viMatchArea" class="hidden vi-match-container">
                     <div class="vi-match-headers">
                         <div class="vi-match-header">🖼️ Hình Ảnh</div>
@@ -790,29 +812,7 @@
         <p class="collab">Mascot collab w Btoan AI</p>
     </footer>
 
-    <!-- Achievements Modal -->
-    <div class="modal-overlay" id="achievementsModal">
-        <div class="modal-content achievements-modal-content" style="max-width: 500px; padding: 24px;">
-            <button class="modal-close" onclick="closeModal('achievementsModal')">&times;</button>
-            <h2 style="font-family: 'Baloo 2', sans-serif; color: #F59E0B; font-size: 1.8rem; margin-bottom: 24px;">🏆 Bảng Thành Tích</h2>
-            <div id="modalAchGrid" style="display: flex; flex-direction: column; gap: 16px;">
-                <div style="background: #FEFCE8; border: 2px solid #FACC15; border-radius: 16px; padding: 16px; text-align: left;">
-                    <h3 style="color: #D97706; font-size: 1.2rem; margin-bottom: 12px; font-weight: 800; font-family: 'Nunito', sans-serif;">AĂÂ Tiếng Việt</h3>
-                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                        <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                            <span style="font-size: 1.5rem;">🔤</span>
-                            <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achViLetters">0/29</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Chữ cái</div></div>
-                        </div>
-                        <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                            <span style="font-size: 1.5rem;">📚</span>
-                            <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achViVocab">0/30</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Từ vựng</div></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Other sections here... -->
-            </div>
-        </div>
-    </div>
+
 
     <!-- Confetti -->
     <div class="confetti-container" id="confettiContainer"></div>
@@ -989,16 +989,160 @@
             }
         };
 
+        window.viAppSpelling = {
+            current: 0,
+            score: 0,
+            total: 10,
+            word: '',
+            userInput: '',
+            difficulty: 'easy',
+            questions: [],
+            
+            init() {
+                const menu = document.getElementById('gamesMenu'); if(menu) menu.classList.add('hidden');
+                const area = document.getElementById('game-choose'); if(area) area.classList.remove('hidden');
+                const qArea = document.getElementById('chooseQuestionArea'); if(qArea) qArea.classList.add('hidden');
+                const spellArea = document.getElementById('viSpellingGameArea'); if(spellArea) spellArea.classList.remove('hidden');
+                const diffArea = document.getElementById('viSpellingDifficulty'); if(diffArea) diffArea.classList.remove('hidden');
+                const playArea = document.getElementById('viSpellingPlay'); if(playArea) playArea.classList.add('hidden');
+                
+                // Hide others
+                const matchArea = document.getElementById('viMatchArea'); if(matchArea) matchArea.classList.add('hidden');
+                const victory = document.getElementById('viMatchVictory'); if(victory) victory.classList.add('hidden');
+                const opts = document.getElementById('chooseOptions'); if(opts) opts.classList.add('hidden');
+
+                document.getElementById('chooseRound').innerText = '1';
+                document.getElementById('chooseScore').innerText = '0';
+                document.getElementById('chooseQuestion').innerText = 'Chọn mức độ khó'; 
+                document.getElementById('chooseEmoji').innerText = '🎲';
+            },
+
+            setDifficulty(diff) {
+                this.difficulty = diff;
+                this.current = 0;
+                this.score = 0;
+                this.questions = [...VOCABULARY].sort(() => Math.random() - 0.5).slice(0, 10);
+                
+                document.getElementById('viSpellingDifficulty').classList.add('hidden');
+                document.getElementById('viSpellingPlay').classList.remove('hidden');
+                document.getElementById('chooseQuestionArea').classList.remove('hidden');
+                
+                this.show();
+            },
+
+            removeAccents(str) {
+                return str.normalize('NFD')
+                          .replace(/[\u0300-\u036f]/g, '')
+                          .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+            },
+
+            show() {
+                const q = this.questions[this.current];
+                this.word = q.word.toLowerCase().replace(/\s+/g, '');
+                this.userInput = '';
+                
+                document.getElementById('chooseRound').innerText = this.current + 1;
+                document.getElementById('chooseEmoji').innerText = q.emoji;
+                document.getElementById('chooseQuestion').innerHTML = `Bé hãy nhìn hình và ghép chữ nhé!`;
+                
+                const unaccentedWord = this.removeAccents(this.word);
+                let letters = unaccentedWord.split('');
+
+                document.getElementById('viSpellingTarget').className = 'en-spell-target';
+                document.getElementById('viSpellingTarget').innerHTML = letters.map(() => `<div class="en-spell-box"></div>`).join('');
+                
+                
+                // Add distractors
+                const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+                let distractors = [];
+                if (this.difficulty === 'medium') {
+                    for(let i=0; i<3; i++) distractors.push(alphabet[Math.floor(Math.random()*26)]);
+                } else if (this.difficulty === 'hard') {
+                    for(let i=0; i<6; i++) distractors.push(alphabet[Math.floor(Math.random()*26)]);
+                }
+                
+                const finalLetters = [...letters, ...distractors].sort(() => Math.random() - 0.5);
+                
+                document.getElementById('viSpellingLetters').innerHTML = finalLetters.map((l, i) => 
+                    `<button class="en-spell-letter" onclick="viAppSpelling.pick(this, '${l}')">${l}</button>`
+                ).join('');
+                
+                const fb = document.getElementById('chooseFeedback'); if(fb) fb.classList.add('hidden');
+            },
+
+            pick(btn, letter) {
+                this.userInput += letter;
+                btn.disabled = true;
+                btn.style.opacity = '0.3';
+                const boxes = document.querySelectorAll('#viSpellingTarget .en-spell-box');
+                for (let i = 0; i < boxes.length; i++) {
+                    boxes[i].innerText = this.userInput[i] || '';
+                }
+                if (window.playClickSound) window.playClickSound();
+            },
+
+            clear() {
+                this.userInput = '';
+                const boxes = document.querySelectorAll('#viSpellingTarget .en-spell-box');
+                boxes.forEach(b => b.innerText = '');
+                document.querySelectorAll('.en-spell-letter').forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+            },
+
+            check() {
+                const q = this.questions[this.current];
+                const unaccentedCorrect = this.removeAccents(this.word);
+                const target = document.getElementById('viSpellingTarget');
+                const fb = document.getElementById('chooseFeedback');
+                const txt = document.getElementById('chooseFeedbackText');
+                
+                if (fb) fb.classList.remove('hidden');
+                
+                if (this.userInput.toLowerCase() === unaccentedCorrect.toLowerCase()) {
+                    this.score++;
+                    target.innerText = q.word; 
+                    target.className = 'en-spell-target correct';
+                    if(txt) txt.innerText = 'Chính xác! Bé giỏi quá! ⭐ +1';
+                    if (window.addStars) window.addStars(1);
+                    document.getElementById('chooseScore').innerText = this.score;
+                    if (window.playCorrectSound) window.playCorrectSound();
+                    if (window.showConfetti) window.showConfetti();
+                } else {
+                    target.innerText = q.word;
+                    target.className = 'en-spell-target wrong';
+                    if(txt) txt.innerText = `Chưa đúng rồi! Đáp án là: ${q.word}`;
+                    if (window.playWrongSound) window.playWrongSound();
+                }
+
+                setTimeout(() => {
+                    this.current++;
+                    if (this.current >= this.total) {
+                        this.complete();
+                    } else {
+                        this.show();
+                    }
+                }, 3000);
+            },
+
+            complete() {
+                const area = document.getElementById('game-choose'); if(area) area.classList.add('hidden');
+                const spellArea = document.getElementById('viSpellingGameArea'); if(spellArea) spellArea.classList.add('hidden');
+                const comp = document.getElementById('game-complete'); if(comp) comp.classList.remove('hidden');
+                document.getElementById('finalScore').innerText = this.score;
+                const msg = this.score >= 8 ? 'Xuất sắc! 🌟' : this.score >= 5 ? 'Tốt lắm! 👍' : 'Cố gắng thêm nhé! 💪';
+                document.getElementById('completeMessage').innerText = msg;
+            }
+        };
+
         window.viAppQuiz = {
             questions: [
-                { q: 'Quả táo màu gì?', a: ['Đỏ 🍎', 'Xanh', 'Vàng'], c: 0 },
-                { q: 'Con vật nào gáy "Ò ó o"?', a: ['Chó', 'Mèo', 'Gà Trống 🐓'], c: 2 },
-                { q: 'Số nào sau số 1?', a: ['0', '2', '3'], c: 1 },
-                { q: 'Mặt trời mọc ở đâu?', a: ['Hướng Đông 🌅', 'Hướng Tây', 'Bắc'], c: 0 },
-                { q: 'Bé cần làm gì trước khi ăn?', a: ['Rửa tay ✨', 'Đi ngủ', 'Xem TV'], c: 0 },
-                { q: 'Con vật nào thích ăn cỏ?', a: ['Hổ', 'Bò 🐮', 'Mèo'], c: 1 },
-                { q: 'Cái gì dùng để viết?', a: ['Bút ✏️', 'Cặp', 'Sách'], c: 0 },
-                { q: 'Bầu trời có màu gì?', a: ['Đen', 'Xanh dương ☁️', 'Đỏ'], c: 1 }
+                { q: 'Quả táo màu gì?', a: ['Đỏ', 'Xanh', 'Vàng', 'Đen'], c: 0 },
+                { q: 'Con vật nào gáy "Ò ó o"?', a: ['Chó', 'Mèo', 'Gà Trống', 'Lợn'], c: 2 },
+                { q: 'Số nào sau số 1?', a: ['0', '2', '3', '4'], c: 1 },
+                { q: 'Mặt trời mọc ở đâu?', a: ['Hướng Đông', 'Hướng Tây', 'Bắc', 'Nam'], c: 0 },
+                { q: 'Bé cần làm gì trước khi ăn?', a: ['Rửa tay', 'Đi ngủ', 'Xem TV', 'Chơi game'], c: 0 },
+                { q: 'Con vật nào thích ăn cỏ?', a: ['Hổ', 'Bò', 'Mèo', 'Chó'], c: 1 },
+                { q: 'Cái gì dùng để viết?', a: ['Bút', 'Cặp', 'Sách', 'Thước'], c: 0 },
+                { q: 'Bầu trời có màu gì?', a: ['Đen', 'Xanh dương', 'Đỏ', 'Trắng'], c: 1 }
             ],
             current: 0,
             init() {
@@ -1038,10 +1182,10 @@
             }
         };
 
-        const originalStartGame = window.startGame;
         window.startGame = function(type) {
             if (type === 'quiz') viAppQuiz.init();
             else if (type === 'choose') viAppMatch.init();
+            else if (type === 'spelling') viAppSpelling.init();
             else if (typeof originalStartGame === 'function') originalStartGame(type);
         };
 

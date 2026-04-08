@@ -1379,6 +1379,10 @@ function renderEnGameQuestion() {
         document.getElementById('enGameRound').textContent = enGameState.current + 1;
     }
 
+    if (enGameType === 'spell') {
+        enSpellWord = ''; 
+    }
+
     if (enGameType === 'picture') {
         const opts = shuffleArray([q, ...shuffleArray(allVocab.filter(w => w.en !== q.en)).slice(0, 3)]);
         area.innerHTML = `<div class="en-game-q">
@@ -1417,7 +1421,7 @@ function renderEnGameQuestion() {
             <div class="en-game-q-emoji">${q.emoji}</div>
             <div class="en-game-q-text">Ghép chữ thành từ: <b>${q.vi}</b></div>
         </div>
-        <div class="en-spell-target" id="enSpellTarget"></div>
+        <div class="en-spell-target" id="enSpellTarget">${letters.map(() => `<div class="en-spell-box"></div>`).join('')}</div>
         <div class="en-spell-letters" id="enSpellLetters">${finalLetters.map((l, i) =>
             `<button class="en-spell-letter" onclick="pickEnSpellLetter(this,'${l}')">${l}</button>`
         ).join('')}</div>
@@ -1467,11 +1471,15 @@ function pickEnSpellLetter(btn, letter) {
     enSpellWord += letter;
     btn.disabled = true;
     btn.style.opacity = '0.3';
-    document.getElementById('enSpellTarget').textContent = enSpellWord;
+    const boxes = document.querySelectorAll('#enSpellTarget .en-spell-box');
+    for (let i = 0; i < boxes.length; i++) {
+        boxes[i].textContent = enSpellWord[i] || '';
+    }
 }
 function clearEnSpell() {
     enSpellWord = '';
-    document.getElementById('enSpellTarget').textContent = '';
+    const boxes = document.querySelectorAll('#enSpellTarget .en-spell-box');
+    boxes.forEach(b => b.textContent = '');
     document.querySelectorAll('.en-spell-letter').forEach(b => { b.disabled = false; b.style.opacity = '1'; });
 }
 function checkEnSpell(correct) {

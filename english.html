@@ -815,57 +815,8 @@
             </div>
         </div>
 
-        <!-- Achievements Modal -->
-        <div class="modal-overlay" id="achievementsModal">
-            <div class="modal-content achievements-modal-content" style="max-width: 500px; padding: 24px;">
-                <button class="modal-close" onclick="closeModal('achievementsModal')">&times;</button>
-                <h2 style="font-family: 'Baloo 2', sans-serif; color: #F59E0B; font-size: 1.8rem; margin-bottom: 24px;">🏆 Bảng Thành Tích</h2>
-                <div id="modalAchGrid" style="display: flex; flex-direction: column; gap: 16px;">
-                    <!-- Tiếng Việt -->
-                    <div style="background: #FEFCE8; border: 2px solid #FACC15; border-radius: 16px; padding: 16px; text-align: left;">
-                        <h3 style="color: #D97706; font-size: 1.2rem; margin-bottom: 12px; font-weight: 800; font-family: 'Nunito', sans-serif;">AĂÂ Tiếng Việt</h3>
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                <span style="font-size: 1.5rem;">🔤</span>
-                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achViLetters">0/29</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Chữ cái</div></div>
-                            </div>
-                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                <span style="font-size: 1.5rem;">📚</span>
-                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achViVocab">0/30</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Từ vựng</div></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Tiếng Anh -->
-                    <div style="background: #EFF6FF; border: 2px solid #60A5FA; border-radius: 16px; padding: 16px; text-align: left;">
-                        <h3 style="color: #2563EB; font-size: 1.2rem; margin-bottom: 12px; font-weight: 800; font-family: 'Nunito', sans-serif;">ABC Tiếng Anh</h3>
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                <span style="font-size: 1.5rem;">⭐</span>
-                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achEnScore">0</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Điểm số</div></div>
-                            </div>
-                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                <span style="font-size: 1.5rem;">🎯</span>
-                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achEnRatio">0%</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Tỉ lệ</div></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Toán -->
-                    <div style="background: #ECFDF5; border: 2px solid #34D399; border-radius: 16px; padding: 16px; text-align: left;">
-                        <h3 style="color: #059669; font-size: 1.2rem; margin-bottom: 12px; font-weight: 800; font-family: 'Nunito', sans-serif;">🔢 Toán Học</h3>
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                <span style="font-size: 1.5rem;">⭐</span>
-                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achMathScore">0</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Điểm số</div></div>
-                            </div>
-                            <div style="flex: 1; background: white; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                <span style="font-size: 1.5rem;">📚</span>
-                                <div><div style="font-weight: 800; color: #111827; font-size: 1.1rem;" id="achMathLessons">0/11</div><div style="font-size: 0.75rem; color: #6B7280; font-weight: 600;">Bài học</div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Achievements Modal (Dynamic) -->
+        <div id="achievementsModal"></div>
 
         <!-- Footer -->
         <footer class="site-footer">
