@@ -174,27 +174,41 @@ function speakEnglish(text, onEndCallback) {
 }
 
 function speakLetterSound(letterLower, onEndCallback) {
+    // Luôn dừng mọi âm thanh đang phát trước khi bắt đầu âm mới
     stopAllAudio();
+    
     const key = LETTER_AUDIO_MAP[letterLower];
+    const isInSubfolder = window.location.pathname.match(/\/(vietnamese|english|math)\/[^\/]+$/);
+    const audioBasePath = isInSubfolder ? '../assets/audio/' : 'assets/audio/';
+    
     if (key) {
-        const url = 'assets/audio/' + key + '.mp3';
+        const url = audioBasePath + key + '.mp3';
         const a = new Audio(url);
         a.volume = 1;
-        a.onended = () => { if (onEndCallback) onEndCallback(); };
-        a.onerror = () => {
+
+        // Lưu instance hiện tại để có thể dừng được
+        currentAudio = a;
+
+        a.onended = () => { 
+            if (currentAudio === a) currentAudio = null;
+            if (onEndCallback) onEndCallback(); 
+        };
+        
+        let hasFailed = false;
+        const fallback = () => {
+            if (hasFailed) return;
+            hasFailed = true;
+            if (currentAudio === a) currentAudio = null;
             const sound = LETTER_SOUNDS[letterLower];
             if (sound) speakVietnamese(sound, onEndCallback);
             else if (onEndCallback) onEndCallback();
         };
-        a.play().then(() => { 
-            currentAudio = a; 
-        }).catch((err) => {
+        
+        a.onerror = fallback;
+        a.play().catch((err) => {
             console.warn('Audio play failed, falling back to TTS', err);
-            const sound = LETTER_SOUNDS[letterLower];
-            if (sound) speakVietnamese(sound, onEndCallback);
-            else if (onEndCallback) onEndCallback();
+            fallback();
         });
-        currentAudio = a;
     } else {
         const sound = LETTER_SOUNDS[letterLower];
         if (sound) speakVietnamese(sound, onEndCallback);
@@ -205,27 +219,41 @@ function speakLetterSound(letterLower, onEndCallback) {
 function playGoogleTTS(text, lang, onEndCallback) {
     stopCurrentAudio();
     const tl = (lang === 'en') ? 'en' : 'vi';
-    // Sử dụng client=gtx để giọng Google thường là giọng nữ chuẩn
     const url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + tl + '&q=' + encodeURIComponent(text);
     
     const a = new Audio();
     a.volume = 1;
-    a.onended = () => { if (onEndCallback) onEndCallback(); };
+    currentAudio = a;
+
+    a.onended = () => { 
+        if (currentAudio === a) currentAudio = null;
+        if (onEndCallback) onEndCallback(); 
+    };
     
     const handleFallback = () => {
+        if (currentAudio === a) currentAudio = null;
         // Fallback sang client dự phòng khác
         const fallbackUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + tl + '&q=' + encodeURIComponent(text);
-        a.onerror = () => { if (onEndCallback) onEndCallback(); };
-        a.src = fallbackUrl;
-        a.play().catch(() => { if (onEndCallback) onEndCallback(); });
+        const fbAudio = new Audio(fallbackUrl);
+        fbAudio.volume = 1;
+        currentAudio = fbAudio;
+        fbAudio.onended = () => {
+            if (currentAudio === fbAudio) currentAudio = null;
+            if (onEndCallback) onEndCallback();
+        };
+        fbAudio.onerror = () => { 
+            if (currentAudio === fbAudio) currentAudio = null;
+            if (onEndCallback) onEndCallback(); 
+        };
+        fbAudio.play().catch(() => { 
+            if (currentAudio === fbAudio) currentAudio = null;
+            if (onEndCallback) onEndCallback(); 
+        });
     };
     
     a.onerror = handleFallback;
     a.src = url;
-    
-    a.play().then(() => {
-        currentAudio = a;
-    }).catch(() => {
+    a.play().catch(() => {
         handleFallback();
     });
 }
@@ -242,7 +270,9 @@ function playLocalAudio(path) {
 }
 
 function playAudio(fileName) {
-    return playLocalAudio('assets/audio/' + fileName + '.mp3');
+    const isInSubfolder = window.location.pathname.match(/\/(vietnamese|english|math)\/[^\/]+$/);
+    const audioBasePath = isInSubfolder ? '../assets/audio/' : 'assets/audio/';
+    return playLocalAudio(audioBasePath + fileName + '.mp3');
 }
 
 // ===================================================

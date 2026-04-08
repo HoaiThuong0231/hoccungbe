@@ -383,19 +383,23 @@ function navigateTo(page) {
     if (filename.includes('?')) filename = filename.split('?')[0];
     if (filename.includes('#')) filename = filename.split('#')[0];
     
+    
+    const isRoot = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/");
+    const prefix = isRoot ? "" : "../";
     const pageMap = {
-        'home': 'index.html',
-        'vietnamese': 'vietnamese.html',
-        'english': 'english.html',
-        'math': 'math.html'
+        "home": prefix + "index.html",
+        "vietnamese": prefix + "vietnamese/vietnamese.html",
+        "english": prefix + "english/english.html",
+        "math": prefix + "math/math.html"
     };
 
     if (pageMap[page]) {
         let expectedFile = pageMap[page];
-        if (!filename) filename = 'index.html'; // Default
+        if (!filename) filename = "index.html"; // Default
         
         // Cần điều hướng sang trang khác nếu khác file hiện tại
-        if (filename !== expectedFile) {
+        let targetFilename = expectedFile.split("/").pop();
+        if (filename !== targetFilename) {
             window.location.href = expectedFile;
             return;
         }
