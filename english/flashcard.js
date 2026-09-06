@@ -34,6 +34,28 @@ const FLASHCARDS = [
     { word_en:'star', word_vi:'ngôi sao', emoji:'⭐', category:'objects' },
     { word_en:'flower', word_vi:'bông hoa', emoji:'🌸', category:'objects' },
     { word_en:'sun', word_vi:'mặt trời', emoji:'☀️', category:'objects' },
+    // Hồ Câu
+    { word_en:'Milk coffee', word_vi:'Cà phê sữa', emoji:'☕', category:'ho_cau' },
+    { word_en:'Iced coffee', word_vi:'Cà phê đá', emoji:'🧊', category:'ho_cau' },
+    { word_en:'Hot coffee', word_vi:'Cà phê nóng', emoji:'☕', category:'ho_cau' },
+    { word_en:'Breakfast', word_vi:'Ăn sáng', emoji:'🍳', category:'ho_cau' },
+    { word_en:'Sugar', word_vi:'Đường', emoji:'🧂', category:'ho_cau' },
+    { word_en:'Bread with fried eggs', word_vi:'Bánh mì ốp la', emoji:'🥖', category:'ho_cau' },
+    { word_en:'Instant noodles with egg', word_vi:'Mì gói trứng', emoji:'🍜', category:'ho_cau' },
+    { word_en:'Cigarettes', word_vi:'Thuốc lá', emoji:'🚬', category:'ho_cau' },
+    { word_en:'555 cigarettes', word_vi:'Thuốc lá 3 số 3', emoji:'🚬', category:'ho_cau' },
+    { word_en:'Craven "A" cigarettes', word_vi:'Thuốc lá mèo', emoji:'🐱', category:'ho_cau' },
+    { word_en:'Would you like to buy a hat?', word_vi:'Mời bạn mua nón', emoji:'👒', category:'ho_cau' },
+    { word_en:'What is your name?', word_vi:'Bạn tên gì', emoji:'❓', category:'ho_cau' },
+    { word_en:'My name is Mary', word_vi:'Mình tên là Mary', emoji:'👧', category:'ho_cau' },
+    { word_en:'Wash the dishes', word_vi:'Rửa chén', emoji:'🍽️', category:'ho_cau' },
+    { word_en:'Clean the room', word_vi:'Dọn phòng', emoji:'🧹', category:'ho_cau' },
+    { word_en:'Restroom', word_vi:'Nhà vệ sinh', emoji:'🚻', category:'ho_cau' },
+    { word_en:'The bill, please', word_vi:'Tính tiền', emoji:'💵', category:'ho_cau' },
+    { word_en:'Get fishing bait', word_vi:'Lấy mồi câu', emoji:'🪱', category:'ho_cau' },
+    { word_en:'Bath towel', word_vi:'Khăn Tắm', emoji:'🧖', category:'ho_cau' },
+    { word_en:'Face towel', word_vi:'Khăn mặt', emoji:'🧼', category:'ho_cau' },
+    { word_en:'Change bed sheets', word_vi:'Thay ga giường', emoji:'🛏️', category:'ho_cau' },
 ];
 
 // ===================================================

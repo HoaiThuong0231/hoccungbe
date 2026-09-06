@@ -127,6 +127,29 @@ const EN_VOCAB = {
             { en: 'oval', vi: 'hình bầu dục', emoji: '🥚' },
             { en: 'diamond', vi: 'hình thoi', emoji: '💎' },
         ],
+        ho_cau: [
+            { en: 'Milk coffee', vi: 'Cà phê sữa', emoji: '☕' },
+            { en: 'Iced coffee', vi: 'Cà phê đá', emoji: '🧊' },
+            { en: 'Hot coffee', vi: 'Cà phê nóng', emoji: '☕' },
+            { en: 'Breakfast', vi: 'Ăn sáng', emoji: '🍳' },
+            { en: 'Sugar', vi: 'Đường', emoji: '🧂' },
+            { en: 'Bread with fried eggs', vi: 'Bánh mì ốp la', emoji: '🥖' },
+            { en: 'Instant noodles with egg', vi: 'Mì gói trứng', emoji: '🍜' },
+            { en: 'Cigarettes', vi: 'Thuốc lá', emoji: '🚬' },
+            { en: '555 cigarettes', vi: 'Thuốc lá 3 số 3', emoji: '🚬' },
+            { en: 'Craven "A" cigarettes', vi: 'Thuốc lá mèo', emoji: '🐱' },
+            { en: 'Would you like to buy a hat?', vi: 'Mời bạn mua nón', emoji: '👒' },
+            { en: 'What is your name?', vi: 'Bạn tên gì', emoji: '❓' },
+            { en: 'My name is Mary', vi: 'Mình tên là Mary', emoji: '👧' },
+            { en: 'Wash the dishes', vi: 'Rửa chén', emoji: '🍽️' },
+            { en: 'Clean the room', vi: 'Dọn phòng', emoji: '🧹' },
+            { en: 'Restroom', vi: 'Nhà vệ sinh', emoji: '🚻' },
+            { en: 'The bill, please', vi: 'Tính tiền', emoji: '💵' },
+            { en: 'Get fishing bait', vi: 'Lấy mồi câu', emoji: '🪱' },
+            { en: 'Bath towel', vi: 'Khăn Tắm', emoji: '🧖' },
+            { en: 'Face towel', vi: 'Khăn mặt', emoji: '🧼' },
+            { en: 'Change bed sheets', vi: 'Thay ga giường', emoji: '🛏️' },
+        ],
     },
     level2: {
         food: [
@@ -416,6 +439,28 @@ const EN_PHONETICS = {
     'angry': '/ˈæŋɡri/', 'scared': '/skɛrd/', 'surprised': '/sərˈpraɪzd/',
     'tired': '/ˈtaɪərd/', 'excited': '/ɪkˈsaɪtɪd/', 'shy': '/ʃaɪ/',
     'proud': '/praʊd/', 'love': '/lʌv/',
+    // Hồ Câu & Dịch vụ
+    'milk coffee': '/mɪlk ˈkɔːfi/',
+    'iced coffee': '/aɪst ˈkɔːfi/',
+    'hot coffee': '/hɑːt ˈkɔːfi/',
+    'breakfast': '/ˈbrekfəst/',
+    'sugar': '/ˈʃʊɡər/',
+    'bread with fried eggs': '/bred wɪð fraɪd eɡz/',
+    'instant noodles with egg': '/ˈɪnstənt ˈnuːdlz wɪð eɡ/',
+    'cigarettes': '/ˌsɪɡəˈrets/',
+    '555 cigarettes': '/faɪv faɪv faɪv ˌsɪɡəˈrets/',
+    'craven "a" cigarettes': '/ˈkreɪvən eɪ ˌsɪɡəˈrets/',
+    'would you like to buy a hat?': '/wʊd juː laɪk tu baɪ ə hæt/',
+    'what is your name?': '/wʌt ɪz jʊər neɪm/',
+    'my name is mary': '/maɪ neɪm ɪz ˈmɛəri/',
+    'wash the dishes': '/wɑːʃ ðə ˈdɪʃɪz/',
+    'clean the room': '/kliːn ðə ruːm/',
+    'restroom': '/ˈrestruːm/',
+    'the bill, please': '/ðə bɪl pliːz/',
+    'get fishing bait': '/ɡet ˈfɪʃɪŋ beɪt/',
+    'bath towel': '/bæθ ˈtaʊəl/',
+    'face towel': '/feɪs ˈtaʊəl/',
+    'change bed sheets': '/tʃeɪndʒ bed ʃiːts/',
 };
 
 function getPhonetic(word) {
@@ -622,6 +667,7 @@ function showEnSection(section) {
         case 'alphabet': renderEnAlphabet(); break;
         case 'vocab': renderEnVocab(); break;
         case 'flashcard': initEnFlashcard(); break;
+        case 'hocau': initHoCauSection(); break;
         case 'lessons': renderEnLessons(); break;
         case 'games': renderEnGamesMenu(); break;
         case 'tests': renderEnTests(); break;
@@ -731,7 +777,7 @@ function renderEnTopicTabs() {
     const topics = Object.keys(EN_VOCAB[enVocabLevel]);
     const topicNames = {
         animals: '🐾 Animals', colors: '🎨 Colors', numbers: '🔢 Numbers',
-        body: '🫀 Body', shapes: '🔷 Shapes',
+        body: '🫀 Body', shapes: '🔷 Shapes', ho_cau: '🎣 Hồ Câu',
         food: '🍎 Food', family: '👨‍👩‍👧 Family', objects: '🎒 Objects',
         clothes: '👕 Clothes', transport: '🚗 Transport',
         actions: '🏃 Actions', adjectives: '⭐ Adjectives',
@@ -834,7 +880,23 @@ function renderFcPartsMenu() {
         }
     }
 
-    grid.innerHTML = enFcParts.map((part, idx) => {
+    const hoCauCard = `
+    <div class="hocau-folder-card">
+        <div class="hocau-folder-badge">🎣 THƯ MỤC FLASHCARD ĐẶC BIỆT</div>
+        <div class="hocau-folder-title">🎣 Hồ Câu — Flashcard & Bảng Âm Thanh</div>
+        <div class="hocau-folder-desc">21 thẻ từ vựng và câu giao tiếp phục vụ hồ câu: Cà phê, đồ ăn, mồi câu, dọn phòng, tính tiền...</div>
+        <div class="hocau-folder-actions">
+            <button class="hocau-action-btn hocau-action-btn-primary" onclick="openHoCauFromFC('flashcard')">
+                🃏 Học Flashcard
+            </button>
+            <button class="hocau-action-btn hocau-action-btn-secondary" onclick="openHoCauFromFC('soundboard')">
+                🔊 Bảng phát âm nhanh (21 ô)
+            </button>
+        </div>
+    </div>
+    `;
+
+    grid.innerHTML = hoCauCard + enFcParts.map((part, idx) => {
         const score = currentProgress[idx] !== undefined ? currentProgress[idx] : null;
         let badgeClass = 'badge-orange';
         let badgeText = '⭐ Học & Thi';
@@ -1652,3 +1714,388 @@ function backToEnTests() {
 // Sound effects (reuse from script.js if available)
 function playCorrectSound() { try { playClickSound(); } catch (e) { } }
 function playWrongSound() { try { playClickSound(); } catch (e) { } }
+
+// ===================================================
+// 🎣 HỒ CÂU (FISHING LAKE) - FLASHCARD & SOUNDBOARD
+// ===================================================
+const HO_CAU_ITEMS = [
+    { id: 1, en: 'Milk coffee', vi: 'Cà phê sữa', emoji: '☕', category: 'food', phonetic: '/mɪlk ˈkɔːfi/' },
+    { id: 2, en: 'Iced coffee', vi: 'Cà phê đá', emoji: '🧊', category: 'food', phonetic: '/aɪst ˈkɔːfi/' },
+    { id: 3, en: 'Hot coffee', vi: 'Cà phê nóng', emoji: '☕', category: 'food', phonetic: '/hɑːt ˈkɔːfi/' },
+    { id: 4, en: 'Breakfast', vi: 'Ăn sáng', emoji: '🍳', category: 'food', phonetic: '/ˈbrekfəst/' },
+    { id: 5, en: 'Sugar', vi: 'Đường', emoji: '🧂', category: 'food', phonetic: '/ˈʃʊɡər/' },
+    { id: 6, en: 'Bread with fried eggs', vi: 'Bánh mì ốp la', emoji: '🥖', category: 'food', phonetic: '/bred wɪð fraɪd eɡz/' },
+    { id: 7, en: 'Instant noodles with egg', vi: 'Mì gói trứng', emoji: '🍜', category: 'food', phonetic: '/ˈɪnstənt ˈnuːdlz wɪð eɡ/' },
+    { id: 8, en: 'Cigarettes', vi: 'Thuốc lá', emoji: '🚬', category: 'smoke', phonetic: '/ˌsɪɡəˈrets/' },
+    { id: 9, en: '555 cigarettes', vi: 'Thuốc lá 3 số 3', emoji: '🚬', category: 'smoke', phonetic: '/faɪv faɪv faɪv ˌsɪɡəˈrets/' },
+    { id: 10, en: 'Craven "A" cigarettes', vi: 'Thuốc lá mèo', emoji: '🐱', category: 'smoke', phonetic: '/ˈkreɪvən eɪ ˌsɪɡəˈrets/' },
+    { id: 11, en: 'Would you like to buy a hat?', vi: 'Mời bạn mua nón', emoji: '👒', category: 'service', phonetic: '/wʊd juː laɪk tu baɪ ə hæt/' },
+    { id: 12, en: 'What is your name?', vi: 'Bạn tên gì', emoji: '❓', category: 'chat', phonetic: '/wʌt ɪz jʊər neɪm/' },
+    { id: 13, en: 'My name is Mary', vi: 'Mình tên là Mary', emoji: '👧', category: 'chat', phonetic: '/maɪ neɪm ɪz ˈmɛəri/' },
+    { id: 14, en: 'Wash the dishes', vi: 'Rửa chén', emoji: '🍽️', category: 'room', phonetic: '/wɑːʃ ðə ˈdɪʃɪz/' },
+    { id: 15, en: 'Clean the room', vi: 'Dọn phòng', emoji: '🧹', category: 'room', phonetic: '/kliːn ðə ruːm/' },
+    { id: 16, en: 'Restroom', vi: 'Nhà vệ sinh', emoji: '🚻', category: 'room', phonetic: '/ˈrestruːm/' },
+    { id: 17, en: 'The bill, please', vi: 'Tính tiền', emoji: '💵', category: 'service', phonetic: '/ðə bɪl pliːz/' },
+    { id: 18, en: 'Get fishing bait', vi: 'Lấy mồi câu', emoji: '🪱', category: 'service', phonetic: '/ɡet ˈfɪʃɪŋ beɪt/' },
+    { id: 19, en: 'Bath towel', vi: 'Khăn Tắm', emoji: '🧖', category: 'room', phonetic: '/bæθ ˈtaʊəl/' },
+    { id: 20, en: 'Face towel', vi: 'Khăn mặt', emoji: '🧼', category: 'room', phonetic: '/feɪs ˈtaʊəl/' },
+    { id: 21, en: 'Change bed sheets', vi: 'Thay ga giường', emoji: '🛏️', category: 'room', phonetic: '/tʃeɪndʒ bed ʃiːts/' },
+];
+
+let hoCauPreviousSection = 'menu';
+let hoCauActiveTab = 'soundboard';
+let hoCauSelectedCat = 'all';
+let hoCauFCIndex = 0;
+let hoCauFCFlipped = false;
+let hoCauTestQs = [];
+let hoCauTestIdx = 0;
+let hoCauTestScore = 0;
+
+function initHoCauSection(initialTab = 'soundboard') {
+    switchHoCauTab(initialTab);
+    renderHoCauSoundboard();
+    initHoCauFlashcard();
+}
+
+function openHoCauFromFC(tab = 'flashcard') {
+    hoCauPreviousSection = 'flashcard';
+    showEnSection('hocau');
+    switchHoCauTab(tab);
+}
+
+function handleHoCauBack() {
+    if (hoCauPreviousSection === 'flashcard') {
+        showEnSection('flashcard');
+    } else {
+        backToEnMenu();
+    }
+}
+
+function switchHoCauTab(tab) {
+    hoCauActiveTab = tab;
+
+    // Tab buttons
+    document.querySelectorAll('.hocau-tab-btn').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.getElementById('tabHoCau' + tab.charAt(0).toUpperCase() + tab.slice(1));
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Views
+    const sbView = document.getElementById('hoCauSoundboardView');
+    const fcView = document.getElementById('hoCauFlashcardView');
+    const testView = document.getElementById('hoCauTestView');
+    const completeView = document.getElementById('hoCauTestComplete');
+
+    if (sbView) sbView.classList.toggle('hidden', tab !== 'soundboard');
+    if (fcView) fcView.classList.toggle('hidden', tab !== 'flashcard');
+    if (testView) testView.classList.toggle('hidden', tab !== 'test');
+    if (completeView) completeView.classList.add('hidden');
+
+    const counter = document.getElementById('hoCauCounter');
+    if (counter) {
+        if (tab === 'flashcard') {
+            counter.classList.remove('hidden');
+            counter.textContent = `${hoCauFCIndex + 1}/${HO_CAU_ITEMS.length}`;
+        } else {
+            counter.classList.add('hidden');
+        }
+    }
+
+    if (tab === 'flashcard') {
+        showHoCauFC();
+    } else if (tab === 'test') {
+        startHoCauTest();
+    }
+}
+
+// ---------------------------------------------------
+// 🔊 SOUNDBOARD LOGIC
+// ---------------------------------------------------
+function renderHoCauSoundboard() {
+    const grid = document.getElementById('hoCauSoundboardGrid');
+    if (!grid) return;
+
+    const query = (document.getElementById('hoCauSearchInput')?.value || '').toLowerCase().trim();
+    const cat = hoCauSelectedCat;
+
+    const filtered = HO_CAU_ITEMS.filter(item => {
+        const matchesCat = (cat === 'all' || item.category === cat);
+        const matchesSearch = !query || 
+            item.vi.toLowerCase().includes(query) || 
+            item.en.toLowerCase().includes(query) ||
+            (item.phonetic && item.phonetic.toLowerCase().includes(query));
+        return matchesCat && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #64748b;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">🔍</div>
+                <div style="font-size: 1.1rem; font-weight: 700;">Không tìm thấy từ nào phù hợp</div>
+                <div style="font-size: 0.9rem; margin-top: 6px;">Hãy thử tìm kiếm với từ khác nhé!</div>
+            </div>
+        `;
+        return;
+    }
+
+    const catLabels = {
+        food: '☕ Đồ ăn & Uống',
+        smoke: '🚬 Thuốc lá',
+        service: '🎣 Hồ câu & Mồi',
+        chat: '💬 Giao tiếp',
+        room: '🛏️ Phòng & Vệ sinh'
+    };
+
+    grid.innerHTML = filtered.map(item => `
+        <button class="sound-tile" id="soundTile_${item.id}" onclick="playHoCauSound(${item.id}, this)">
+            <div class="sound-tile-header">
+                <span class="sound-tile-emoji">${item.emoji}</span>
+                <span class="sound-tile-speaker-btn">🔊</span>
+            </div>
+            <div class="sound-tile-vi">${item.vi}</div>
+            <div class="sound-tile-en">${item.en}</div>
+            <div class="sound-tile-phonetic">${item.phonetic}</div>
+            <div class="sound-tile-category-tag">${catLabels[item.category] || 'Hồ câu'}</div>
+        </button>
+    `).join('');
+}
+
+function filterHoCauSoundboard() {
+    renderHoCauSoundboard();
+}
+
+function selectHoCauChip(cat) {
+    hoCauSelectedCat = cat;
+    document.querySelectorAll('.soundboard-chip').forEach(chip => {
+        chip.classList.toggle('active', chip.dataset.cat === cat);
+    });
+    renderHoCauSoundboard();
+}
+
+let activeSoundTileTimer = null;
+function playHoCauSound(id, tileEl) {
+    const item = HO_CAU_ITEMS.find(x => x.id === id);
+    if (!item) return;
+
+    if (activeSoundTileTimer) clearTimeout(activeSoundTileTimer);
+    document.querySelectorAll('.sound-tile').forEach(t => t.classList.remove('is-playing'));
+
+    if (tileEl) tileEl.classList.add('is-playing');
+
+    speakEnglish(item.en, () => {
+        if (tileEl) tileEl.classList.remove('is-playing');
+    });
+
+    activeSoundTileTimer = setTimeout(() => {
+        if (tileEl) tileEl.classList.remove('is-playing');
+    }, 2800);
+}
+
+// ---------------------------------------------------
+// 🃏 FLASHCARD LOGIC
+// ---------------------------------------------------
+function initHoCauFlashcard() {
+    hoCauFCIndex = 0;
+    hoCauFCFlipped = false;
+    showHoCauFC();
+}
+
+function showHoCauFC() {
+    if (!HO_CAU_ITEMS.length) return;
+    const card = HO_CAU_ITEMS[hoCauFCIndex];
+
+    const frontEmoji = document.getElementById('hoCauFCFrontEmoji');
+    const frontWord = document.getElementById('hoCauFCFrontWord');
+    const phonetic = document.getElementById('hoCauFCPhonetic');
+    const backEmoji = document.getElementById('hoCauFCBackEmoji');
+    const backWord = document.getElementById('hoCauFCBackWord');
+    const inner = document.getElementById('hoCauFCInner');
+    const counter = document.getElementById('hoCauCounter');
+    const nextBtn = document.getElementById('hoCauFCNextBtn');
+
+    if (frontEmoji) frontEmoji.textContent = card.emoji;
+    if (frontWord) frontWord.textContent = card.en;
+    if (phonetic) phonetic.textContent = card.phonetic || getPhonetic(card.en);
+    if (backEmoji) backEmoji.textContent = card.emoji;
+    if (backWord) backWord.textContent = card.vi;
+    if (inner) inner.classList.remove('flipped');
+    hoCauFCFlipped = false;
+
+    if (counter) {
+        counter.textContent = `${hoCauFCIndex + 1}/${HO_CAU_ITEMS.length}`;
+    }
+    if (nextBtn) {
+        nextBtn.textContent = (hoCauFCIndex === HO_CAU_ITEMS.length - 1) ? 'Kiểm tra 🎯' : 'Tiếp ➡️';
+    }
+}
+
+function flipHoCauFC() {
+    hoCauFCFlipped = !hoCauFCFlipped;
+    document.getElementById('hoCauFCInner')?.classList.toggle('flipped', hoCauFCFlipped);
+    playClickSound();
+}
+
+function prevHoCauFC() {
+    if (hoCauFCIndex > 0) {
+        hoCauFCIndex--;
+        showHoCauFC();
+    }
+}
+
+function nextHoCauFC() {
+    if (hoCauFCIndex < HO_CAU_ITEMS.length - 1) {
+        hoCauFCIndex++;
+        showHoCauFC();
+    } else {
+        switchHoCauTab('test');
+    }
+}
+
+function speakHoCauFCEn(e) {
+    if (e) e.stopPropagation();
+    speakEnglish(HO_CAU_ITEMS[hoCauFCIndex].en);
+}
+
+function speakHoCauFCVi(e) {
+    if (e) e.stopPropagation();
+    speakVietnamese(HO_CAU_ITEMS[hoCauFCIndex].vi);
+}
+
+// ---------------------------------------------------
+// 📝 TEST / QUIZ LOGIC
+// ---------------------------------------------------
+function startHoCauTest() {
+    document.getElementById('hoCauTestComplete')?.classList.add('hidden');
+    document.getElementById('hoCauTestView')?.classList.remove('hidden');
+
+    hoCauTestQs = [];
+    const pool = shuffleArray(HO_CAU_ITEMS);
+
+    pool.forEach((item, idx) => {
+        const isListen = (idx % 2 === 1);
+        const wrongItems = shuffleArray(HO_CAU_ITEMS.filter(x => x.id !== item.id)).slice(0, 3);
+        const allOptions = shuffleArray([item, ...wrongItems]);
+
+        hoCauTestQs.push({
+            correct: item,
+            type: isListen ? 'listen' : 'vi_to_en',
+            question: isListen ? '🔊 Nghe và chọn từ/câu đúng:' : `Dịch sang tiếng Anh: "${item.vi}"`,
+            options: allOptions
+        });
+    });
+
+    hoCauTestIdx = 0;
+    hoCauTestScore = 0;
+    showHoCauTestQuestion();
+}
+
+function showHoCauTestQuestion() {
+    if (hoCauTestIdx >= hoCauTestQs.length) {
+        finishHoCauTest();
+        return;
+    }
+
+    const q = hoCauTestQs[hoCauTestIdx];
+    const scoreEl = document.getElementById('hoCauTestScore');
+    const roundEl = document.getElementById('hoCauTestRound');
+    if (scoreEl) scoreEl.textContent = hoCauTestScore;
+    if (roundEl) roundEl.textContent = hoCauTestIdx + 1;
+
+    const qText = document.getElementById('hoCauTestQuestion');
+    const listenBtn = document.getElementById('hoCauTestListenBtnContainer');
+
+    if (q.type === 'listen') {
+        listenBtn?.classList.remove('hidden');
+        if (qText) qText.textContent = '🔊 Hãy nghe câu tiếng Anh!';
+        setTimeout(() => speakEnglish(q.correct.en), 300);
+    } else {
+        listenBtn?.classList.add('hidden');
+        if (qText) qText.innerHTML = `${q.correct.emoji} ${q.question}`;
+    }
+
+    document.getElementById('hoCauTestFeedback')?.classList.add('hidden');
+
+    const optionsContainer = document.getElementById('hoCauTestOptions');
+    if (optionsContainer) {
+        optionsContainer.innerHTML = q.options.map(opt => `
+            <button class="game-option-btn" onclick="checkHoCauTestAnswer('${opt.en.replace(/'/g, "\\'")}', this)" style="padding:14px;font-size:1.1rem;font-weight:700;">
+                ${opt.emoji} ${opt.en}
+            </button>
+        `).join('');
+    }
+}
+
+function playHoCauTestListen() {
+    const q = hoCauTestQs[hoCauTestIdx];
+    if (q) speakEnglish(q.correct.en);
+}
+
+function checkHoCauTestAnswer(selectedEn, btn) {
+    const q = hoCauTestQs[hoCauTestIdx];
+    const isCorrect = (selectedEn === q.correct.en);
+
+    document.querySelectorAll('#hoCauTestOptions .game-option-btn').forEach(b => {
+        b.disabled = true;
+        if (b.textContent.includes(q.correct.en)) {
+            b.classList.add('correct');
+        }
+    });
+
+    const feedback = document.getElementById('hoCauTestFeedback');
+    const feedbackText = document.getElementById('hoCauTestFeedbackText');
+    feedback?.classList.remove('hidden');
+
+    if (isCorrect) {
+        hoCauTestScore++;
+        const scoreEl = document.getElementById('hoCauTestScore');
+        if (scoreEl) scoreEl.textContent = hoCauTestScore;
+        btn.classList.add('correct');
+        if (feedbackText) {
+            feedbackText.innerHTML = `🎉 Chính xác! <strong>${q.correct.en}</strong> = <em>${q.correct.vi}</em>`;
+            feedbackText.style.color = '#10B981';
+        }
+        playCorrectSound();
+    } else {
+        btn.classList.add('wrong');
+        if (feedbackText) {
+            feedbackText.innerHTML = `❌ Chưa đúng rồi! Đáp án: <strong>${q.correct.en}</strong> (${q.correct.vi})`;
+            feedbackText.style.color = '#EF4444';
+        }
+        playWrongSound();
+    }
+}
+
+function nextHoCauTestQuestion() {
+    hoCauTestIdx++;
+    showHoCauTestQuestion();
+}
+
+function finishHoCauTest() {
+    document.getElementById('hoCauTestView')?.classList.add('hidden');
+    const complete = document.getElementById('hoCauTestComplete');
+    complete?.classList.remove('hidden');
+
+    const finalScore = document.getElementById('hoCauTestFinalScore');
+    if (finalScore) finalScore.textContent = hoCauTestScore;
+    const msg = hoCauTestScore >= 18 ? 'Xuất sắc! Bạn đã nhớ gần hết từ vựng Hồ Câu! 🌟🌟🌟' 
+              : hoCauTestScore >= 12 ? 'Rất tốt! Cố thêm một chút nữa là đạt điểm tối đa! 🌟🌟' 
+              : 'Hãy xem lại Bảng phát âm và làm lại nhé! 💪';
+    const msgEl = document.getElementById('hoCauTestMsg');
+    if (msgEl) msgEl.textContent = msg;
+
+    if (hoCauTestScore >= 15 && typeof triggerConfetti === 'function') {
+        triggerConfetti();
+    }
+}
+
+// Auto open section from URL query (e.g. english.html?section=hocau)
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get('section');
+        if (section) {
+            showEnSection(section);
+        }
+    } catch (e) { }
+});
+
+

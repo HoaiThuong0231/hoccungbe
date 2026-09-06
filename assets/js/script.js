@@ -420,6 +420,9 @@ function navigateTo(page) {
     if (page === 'games') backToGames();
     if (page === 'math') backToMathMenu();
     if (page === 'english') backToEnMenu();
+    if (page === 'hocau' && typeof initHoCauSection === 'function') {
+        initHoCauSection('soundboard');
+    }
     if (['vietnamese', 'home'].includes(page)) updateProgress();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     updateMascotSpeech();
@@ -1056,3 +1059,29 @@ function resetAllGlobalProgress() {
         location.reload();
     }
 }
+
+function openHoCauFromHome() {
+    if (document.getElementById('page-hocau')) {
+        navigateTo('hocau');
+        return;
+    }
+
+    let path = window.location.pathname || '';
+    let filename = path.split('/').pop().toLowerCase();
+    const isInSubfolder = ['vietnamese.html', 'english.html', 'math.html'].includes(filename) || path.includes('/vietnamese/') || path.includes('/english/') || path.includes('/math/');
+    const targetUrl = isInSubfolder ? '../index.html?page=hocau' : 'index.html?page=hocau';
+    window.location.href = targetUrl;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const pageParam = params.get('page');
+        if (pageParam === 'hocau') {
+            navigateTo('hocau');
+        }
+    } catch (e) { }
+});
+
+
+

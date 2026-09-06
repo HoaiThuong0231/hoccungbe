@@ -66,6 +66,9 @@
         <button class="bottom-nav-btn" data-page="math" onclick="navigateTo('math')">
             <span class="bottom-nav-icon">🔢</span><span class="bottom-nav-label">Toán</span>
         </button>
+        <button class="bottom-nav-btn" data-page="hocau" onclick="navigateTo('hocau')">
+            <span class="bottom-nav-icon">🎣</span><span class="bottom-nav-label">Hồ Câu</span>
+        </button>
     </nav>
 
     <!-- Main Content -->
@@ -174,6 +177,18 @@
                     </div>
                     <div class="lb-card-arrow">→</div>
                 </button>
+                <button class="lb-card lb-hocau" onclick="navigateTo('hocau')">
+                    <div class="lb-card-icon" style="padding: 0; background: transparent; box-shadow: none;">
+                        <div style="width: 75px; height: 75px; border-radius: 20px; background: rgba(255,255,255,0.25); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; font-size: 2.8rem; box-shadow: 0 8px 16px rgba(0,0,0,0.15); border: 1.5px solid rgba(255,255,255,0.4);">
+                            🎣
+                        </div>
+                    </div>
+                    <div class="lb-card-info">
+                        <div class="lb-card-title">Hồ Câu</div>
+                        <div class="lb-card-desc">21 từ vựng, flashcard & phát âm nhanh</div>
+                    </div>
+                    <div class="lb-card-arrow">→</div>
+                </button>
             </div>
 
             <!-- Thành Tích -->
@@ -219,6 +234,110 @@
                     <!-- Sẽ được điền bởi auth.js -->
                     <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;">
                         <p style="color:#6B7280; font-weight:600;">Đang tải bảng xếp hạng... 🚀</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ HỒ CÂU STANDALONE PAGE ============ -->
+        <section class="page" id="page-hocau">
+            <div class="page-header" style="margin-bottom: 20px;">
+                <button class="game-back-btn" onclick="navigateTo('home')" style="margin-bottom: 12px;">← Trang chủ</button>
+                <h1 class="page-title">🎣 Hồ Câu — Flashcard & Bảng Âm Thanh</h1>
+                <p class="page-desc">Gói gọn 21 từ vựng & câu giao tiếp: Cà phê, đồ ăn, mồi câu, dọn phòng, tính tiền...</p>
+                <span class="en-fc-counter hidden" id="hoCauCounter">1/21</span>
+            </div>
+
+            <!-- Tab Navigation: Soundboard vs Flashcard vs Test -->
+            <div class="hocau-nav-tabs">
+                <button class="hocau-tab-btn active" id="tabHoCauSoundboard" onclick="switchHoCauTab('soundboard')">
+                    🔊 Bảng phát âm nhanh (21 ô)
+                </button>
+                <button class="hocau-tab-btn" id="tabHoCauFlashcard" onclick="switchHoCauTab('flashcard')">
+                    🃏 Thẻ Flashcard (3D)
+                </button>
+                <button class="hocau-tab-btn" id="tabHoCauTest" onclick="switchHoCauTab('test')">
+                    📝 Kiểm tra trắc nghiệm
+                </button>
+            </div>
+
+            <!-- View 1: Soundboard (Bảng tổng hợp các ô nhỏ bấm vào phát câu tiếng Anh) -->
+            <div id="hoCauSoundboardView">
+                <div class="soundboard-toolbar">
+                    <div class="soundboard-search-box">
+                        <span class="soundboard-search-icon">🔍</span>
+                        <input type="text" id="hoCauSearchInput" class="soundboard-search-input" 
+                            placeholder="Tìm nhanh từ (ví dụ: cà phê, tiền, mồi câu, khăn, Mary...)" 
+                            oninput="filterHoCauSoundboard()">
+                    </div>
+                    <div class="soundboard-chips">
+                        <button class="soundboard-chip active" data-cat="all" onclick="selectHoCauChip('all')">Tất cả (21)</button>
+                        <button class="soundboard-chip" data-cat="food" onclick="selectHoCauChip('food')">☕ Đồ ăn & Uống (7)</button>
+                        <button class="soundboard-chip" data-cat="smoke" onclick="selectHoCauChip('smoke')">🚬 Thuốc lá (3)</button>
+                        <button class="soundboard-chip" data-cat="service" onclick="selectHoCauChip('service')">🎣 Mồi & Hồ câu (3)</button>
+                        <button class="soundboard-chip" data-cat="chat" onclick="selectHoCauChip('chat')">💬 Giao tiếp (2)</button>
+                        <button class="soundboard-chip" data-cat="room" onclick="selectHoCauChip('room')">🛏️ Dịch vụ phòng (6)</button>
+                    </div>
+                </div>
+                <div class="soundboard-grid" id="hoCauSoundboardGrid">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- View 2: 3D Flashcard Learning Area -->
+            <div id="hoCauFlashcardView" class="hidden">
+                <div class="fc-card" onclick="flipHoCauFC()">
+                    <div class="fc-card-inner" id="hoCauFCInner">
+                        <div class="fc-card-front en-fc-front">
+                            <div class="fc-emoji" id="hoCauFCFrontEmoji">☕</div>
+                            <div class="fc-word-en" id="hoCauFCFrontWord">Milk coffee</div>
+                            <div class="en-fc-phonetic" id="hoCauFCPhonetic">/mɪlk ˈkɔːfi/</div>
+                            <button class="fc-speaker-btn" onclick="speakHoCauFCEn(event)">🔊 English</button>
+                            <div style="font-size: 0.9rem; color: #9CA3AF; margin-top: 1rem; font-style: italic;">👆 Click để lật</div>
+                        </div>
+                        <div class="fc-card-back en-fc-back">
+                            <div class="fc-emoji" id="hoCauFCBackEmoji">☕</div>
+                            <div class="fc-word-vi" id="hoCauFCBackWord">Cà phê sữa</div>
+                            <button class="fc-speaker-btn fc-speaker-vi" onclick="speakHoCauFCVi(event)">🔊 Tiếng Việt</button>
+                            <div style="font-size: 0.9rem; color: #9CA3AF; margin-top: 1rem; font-style: italic;">👆 Click để lật</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fc-nav">
+                    <button class="fc-nav-btn" onclick="prevHoCauFC()">⬅️ Trước</button>
+                    <button class="fc-nav-btn" id="hoCauFCNextBtn" onclick="nextHoCauFC()">Tiếp ➡️</button>
+                </div>
+            </div>
+
+            <!-- View 3: Hồ Câu Test Area -->
+            <div id="hoCauTestView" class="hidden">
+                <div class="game-topbar">
+                    <div class="game-score">⭐ <span id="hoCauTestScore">0</span></div>
+                    <div class="game-round">Câu <span id="hoCauTestRound">1</span>/21</div>
+                </div>
+                <div class="game-question">
+                    <div class="listen-btn-container" id="hoCauTestListenBtnContainer" style="margin-bottom:1rem">
+                        <button class="listen-play-btn" onclick="playHoCauTestListen()">🔊 Mở loa để nghe!</button>
+                    </div>
+                    <div class="game-question-text" id="hoCauTestQuestion" style="font-size:1.8rem;"></div>
+                </div>
+                <div class="game-options" id="hoCauTestOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem"></div>
+                <div class="game-feedback hidden" id="hoCauTestFeedback" style="margin-top:1.5rem">
+                    <div class="feedback-text" id="hoCauTestFeedbackText"></div>
+                    <button class="game-next-btn" onclick="nextHoCauTestQuestion()">Câu tiếp →</button>
+                </div>
+            </div>
+
+            <!-- Test Complete Area -->
+            <div id="hoCauTestComplete" class="hidden">
+                <div class="game-complete-content">
+                    <div class="game-complete-emoji">🎉</div>
+                    <h2 class="game-complete-title">Tuyệt Vời!</h2>
+                    <div class="game-complete-score">Bạn đạt <span id="hoCauTestFinalScore">0</span>/21 ⭐</div>
+                    <div class="game-complete-message" id="hoCauTestMsg">Bạn đã thành thạo từ vựng Hồ Câu!</div>
+                    <div class="game-complete-buttons">
+                        <button class="game-btn-replay" onclick="startHoCauTest()">🔄 Thi lại</button>
+                        <button class="game-btn-menu" onclick="switchHoCauTab('soundboard')">🔊 Về bảng phát âm</button>
                     </div>
                 </div>
             </div>
